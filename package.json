@@ -1,0 +1,15 @@
+{
+  "name": "shopping-planner",
+  "version": "1.0.0",
+  "description": "This project is an app that helps assist in the process of amassing a grocery/household staples list via a weekly menu plan.",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "lite-server"
+  },
+  "keywords": [],
+  "license": "Unlicense",
+  "devDependencies": {
+    "lite-server": "^2.5.4"
+  }
+}
