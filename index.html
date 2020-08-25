@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
 
-    <title>Shopplan</title>
+    <title>ShopPlan</title>
 
     <meta
       name="description"
@@ -11,7 +11,7 @@
     />
     <meta name="author" content="wjb" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+    <link rel="icon" href="./icons/favicon.ico" type="image/x-icon"/>
     <link
       rel="stylesheet"
       type="text/css"
@@ -23,6 +23,7 @@
 
   <body>
     <nav>
+      <h1>Dinner Menu Plan</h1>
       <ul>
         <li>Dinner Plan</li>
         <li>Lunch Plan</li>
@@ -30,6 +31,31 @@
         <li>Shopping List</li>
       </ul>
     </nav>
-    <h1></h1>
+    <hr class="line" />
+    <header>
+    <button id="reorderBtn">Reorder</button>
+    <h2>Double-click any empty slot to enter a menu item</h2>
+    </header>
+    <main>
+      <div id="menuGrid">
+      </div>
+    </main>
+    <!-- THE SECTION BELOW IS A TEST OF CREATING A SELECTION TOOL-->
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h4 id="modalH4">Select day with which to begin your week:</h4>
+        <span class="clickableDays">Saturday</span>
+        <span class="clickableDays">Sunday</span>
+        <span class="clickableDays">Monday</span>
+        <span class="clickableDays">Tuesday</span>
+        <span class="clickableDays">Wednesday</span>
+        <span class="clickableDays">Thursday</span>
+        <span class="clickableDays">Friday</span>
+      </div>
+    <!-- THE SECTION ABOVE IS A TEST OF CREATING A SELECTION TOOL-->
   </body>
 </html>
