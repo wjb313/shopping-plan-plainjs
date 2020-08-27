@@ -1,3 +1,4 @@
+// ***MENU PLAN PAGE***
 // declare global variables and constants
 const days = [
   "Saturday",
@@ -9,7 +10,7 @@ const days = [
   "Friday",
 ];
 
-const headerItems = ["Day", "Main Dish", "Side Dish", "Side Dish", "Other"];
+const menuItemHeaders = ["Day", "Main Dish", "Side Dish", "Side Dish", "Other"];
 
 // declare variables and constants for manipluating the DOM
 const menuGrid = document.querySelector("#menuGrid");
@@ -19,11 +20,11 @@ const closeSpan = document.querySelector(".close");
 const modalContent = document.querySelector(".modal-content");
 const selectDay = document.querySelectorAll(".clickableDays");
 
-//generate headers
-for (let i = 0; i < headerItems.length; i++) {
+//generate headers for menu grid
+for (let i = 0; i < menuItemHeaders.length; i++) {
   const headerItem = document.createElement("div");
 
-  headerItem.textContent = headerItems[i];
+  headerItem.textContent = menuItemHeaders[i];
   headerItem.className = "headers";
   headerItem.id = "header" + [i + 1];
   menuGrid.appendChild(headerItem);
@@ -35,9 +36,6 @@ for (let i = 0; i < 28; i++) {
 
   menuItem.setAttribute("contentEditable", false);
   menuItem.setAttribute("draggable", true);
-  // menuItem.setAttribute("ondragstart", "dragstart_handler(event)");
-  // menuItem.setAttribute("ondragover", "dragover_handler(event)");
-  // menuItem.setAttribute("ondrop", "drop_handler(event)");
   menuItem.className = "menuItems";
   menuItem.id = "mi" + [i + 1];
   menuGrid.appendChild(menuItem);
@@ -52,23 +50,8 @@ for (let i = 0; i < days.length; i++) {
   daysBox.id = "day" + (i + 1);
   menuGrid.appendChild(daysBox);
 }
-const day1 = document.querySelector("#day1");
-const day2 = document.querySelector("#day2");
-const day3 = document.querySelector("#day3");
-const day4 = document.querySelector("#day4");
-const day5 = document.querySelector("#day5");
-const day6 = document.querySelector("#day6");
-const day7 = document.querySelector("#day7");
-// for (let i = 0; i < days.length; i++) {
-//   const daysSelect = document.createElement("span");
 
-//   daysSelect.textContent = days[i];
-//   daysSelect.className = "clickableDays";
-//   // daysBox.id = "day" + (i + 1);
-//   modalContent.appendChild(daysSelect);
-// }
-
-// define function to re-order days of the week
+// define function to set new starting day of the week
 reorderBtn.addEventListener("click", function () {
   modal.style.display = "block";
 });
@@ -76,49 +59,30 @@ reorderBtn.addEventListener("click", function () {
 selectDay.forEach(function (e) {
   e.addEventListener("click", function (e) {
     days1 = days.slice(days.indexOf(e.target.textContent));
-    console.log("new array days1: " + days1);
     days2 = days.slice(0, days.indexOf(e.target.textContent));
-    console.log("new array days2: " + days2);
     days1.push(...days2);
-    console.log("days 2 appended to days 1: " + days1);
     modal.style.display = "none";
-    //menuGrid.removeChild(menuGrid.lastChild);
+
     for (let i = 0; i < days1.length; i++) {
-      //const daysBox = document.createElement("div");
       let currentDay = "day" + (i + 1);
       let currentDayDOM = document.querySelector("#" + currentDay);
-      console.log(currentDay);
+
       currentDayDOM.textContent = days1[i];
-      console.log(days1[i]);
-      console.log(currentDayDOM.textContent);
-      //console.log(currentDay.textContent);
-      //daysBox.className = "days";
-      //daysBox.id = "day" + (i + 1);
-      //menuGrid.appendChild(daysBox);
     }
   });
 });
 
-// selectDay.addEventListener("click", function (e) {
-//   console.log("You selected: " + e.target.textContent);
-//   console.log(days);
-//   console.log(days.indexOf("e.target.textContent"));
-//   days1 = days.slice(days.indexOf("e.target.textContent"));
-//   days2 = days.slice(0, days.indexOf("e.target.textContent"));
-// });
-
+// Handle event = close Modal Box Selection Tool without choosing a new starting day
 closeSpan.addEventListener("click", function () {
   modal.style.display = "none";
 });
 
-//const reorder = function () {};
+// ADD DRAG AND DROP FUNCTIONALITY FOR MENU ITEMS
 
-// Drag and drop functionality
 let dragIndex = 0;
 let clone = "";
 
 function dragstart_handler(e) {
-  //e.preventDefault();
   e.dataTransfer.setData("text/plain", e.target.id);
   e.dataTransfer.dropEffect = "move";
 }
@@ -148,6 +112,26 @@ function drop_handler(e) {
   addEListen();
 }
 
+// ADD ALL EVENT HANDLERS FOR DRAG AND DROP TO ALL MENU ITEMS
+
+// Calls function upon loading all content
+window.addEventListener("DOMContentLoaded", addEListen);
+
+// Function adds all event listeners; gets called at end of every drop action
+function addEListen() {
+  const miDrag = document.querySelectorAll(".menuItems");
+
+  miDrag.forEach(function (e) {
+    e.addEventListener("dragstart", dragstart_handler);
+    e.addEventListener("dragover", dragover_handler);
+    e.addEventListener("drop", drop_handler);
+    e.addEventListener("dblclick", dcEdit);
+  });
+}
+
+// ADD EDIT FUNCTIONALITY FOR MENU ITEMS
+
+// Change div to contentEditable on double-click
 function dcEdit(e) {
   console.log(e.contentEditable);
   e.target.contentEditable = true;
@@ -161,59 +145,83 @@ function dcEdit(e) {
   }
 }
 
-//function exitEdit() {}
+// ***DEFINE EVENT HANDLERS FOR PAGE NAVIGATION***
+const dinnerLink = document.querySelector("#goToDinnerMenu");
+const lunchLink = document.querySelector("#goToLunchMenu");
+const breakfastLink = document.querySelector("#goToBreakfastMenu");
+const listLink = document.querySelector("#goToShoppingList");
 
-function addEListen() {
-  const miDrag = document.querySelectorAll(".menuItems");
+const dinnerDisplay = document.querySelector("#dinnerWrapper");
+const lunchDisplay = document.querySelector("#lunchWrapper");
+const breakfastDisplay = document.querySelector("#breakfastWrapper");
+const listDisplay = document.querySelector("#listWrapper");
 
-  miDrag.forEach(function (e) {
-    e.addEventListener("dragstart", dragstart_handler);
-    e.addEventListener("dragover", dragover_handler);
-    e.addEventListener("drop", drop_handler);
-    e.addEventListener("dblclick", dcEdit);
-  });
-}
+dinnerLink.addEventListener("click", function () {
+  dinnerDisplay.style.display = "grid";
+  listDisplay.style.display = "none";
+});
 
-//menuGrid.addEventListener("click");
-window.addEventListener("DOMContentLoaded", addEListen);
+listLink.addEventListener("click", function () {
+  dinnerDisplay.style.display = "none";
+  listDisplay.style.display = "grid";
+});
 
-// DRAG-N-DROP SCRIPT EXAMPLE FROM [https://medium.com/@ramya.bala221190/dragging-dropping-and-swapping-elements-with-javascript-11d9cdac2178]
-// let dragindex = 0;
-// let dropindex = 0;
-// let clone = "";
+// ***SHOPPING LIST PAGE***
 
-// function drag(e) {
-//   e.dataTransfer.setData("text/plain", e.target.innerText);
-//   console.log(e.target.innerText);
-//   e.dataTransfer.setData("text", e.target.id);
-//   console.log(e.target.id);
-// }
+// ADD NEW LINE TO SHOPPING LIST
 
-// function drop(e) {
-//   e.preventDefault();
-//   clone = e.target.cloneNode(true);
-//   console.log(clone);
-//   let data = e.dataTransfer.getData("text");
-//   console.log(data);
-//   let nodelist = document.getElementById("menuGrid").childNodes;
-//   for (let i = 0; i < nodelist.length; i++) {
-//     if (nodelist[i].id == data) {
-//       dragindex = i;
-//     }
-//   }
+const newLine = document.querySelector("#addItemBtn");
 
-//   document
-//     .getElementById("menuGrid")
-//     .replaceChild(document.getElementById(data), e.target);
+const listContainer = document.querySelector("#shoppingList");
 
-//   document
-//     .getElementById("menuGrid")
-//     .insertBefore(
-//       clone,
-//       document.getElementById("menuGrid").childNodes[dragindex]
-//     );
-// }
+const typeOptions = [
+  "",
+  "Veggies",
+  "Fruits",
+  "Refrigerated",
+  "Dairy",
+  "Snacks",
+  "Dry Goods",
+  "Frozen",
+  "Bread",
+  "Meats",
+];
 
-// function allowDrop(e) {
-//   e.preventDefault();
-// }
+const unitsOptions = ["", "lbs", "oz", "c", "cans", "bags", "boxes"];
+
+// Create each individual field within a new line
+newLine.addEventListener("click", function () {
+  const newItem = document.createElement("input");
+  const newQuantity = document.createElement("input");
+  const newUnits = document.createElement("select");
+  const newType = document.createElement("select");
+
+  listContainer.appendChild(newItem);
+  listContainer.appendChild(newQuantity);
+  listContainer.appendChild(newUnits);
+  listContainer.appendChild(newType);
+
+  // Set input type for shopping list item
+  newItem.type = "text";
+
+  // Set input type for shopping list quantity
+  newQuantity.type = "number";
+
+  // Set input type for shopping list units
+  newUnits.type = "select";
+
+  // Set input type for shopping list type
+  newType.type = "select";
+
+  // Add options for units selection drop down
+  for (i = 0; i < unitsOptions.length; i++) {
+    let uoList = new Option(unitsOptions[i], i);
+    newUnits.options.add(uoList);
+  }
+
+  // Add options for type selection drop down
+  for (i = 0; i < typeOptions.length; i++) {
+    let toList = new Option(typeOptions[i], i);
+    newType.options.add(toList);
+  }
+});

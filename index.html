@@ -23,27 +23,39 @@
 
   <body>
     <nav>
-      <h1>Dinner Menu Plan</h1>
       <ul>
-        <li>Dinner Plan</li>
-        <li>Lunch Plan</li>
-        <li>Breakfast Plan</li>
-        <li>Shopping List</li>
+        <li id="goToDinnerMenu">Dinner Plan</li>
+        <li id="goToLunchMenu">Lunch Plan</li>
+        <li id="goToBreakfastMenu">Breakfast Plan</li>
+        <li id="goToShoppingList">Shopping List</li>
       </ul>
     </nav>
     <hr class="line" />
-    <header>
-    <button id="reorderBtn">Reorder</button>
-    <h2>Double-click any empty slot to enter a menu item</h2>
-    </header>
     <main>
-      <div id="menuGrid">
+      <div id="dinnerWrapper">
+        <header>
+        <h1>Dinner Menu Plan</h1>
+        <button id="reorderBtn">Change Starting Day</button>
+        <h2>Double-click any empty slot to enter a menu item</h2>
+        </header>
+        <div id="menuGrid">
+        </div>
+      </div>
+      <div id="listWrapper">
+        <header>
+        <h1>Shopping List</h1>
+        <button id="addItemBtn">Add Item</button>
+        </header>
+        <div id="shoppingList">
+          <div class="slHeaders">Item</div>
+          <div class="slHeaders">Quantity</div>
+          <div class="slHeaders" id="units">Units<br>(Optional)</div>
+          <div class="slHeaders">Type</div>
+        </div>
       </div>
     </main>
-    <!-- THE SECTION BELOW IS A TEST OF CREATING A SELECTION TOOL-->
     <!-- The Modal -->
     <div id="myModal" class="modal">
-
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -56,6 +68,5 @@
         <span class="clickableDays">Thursday</span>
         <span class="clickableDays">Friday</span>
       </div>
-    <!-- THE SECTION ABOVE IS A TEST OF CREATING A SELECTION TOOL-->
   </body>
 </html>

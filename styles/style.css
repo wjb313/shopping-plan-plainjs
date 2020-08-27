@@ -30,27 +30,15 @@ main {
   justify-content: center;
 }
 
-h1 {
-  font-size: 2rem;
-  padding: 5px;
-}
-
-/* Define content in order of appearance */
-
 nav {
   display: flex;
   align-content: center;
-  justify-content: space-between;
+  justify-content: right;
   background-color: white;
 }
 
-header {
-  margin: 5px 0px 10px 5px;
-}
 ul {
   display: flex;
-  justify-content: right;
-  align-items: center;
   list-style: none;
 }
 
@@ -60,8 +48,24 @@ li {
   border-left: 1px solid black;
 }
 
+h1 {
+  font-size: 2rem;
+  padding: 5px;
+}
+
+header {
+  margin: 5px 0px 10px 5px;
+}
+
+/* Define content in order of appearance */
+
 .line {
   box-shadow: 0 0.5px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Menu Plan Formatting */
+#dinnerWrapper {
+  display: grid;
 }
 
 #menuGrid {
@@ -69,7 +73,7 @@ li {
   width: 90vw;
 
   grid-template-columns: 175px 1fr 1fr 1fr 1fr;
-  grid-template-rows: repeat(8, 60px);
+  grid-template-rows: repeat(8, 55px);
   row-gap: 10px;
   column-gap: 5px;
   grid-template-areas:
@@ -85,7 +89,7 @@ li {
 
 .menuItems {
   padding-left: 10px;
-  line-height: 60px;
+  line-height: 55px;
   font-size: 1.5rem;
   background-color: white;
   border: 0.5px rgb(187, 209, 243) solid;
@@ -97,7 +101,7 @@ li {
 
 .headers {
   padding-left: 10px;
-  line-height: 60px;
+  line-height: 55px;
   font-size: 3.5rem;
   background-color: white;
   border: 0.5px rgb(187, 209, 243) solid;
@@ -107,26 +111,66 @@ li {
   box-shadow: 5px 5px 7px -5px rgb(119, 168, 243);
 }
 
-/* #mainHeader {
-  grid-area: mainHeader;
+/* Shopping List formatting */
+#listWrapper {
+  display: none;
 }
 
-#side1Header {
-  grid-area: side1Header;
+#shoppingList {
+  display: grid;
+  width: 75vw;
+  grid-template-columns: 1fr 1fr 60px 1fr;
+  grid-template-rows: repeat(20, 30px);
+  row-gap: 10px;
+  column-gap: 30px;
+  grid-template-areas:
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type"
+    "item quantity units type";
 }
 
-#side1Header {
-  grid-area: side2Header;
+.slHeaders {
+  font-size: 2rem;
+  text-align: center;
 }
 
-#otherHeader {
-  grid-area: otherHeader;
+#units {
+  font-size: 1rem;
 }
 
-#daysHeader {
-  grid-area: daysHeader;
-}*/
+#addItemBtn {
+  width: 150px;
+  margin: 10px;
+  padding: 10px;
+  background-color: rgb(206, 221, 245);
+  color: #7c7371;
+  border: 2px solid rgb(119, 168, 243);
+  border-radius: 50px;
+  font-size: 15px;
+  overflow: hidden;
+  transition: 1s;
+  white-space: nowrap;
+  cursor: pointer;
+}
 
+/* .days and #day(number) order the days of the week within the menu grid */
 .days {
   padding-left: 10px;
   line-height: 60px;
@@ -167,7 +211,34 @@ li {
   grid-area: day7;
 }
 
-/* THIS IS AN EXPERIMENTAL SECTION FOR NOW; CODE FOUND AT W3SCHOOLS.COM - HOW TO MAKE A MODAL BOX */
+/* Button that opens Modal Box Selection Tool */
+#reorderBtn {
+  /* width: 100px; */
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(206, 221, 245);
+  color: #7c7371;
+  border: 2px solid rgb(119, 168, 243);
+  border-radius: 50px;
+  font-size: 15px;
+  overflow: hidden;
+  transition: 1s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#reorderBtn:hover {
+  /* width: 150px; */
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(162, 193, 243);
+  color: #7c7371;
+  border: 2px solid rgb(83, 146, 241);
+  border-radius: 50px;
+  font-size: 15px;
+}
+
+/* Modal Box Selection Tool */
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -221,30 +292,4 @@ li {
   color: #aaaaaa;
   text-decoration: none;
   cursor: pointer;
-}
-
-#reorderBtn {
-  width: 150px;
-  margin: 10px;
-  padding: 10px;
-  background-color: rgb(206, 221, 245);
-  color: #7c7371;
-  border: 2px solid rgb(119, 168, 243);
-  border-radius: 50px;
-  font-size: 15px;
-  overflow: hidden;
-  transition: 1s;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-#reorderBtn:hover {
-  width: 150px;
-  margin: 10px;
-  padding: 10px;
-  background-color: rgb(162, 193, 243);
-  color: #7c7371;
-  border: 2px solid rgb(83, 146, 241);
-  border-radius: 50px;
-  font-size: 15px;
 }
