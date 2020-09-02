@@ -11,7 +11,7 @@
     />
     <meta name="author" content="wjb" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="./icons/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="./icons/favicon.ico" type="image/x-icon" />
     <link
       rel="stylesheet"
       type="text/css"
@@ -19,47 +19,255 @@
       media="screen"
     />
     <script defer src="scripts/main.js"></script>
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
   </head>
 
   <body>
     <nav>
       <ul>
-        <li id="goToDinnerMenu">Dinner Plan</li>
-        <li id="goToLunchMenu">Lunch Plan</li>
-        <li id="goToBreakfastMenu">Breakfast Plan</li>
-        <li id="goToShoppingList">Shopping List</li>
+        <li class="navItem" id="goToDinnerMenu">Dinner Plan</li>
+        <li class="navItem" id="goToLunchMenu">Lunch Plan</li>
+        <li class="navItem" id="goToBreakfastMenu">Breakfast Plan</li>
+        <li class="navItem" id="goToShoppingList">Shopping List</li>
       </ul>
     </nav>
     <hr class="line" />
     <main>
       <div id="dinnerWrapper">
         <header>
-        <h1>Dinner Menu Plan</h1>
-        <button id="reorderBtn">Change Starting Day</button>
-        <h2>Double-click any empty slot to enter a menu item</h2>
+          <h1>Dinner Menu Plan</h1>
+          <div id="btnDiv">
+            <button id="reorderBtn">Change Starting Day</button>
+            <button id="clearBtn">Clear All Menu menuItems</button>
+          </div>
         </header>
         <div id="menuGrid">
+          <div id="subGrid">
+            <div id="dsg1" class="daySubGrid" draggable="true">
+              <input id="mi1-1" class="menuItems" />
+              <input id="mi1-2" class="menuItems" />
+              <input id="mi1-3" class="menuItems" />
+              <input id="mi1-4" class="menuItems" />
+              <svg
+                id="svgHandle1"
+                class="svgHandles"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                focusable="false"
+                width="4.5em"
+                height="4em"
+                style="
+                  -ms-transform: rotate(360deg);
+                  -webkit-transform: rotate(360deg);
+                  transform: rotate(360deg);
+                "
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 23 16"
+              >
+                <path
+                  id="path1"
+                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
+                  fill="#626262"
+                />
+              </svg>
+            </div>
+            <div id="dsg2" class="daySubGrid" draggable="true">
+              <input id="mi2-1" class="menuItems" />
+              <input id="mi2-2" class="menuItems" />
+              <input id="mi2-3" class="menuItems" />
+              <input id="mi2-4" class="menuItems" />
+              <svg
+                id="svgHandle2"
+                class="svgHandles"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                focusable="false"
+                width="4.5em"
+                height="4em"
+                style="
+                  -ms-transform: rotate(360deg);
+                  -webkit-transform: rotate(360deg);
+                  transform: rotate(360deg);
+                "
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 23 16"
+              >
+                <path
+                  id="path2"
+                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
+                  fill="#626262"
+                />
+              </svg>
+            </div>
+            <div id="dsg3" class="daySubGrid" draggable="true">
+              <input id="mi3-1" class="menuItems" />
+              <input id="mi3-2" class="menuItems" />
+              <input id="mi3-3" class="menuItems" />
+              <input id="mi3-4" class="menuItems" />
+              <svg
+                id="svgHandle3"
+                class="svgHandles"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                focusable="false"
+                width="4.5em"
+                height="4em"
+                style="
+                  -ms-transform: rotate(360deg);
+                  -webkit-transform: rotate(360deg);
+                  transform: rotate(360deg);
+                "
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 23 16"
+              >
+                <path
+                  id="path3"
+                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
+                  fill="#626262"
+                />
+              </svg>
+            </div>
+            <div id="dsg4" class="daySubGrid" draggable="true">
+              <input id="mi4-1" class="menuItems" />
+              <input id="mi4-2" class="menuItems" />
+              <input id="mi4-3" class="menuItems" />
+              <input id="mi4-4" class="menuItems" />
+              <svg
+                id="svgHandle4"
+                class="svgHandles"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                focusable="false"
+                width="4.5em"
+                height="4em"
+                style="
+                  -ms-transform: rotate(360deg);
+                  -webkit-transform: rotate(360deg);
+                  transform: rotate(360deg);
+                "
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 23 16"
+              >
+                <path
+                  id="path4"
+                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
+                  fill="#626262"
+                />
+              </svg>
+            </div>
+            <div id="dsg5" class="daySubGrid" draggable="true">
+              <input id="mi5-1" class="menuItems" />
+              <input id="mi5-2" class="menuItems" />
+              <input id="mi5-3" class="menuItems" />
+              <input id="mi5-4" class="menuItems" />
+              <svg
+                id="svgHandle5"
+                class="svgHandles"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                focusable="false"
+                width="4.5em"
+                height="4em"
+                style="
+                  -ms-transform: rotate(360deg);
+                  -webkit-transform: rotate(360deg);
+                  transform: rotate(360deg);
+                "
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 23 16"
+              >
+                <path
+                  id="path5"
+                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
+                  fill="#626262"
+                />
+              </svg>
+            </div>
+            <div id="dsg6" class="daySubGrid" draggable="true">
+              <input id="mi6-1" class="menuItems" />
+              <input id="mi6-2" class="menuItems" />
+              <input id="mi6-3" class="menuItems" />
+              <input id="mi6-4" class="menuItems" />
+              <svg
+                id="svgHandle6"
+                class="svgHandles"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                focusable="false"
+                width="4.5em"
+                height="4em"
+                style="
+                  -ms-transform: rotate(360deg);
+                  -webkit-transform: rotate(360deg);
+                  transform: rotate(360deg);
+                "
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 23 16"
+              >
+                <path
+                  id="path6"
+                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
+                  fill="#626262"
+                />
+              </svg>
+            </div>
+            <div id="dsg7" class="daySubGrid" draggable="true">
+              <input id="mi7-1" class="menuItems" />
+              <input id="mi7-2" class="menuItems" />
+              <input id="mi7-3" class="menuItems" />
+              <input id="mi7-4" class="menuItems" />
+              <svg
+                id="svgHandle7"
+                class="svgHandles"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                focusable="false"
+                width="4.5em"
+                height="4em"
+                style="
+                  -ms-transform: rotate(360deg);
+                  -webkit-transform: rotate(360deg);
+                  transform: rotate(360deg);
+                "
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 23 16"
+              >
+                <path
+                  id="path7"
+                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
+                  fill="#626262"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
       <div id="listWrapper">
         <header>
-        <h1>Shopping List</h1>
-        <button id="addItemBtn">Add Item</button>
+          <h1>Shopping List</h1>
+          <button id="addItemBtn">Add Item</button>
         </header>
         <div id="shoppingList">
           <div class="slHeaders">Item</div>
           <div class="slHeaders">Quantity</div>
-          <div class="slHeaders" id="units">Units<br>(Optional)</div>
+          <div class="slHeaders" id="units">Units<br />(Optional)</div>
           <div class="slHeaders">Type</div>
         </div>
       </div>
     </main>
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
+    <!-- Starting Day of the Week Modal Selector Tool -->
+    <div id="reorderModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <h4 id="modalH4">Select day with which to begin your week:</h4>
+        <span id="reorderClose" class="close">&times;</span>
+        <h4 class="modalH4">Select day with which to begin your week:</h4>
         <span class="clickableDays">Saturday</span>
         <span class="clickableDays">Sunday</span>
         <span class="clickableDays">Monday</span>
@@ -68,5 +276,16 @@
         <span class="clickableDays">Thursday</span>
         <span class="clickableDays">Friday</span>
       </div>
+    </div>
+    <!-- Clear All Items Confirmation Modal Box-->
+    <div id="clearModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span id="clearClose" class="close">&times;</span>
+        <h4 class="modalH4">Are you sure you wish to clear all menu items?</h4>
+        <span class="clearYesNo" id="clearYes">Yes</span>
+        <span class="clearYesNo" id="clearNo">No</span>
+      </div>
+    </div>
   </body>
 </html>

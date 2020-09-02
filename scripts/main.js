@@ -10,17 +10,22 @@ const days = [
   "Friday",
 ];
 
-const menuItemHeaders = ["Day", "Main Dish", "Side Dish", "Side Dish", "Other"];
+const menuItemHeaders = ["Day", "Main", "Side", "Side", "Other", ""];
 
 // declare variables and constants for manipluating the DOM
 const menuGrid = document.querySelector("#menuGrid");
 const reorderBtn = document.querySelector("#reorderBtn");
 const modal = document.querySelector("#myModal");
-const closeSpan = document.querySelector(".close");
+const reorderClose = document.querySelector("#reorderClose");
+const clearClose = document.querySelector("#clearClose");
 const modalContent = document.querySelector(".modal-content");
 const selectDay = document.querySelectorAll(".clickableDays");
+const clearYes = document.querySelector("#clearYes");
+const clearNo = document.querySelector("#clearNo");
 
-//generate headers for menu grid
+let inputs = document.getElementsByTagName("input");
+
+// generate headers for menu grid
 for (let i = 0; i < menuItemHeaders.length; i++) {
   const headerItem = document.createElement("div");
 
@@ -28,17 +33,6 @@ for (let i = 0; i < menuItemHeaders.length; i++) {
   headerItem.className = "headers";
   headerItem.id = "header" + [i + 1];
   menuGrid.appendChild(headerItem);
-}
-
-// generate containers for menu items
-for (let i = 0; i < 28; i++) {
-  const menuItem = document.createElement("div");
-
-  menuItem.setAttribute("contentEditable", false);
-  menuItem.setAttribute("draggable", true);
-  menuItem.className = "menuItems";
-  menuItem.id = "mi" + [i + 1];
-  menuGrid.appendChild(menuItem);
 }
 
 // define function to loop through days and populate on dinner menu plan
@@ -51,17 +45,22 @@ for (let i = 0; i < days.length; i++) {
   menuGrid.appendChild(daysBox);
 }
 
-// define function to set new starting day of the week
+// EVENT HANDLER - REORDER BUTTON
+
+// define event listener for reorder button; open modal box
+
 reorderBtn.addEventListener("click", function () {
-  modal.style.display = "block";
+  reorderModal.style.display = "block";
 });
 
+// add event listener to each day in the modal box
+// set selected day as first day of week and repopulate days column
 selectDay.forEach(function (e) {
   e.addEventListener("click", function (e) {
     days1 = days.slice(days.indexOf(e.target.textContent));
     days2 = days.slice(0, days.indexOf(e.target.textContent));
     days1.push(...days2);
-    modal.style.display = "none";
+    reorderModal.style.display = "none";
 
     for (let i = 0; i < days1.length; i++) {
       let currentDay = "day" + (i + 1);
@@ -73,23 +72,55 @@ selectDay.forEach(function (e) {
 });
 
 // Handle event = close Modal Box Selection Tool without choosing a new starting day
-closeSpan.addEventListener("click", function () {
-  modal.style.display = "none";
+reorderClose.addEventListener("click", function () {
+  reorderModal.style.display = "none";
 });
 
+// EVENT HANDLER - CLEAR BUTTON
+
+// define event listener for clear button; open modal box
+exitClearModal = function () {
+  clearModal.style.display = "none";
+};
+
+clearAll = function () {
+  for (let i = 0; i < inputs.length; i++) {
+    if (inputs[i].type === "text") {
+      inputs[i].value = "";
+    }
+    exitClearModal();
+  }
+};
+
+clearBtn.addEventListener("click", function () {
+  clearModal.style.display = "block";
+});
+
+clearYes.addEventListener("click", clearAll);
+
+clearNo.addEventListener("click", exitClearModal);
+
+// Handle event = close Modal Box Selection Tool without choosing a new starting day
+clearClose.addEventListener("click", exitClearModal);
+
 // ADD DRAG AND DROP FUNCTIONALITY FOR MENU ITEMS
+const subGrid = document.querySelector("#subGrid");
+const menuItems = document.querySelector(".menuItems");
 
 let dragIndex = 0;
 let clone = "";
+let dataFrom;
+let dataTo;
 
 function dragstart_handler(e) {
+  console.log(e.target.id);
   e.dataTransfer.setData("text/plain", e.target.id);
   e.dataTransfer.dropEffect = "move";
 }
 
 function dragover_handler(e) {
-  let dataFrom = e.dataTransfer.getData("text/plain");
-  let dataTo = e.target.id;
+  dataFrom = e.dataTransfer.getData("text/plain");
+  dataTo = e.target.id;
 
   if (dataFrom !== dataTo) {
     e.preventDefault();
@@ -99,17 +130,36 @@ function dragover_handler(e) {
 function drop_handler(e) {
   e.preventDefault();
 
+  let targetClass = e.target.className;
+  console.log(targetClass);
+  let modifiedTarget;
+
   clone = e.target.cloneNode(true);
-  let data = e.dataTransfer.getData("text/plain");
-  let nodelist = menuGrid.childNodes;
+
+  dataFrom = e.dataTransfer.getData("text/plain");
+  console.log(dataFrom);
+  console.log(dataTo);
+
+  let nodelist = subGrid.childNodes;
   for (let i = 0; i < nodelist.length; i++) {
-    if (nodelist[i].id == data) {
+    if (nodelist[i].id == dataFrom) {
       dragIndex = i;
     }
   }
-  menuGrid.replaceChild(document.getElementById(data), e.target);
-  menuGrid.insertBefore(clone, menuGrid.childNodes[dragIndex]);
-  addEListen();
+
+  if (targetClass === "menuItems") {
+    modifiedTarget = e.target.parentNode;
+    clone = modifiedTarget.cloneNode(true);
+    subGrid.replaceChild(document.getElementById(dataFrom), modifiedTarget);
+    subGrid.insertBefore(clone, subGrid.childNodes[dragIndex]);
+    addEListen();
+  } else {
+    clone = e.target.cloneNode(true);
+    console.log("ran the else");
+    subGrid.replaceChild(document.getElementById(dataFrom), e.target);
+    subGrid.insertBefore(clone, subGrid.childNodes[dragIndex]);
+    addEListen();
+  }
 }
 
 // ADD ALL EVENT HANDLERS FOR DRAG AND DROP TO ALL MENU ITEMS
@@ -119,31 +169,51 @@ window.addEventListener("DOMContentLoaded", addEListen);
 
 // Function adds all event listeners; gets called at end of every drop action
 function addEListen() {
-  const miDrag = document.querySelectorAll(".menuItems");
+  addDrag();
+  addDropZone();
+  // addEdit();
+}
 
-  miDrag.forEach(function (e) {
+function addDrag() {
+  const dsgDrag = document.querySelectorAll(".daySubGrid");
+
+  dsgDrag.forEach(function (e) {
     e.addEventListener("dragstart", dragstart_handler);
-    e.addEventListener("dragover", dragover_handler);
-    e.addEventListener("drop", drop_handler);
-    e.addEventListener("dblclick", dcEdit);
   });
 }
 
-// ADD EDIT FUNCTIONALITY FOR MENU ITEMS
+function addDropZone() {
+  const dsgDrag = document.querySelectorAll(".daySubGrid");
+
+  dsgDrag.forEach(function (e) {
+    e.addEventListener("dragover", dragover_handler);
+    e.addEventListener("drop", drop_handler);
+  });
+}
+// ADD EDIT FUNCTIONALITY FOR MENU ITEMS ***UPDATED: THIS FUNCTIONALITY NO LONGER REQUIRED AS ALL MENU ITEMS ARE NOW INPUTS AND DO NOT REQUIRE DOUBLE-CLICK
 
 // Change div to contentEditable on double-click
-function dcEdit(e) {
-  console.log(e.contentEditable);
-  e.target.contentEditable = true;
-  e.target.textContent = "";
-  e.target.focus();
 
-  let input = e.target;
-  input.onblur = inputBlur;
-  function inputBlur() {
-    e.target.contentEditable = false;
-  }
-}
+// function addEdit() {
+//   const miEdit = document.querySelectorAll(".menuItems");
+
+//   miEdit.forEach(function (e) {
+//     e.addEventListener("dblclick", dcEdit);
+//   });
+// }
+
+// function dcEdit(e) {
+//   console.log(e.contentEditable);
+//   e.target.contentEditable = true;
+//   //e.target.textContent = "";
+//   e.target.focus();
+
+//   let input = e.target;
+//   input.onblur = inputBlur;
+//   function inputBlur() {
+//     e.target.contentEditable = false;
+//   }
+// }
 
 // ***DEFINE EVENT HANDLERS FOR PAGE NAVIGATION***
 const dinnerLink = document.querySelector("#goToDinnerMenu");

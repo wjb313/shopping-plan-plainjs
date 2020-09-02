@@ -55,6 +55,8 @@ h1 {
 
 header {
   margin: 5px 0px 10px 5px;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* Define content in order of appearance */
@@ -72,7 +74,7 @@ header {
   display: grid;
   width: 90vw;
 
-  grid-template-columns: 175px 1fr 1fr 1fr 1fr;
+  grid-template-columns: 175px 1fr 1fr 1fr 1fr 50px;
   grid-template-rows: repeat(8, 55px);
   row-gap: 10px;
   column-gap: 5px;
@@ -86,6 +88,24 @@ header {
     "day6 recipe recipe recipe recipe"
     "day7 recipe recipe recipe recipe";
 }
+
+#subGrid {
+  display: grid;
+  grid-column: 2 / span 5;
+  grid-row: 2 / span 7;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+}
+
+.daySubGrid {
+  display: grid;
+  grid-column: 1 / span 5;
+  grid-template-columns: subgrid;
+}
+/*
+.daySubGrid * {
+  pointer-events: none;
+} */
 
 .menuItems {
   padding-left: 10px;
@@ -183,7 +203,14 @@ header {
   box-shadow: 5px 5px 7px -5px rgb(119, 168, 243);
 }
 
-#day1 {
+.svgHandles {
+  /* padding: 15px 0 0 10px; */
+  pointer-events: none;
+  cursor: move;
+}
+
+/* COMMENTED OUT BECAUSE I NO LONGER NEED TO TELL DAYS WHERE TO SIT; MAY WANT TO REVISIT THIS AFTER GETTING DnD FUNCTIONALITY TIGHTENED UP */
+/* #day1 {
   grid-area: day1;
 }
 
@@ -209,7 +236,7 @@ header {
 
 #day7 {
   grid-area: day7;
-}
+} */
 
 /* Button that opens Modal Box Selection Tool */
 #reorderBtn {
@@ -238,10 +265,42 @@ header {
   font-size: 15px;
 }
 
+#reorderBtnDiv {
+}
+
+#clearBtn {
+  /* width: 100px; */
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(206, 221, 245);
+  color: #7c7371;
+  border: 2px solid rgb(119, 168, 243);
+  border-radius: 50px;
+  font-size: 15px;
+  overflow: hidden;
+  transition: 1s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+#clearBtn:hover {
+  /* width: 150px; */
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(162, 193, 243);
+  color: #7c7371;
+  border: 2px solid rgb(83, 146, 241);
+  border-radius: 50px;
+  font-size: 15px;
+}
+
+#clearBtnDiv {
+}
+
 /* Modal Box Selection Tool */
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
+  /* display: none; Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   padding-top: 100px; /* Location of the box */
@@ -252,6 +311,14 @@ header {
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+#reorderModal {
+  display: none;
+}
+
+#clearModal {
+  display: none;
 }
 
 /* Modal Content */
@@ -279,7 +346,7 @@ header {
   cursor: pointer;
 }
 
-#modalH4 {
+.modalH4 {
   margin-bottom: 10px;
 }
 
@@ -291,5 +358,20 @@ header {
 .clickableDays:focus {
   color: #aaaaaa;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.clearYesNo {
+  margin-right: 30px;
+}
+
+.clearYesNo:hover,
+.clearYesNo:focus {
+  color: #aaaaaa;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navItem {
   cursor: pointer;
 }
