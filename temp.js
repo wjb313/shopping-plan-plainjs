@@ -1,6 +1,24 @@
 // ***MENU PLAN PAGE***
 
-// define arrays and objects
+let daysDude = {
+  day1: {
+    main: "day1Main",
+    side1: "day1Side1",
+    side2: "day1Side2",
+    other: "day1Other",
+  },
+  day2: { main: "", side1: "", side2: "", other: "" },
+  day3: { main: "", side1: "", side2: "", other: "" },
+  day4: { main: "", side1: "", side2: "", other: "" },
+  day5: { main: "", side1: "", side2: "", other: "" },
+  day6: { main: "", side1: "", side2: "", other: "" },
+  day7: { main: "", side1: "", side2: "", other: "" },
+};
+
+let jsonDaysDude = JSON.stringify(daysDude);
+localStorage.setItem("temp", jsonDaysDude);
+
+// declare global variables and constants
 const days = [
   "Saturday",
   "Sunday",
@@ -12,16 +30,6 @@ const days = [
 ];
 
 const menuItemHeaders = ["Day", "Main", "Side", "Side", "Other", ""];
-
-let menuItemsContent = {
-  day1: { main: "", side1: "", side2: "", other: "" },
-  day2: { main: "", side1: "", side2: "", other: "" },
-  day3: { main: "", side1: "", side2: "", other: "" },
-  day4: { main: "", side1: "", side2: "", other: "" },
-  day5: { main: "", side1: "", side2: "", other: "" },
-  day6: { main: "", side1: "", side2: "", other: "" },
-  day7: { main: "", side1: "", side2: "", other: "" },
-};
 
 // declare variables and constants for manipluating the DOM
 const menuGrid = document.querySelector("#menuGrid");
@@ -36,106 +44,102 @@ const clearNo = document.querySelector("#clearNo");
 
 let inputs = document.getElementsByTagName("input");
 
-// declare variables to populate menu items from localStorage
-let day1Main = document.querySelector("#mi1-1");
-let day1Side1 = document.querySelector("#mi1-2");
-let day1Side2 = document.querySelector("#mi1-3");
-let day1Other = document.querySelector("#mi1-4");
-
-let day2Main = document.querySelector("#mi2-1");
-let day2Side1 = document.querySelector("#mi2-2");
-let day2Side2 = document.querySelector("#mi2-3");
-let day2Other = document.querySelector("#mi2-4");
-
-let day3Main = document.querySelector("#mi3-1");
-let day3Side1 = document.querySelector("#mi3-2");
-let day3Side2 = document.querySelector("#mi3-3");
-let day3Other = document.querySelector("#mi3-4");
-
-let day4Main = document.querySelector("#mi4-1");
-let day4Side1 = document.querySelector("#mi4-2");
-let day4Side2 = document.querySelector("#mi4-3");
-let day4Other = document.querySelector("#mi4-4");
-
-let day5Main = document.querySelector("#mi5-1");
-let day5Side1 = document.querySelector("#mi5-2");
-let day5Side2 = document.querySelector("#mi5-3");
-let day5Other = document.querySelector("#mi5-4");
-
-let day6Main = document.querySelector("#mi6-1");
-let day6Side1 = document.querySelector("#mi6-2");
-let day6Side2 = document.querySelector("#mi6-3");
-let day6Other = document.querySelector("#mi6-4");
-
-let day7Main = document.querySelector("#mi7-1");
-let day7Side1 = document.querySelector("#mi7-2");
-let day7Side2 = document.querySelector("#mi7-3");
-let day7Other = document.querySelector("#mi7-4");
-
 // declare constants and variables for storing data
-const LOCAL_STORAGE_DINNERMENU_KEY = "dinner.menu";
+const LOCAL_STORAGE_KEY_DAY1 = "day1.plan";
+const LOCAL_STORAGE_KEY_DAY2 = "day2.plan";
+const LOCAL_STORAGE_KEY_DAY3 = "day3.plan";
+const LOCAL_STORAGE_KEY_DAY4 = "day4.plan";
+const LOCAL_STORAGE_KEY_DAY5 = "day5.plan";
+const LOCAL_STORAGE_KEY_DAY6 = "day6.plan";
+const LOCAL_STORAGE_KEY_DAY7 = "day7.plan";
 
-// call to localStorage to load saved data
-if (localStorage.getItem(LOCAL_STORAGE_DINNERMENU_KEY) !== null) {
-  console.log("setting mIC to localStorage version");
-  menuItemsContent = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_DINNERMENU_KEY)
-  );
-} else {
-  console.log("lsdmk is null");
+let planDay0 = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_DAY1)) || [];
+
+let planDay1 = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_DAY2)) || [
+  "",
+  "",
+  "",
+  "",
+];
+
+let planDay2 = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_DAY3)) || [
+  "",
+  "",
+  "",
+  "",
+];
+
+let planDay3 = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_DAY4)) || [
+  "",
+  "",
+  "",
+  "",
+];
+
+let planDay4 = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_DAY5)) || [
+  "",
+  "",
+  "",
+  "",
+];
+
+let planDay5 = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_DAY6)) || [
+  "",
+  "",
+  "",
+  "",
+];
+
+let planDay7 = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_DAY7)) || [
+  "",
+  "",
+  "",
+  "",
+];
+
+// const saturday0 = document.querySelector("#mi1-1");
+// const saturday1 = document.querySelector("#mi1-2");
+// const saturday2 = document.querySelector("#mi1-3");
+// const saturday3 = document.querySelector("#mi1-4");
+
+// saturday0.value = saturdayPlan[0];
+// saturday1.value = saturdayPlan[1];
+// saturday2.value = saturdayPlan[2];
+// saturday3.value = saturdayPlan[3];
+
+function populateDays() {
+  let currentPlanDay;
+  let inputID;
+
+  for (i = 0; i < 7; i++) {
+    currentPlanDay = "planDay" + i;
+    console.log(currentPlanDay);
+    for (j = 0; j < currentPlanDay.length; j++) {
+      console.log(currentPlanDay.length);
+      inputID = [i] + [j];
+
+      //inputID.dataset.id.value = currentPlanDay[j];
+    }
+  }
 }
 
-// populate menu item containers with data from local storage
-day1Main.value = menuItemsContent.day1.main;
-day1Side1.value = menuItemsContent.day1.side1;
-day1Side2.value = menuItemsContent.day1.side2;
-day1Other.value = menuItemsContent.day1.other;
+// function populateDays() {
+//   for (i = 0; i < saturdayPlan.length; i++) {
+//     let planDay = "saturday" + i;
+//     planDay.value = saturdayPlan[i];
+//   }
+// }
 
-day2Main.value = menuItemsContent.day2.main;
-day2Side1.value = menuItemsContent.day2.side1;
-day2Side2.value = menuItemsContent.day2.side2;
-day2Other.value = menuItemsContent.day2.other;
-
-day3Main.value = menuItemsContent.day3.main;
-day3Side1.value = menuItemsContent.day3.side1;
-day3Side2.value = menuItemsContent.day3.side2;
-day3Other.value = menuItemsContent.day3.other;
-
-day4Main.value = menuItemsContent.day4.main;
-day4Side1.value = menuItemsContent.day4.side1;
-day4Side2.value = menuItemsContent.day4.side2;
-day4Other.value = menuItemsContent.day4.other;
-
-day5Main.value = menuItemsContent.day5.main;
-day5Side1.value = menuItemsContent.day5.side1;
-day5Side2.value = menuItemsContent.day5.side2;
-day5Other.value = menuItemsContent.day5.other;
-
-day6Main.value = menuItemsContent.day6.main;
-day6Side1.value = menuItemsContent.day6.side1;
-day6Side2.value = menuItemsContent.day6.side2;
-day6Other.value = menuItemsContent.day6.other;
-
-day7Main.value = menuItemsContent.day7.main;
-day7Side1.value = menuItemsContent.day7.side1;
-day7Side2.value = menuItemsContent.day7.side2;
-day7Other.value = menuItemsContent.day7.other;
-
-// save menuItemsContent to localStorage
-function save(e) {
-  let planDay = e.target.dataset.planday;
-  let menuItemName = e.target.dataset.id;
-
-  console.log(planDay);
-  console.log(menuItemName);
-
-  menuItemsContent[planDay][menuItemName] = e.target.value;
-
-  localStorage.setItem(
-    LOCAL_STORAGE_DINNERMENU_KEY,
-    JSON.stringify(menuItemsContent)
-  );
+function saturdaySave(e) {
+  saturdayPlan[e.target.dataset.id] = e.target.value;
+  localStorage.setItem(LOCAL_STORAGE_KEY_DAY1, JSON.stringify(saturdayPlan));
 }
+
+// function save(e) {
+//   localStorage.setItem(LOCAL_STORAGE_KEY_DAY1, JSON.stringify(saturdayPlan));
+//   console.log("saved: " + e.target.id);
+//   console.log(e.target.dataset.id);
+// }
 
 // generate headers for menu grid
 for (let i = 0; i < menuItemHeaders.length; i++) {
@@ -286,7 +290,7 @@ function drop_handler(e) {
 
 // Calls function upon loading all content
 window.addEventListener("DOMContentLoaded", addEListen);
-//window.addEventListener("DOMContentLoaded", populateDays);
+window.addEventListener("DOMContentLoaded", populateDays);
 // Function adds all event listeners; gets called at end of every drop action
 function addEListen() {
   addDrag();
@@ -311,12 +315,23 @@ function addDropZone() {
     e.addEventListener("drop", drop_handler);
   });
 }
+// ADD EDIT FUNCTIONALITY FOR MENU ITEMS ***UPDATED: THIS FUNCTIONALITY NO LONGER REQUIRED AS ALL MENU ITEMS ARE NOW INPUTS AND DO NOT REQUIRE DOUBLE-CLICK
+
+// Change div to contentEditable on double-click
+
+// function addEdit() {
+//   const miEdit = document.querySelectorAll(".menuItems");
+
+//   miEdit.forEach(function (e) {
+//     e.addEventListener("dblclick", dcEdit);
+//   });
+// }
 
 function addLocalStorageSave() {
   const menuItems = document.querySelectorAll(".menuItems");
 
   menuItems.forEach(function (e) {
-    e.addEventListener("blur", save);
+    e.addEventListener("blur", saturdaySave);
   });
 }
 

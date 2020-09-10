@@ -38,16 +38,36 @@
           <h1>Dinner Menu Plan</h1>
           <div id="btnDiv">
             <button id="reorderBtn">Change Starting Day</button>
-            <button id="clearBtn">Clear All Menu menuItems</button>
+            <button id="clearBtn">Clear All Menu Items</button>
           </div>
         </header>
         <div id="menuGrid">
           <div id="subGrid">
             <div id="dsg1" class="daySubGrid" draggable="true">
-              <input id="mi1-1" class="menuItems" />
-              <input id="mi1-2" class="menuItems" />
-              <input id="mi1-3" class="menuItems" />
-              <input id="mi1-4" class="menuItems" />
+              <input
+                id="mi1-1"
+                data-planday="day1"
+                data-id="main"
+                class="menuItems"
+              />
+              <input
+                id="mi1-2"
+                data-planday="day1"
+                data-id="side1"
+                class="menuItems"
+              />
+              <input
+                id="mi1-3"
+                data-planday="day1"
+                data-id="side2"
+                class="menuItems"
+              />
+              <input
+                id="mi1-4"
+                data-planday="day1"
+                data-id="other"
+                class="menuItems"
+              />
               <svg
                 id="svgHandle1"
                 class="svgHandles"
@@ -73,10 +93,30 @@
               </svg>
             </div>
             <div id="dsg2" class="daySubGrid" draggable="true">
-              <input id="mi2-1" class="menuItems" />
-              <input id="mi2-2" class="menuItems" />
-              <input id="mi2-3" class="menuItems" />
-              <input id="mi2-4" class="menuItems" />
+              <input
+                id="mi2-1"
+                data-planday="day2"
+                data-id="main"
+                class="menuItems"
+              />
+              <input
+                id="mi2-2"
+                data-planday="day2"
+                data-id="side1"
+                class="menuItems"
+              />
+              <input
+                id="mi2-3"
+                data-planday="day2"
+                data-id="side2"
+                class="menuItems"
+              />
+              <input
+                id="mi2-4"
+                data-planday="day2"
+                data-id="other"
+                class="menuItems"
+              />
               <svg
                 id="svgHandle2"
                 class="svgHandles"
@@ -102,10 +142,30 @@
               </svg>
             </div>
             <div id="dsg3" class="daySubGrid" draggable="true">
-              <input id="mi3-1" class="menuItems" />
-              <input id="mi3-2" class="menuItems" />
-              <input id="mi3-3" class="menuItems" />
-              <input id="mi3-4" class="menuItems" />
+              <input
+                id="mi3-1"
+                data-planday="day3"
+                data-id="main"
+                class="menuItems"
+              />
+              <input
+                id="mi3-2"
+                data-planday="day3"
+                data-id="side1"
+                class="menuItems"
+              />
+              <input
+                id="mi3-3"
+                data-planday="day3"
+                data-id="side2"
+                class="menuItems"
+              />
+              <input
+                id="mi3-4"
+                data-planday="day3"
+                data-id="other"
+                class="menuItems"
+              />
               <svg
                 id="svgHandle3"
                 class="svgHandles"
@@ -131,10 +191,30 @@
               </svg>
             </div>
             <div id="dsg4" class="daySubGrid" draggable="true">
-              <input id="mi4-1" class="menuItems" />
-              <input id="mi4-2" class="menuItems" />
-              <input id="mi4-3" class="menuItems" />
-              <input id="mi4-4" class="menuItems" />
+              <input
+                id="mi4-1"
+                data-planday="day4"
+                data-id="main"
+                class="menuItems"
+              />
+              <input
+                id="mi4-2"
+                data-planday="day4"
+                data-id="side1"
+                class="menuItems"
+              />
+              <input
+                id="mi4-3"
+                data-planday="day4"
+                data-id="side2"
+                class="menuItems"
+              />
+              <input
+                id="mi4-4"
+                data-planday="day4"
+                data-id="other"
+                class="menuItems"
+              />
               <svg
                 id="svgHandle4"
                 class="svgHandles"
@@ -160,10 +240,30 @@
               </svg>
             </div>
             <div id="dsg5" class="daySubGrid" draggable="true">
-              <input id="mi5-1" class="menuItems" />
-              <input id="mi5-2" class="menuItems" />
-              <input id="mi5-3" class="menuItems" />
-              <input id="mi5-4" class="menuItems" />
+              <input
+                id="mi5-1"
+                data-planday="day5"
+                data-id="main"
+                class="menuItems"
+              />
+              <input
+                id="mi5-2"
+                data-planday="day5"
+                data-id="side1"
+                class="menuItems"
+              />
+              <input
+                id="mi5-3"
+                data-planday="day5"
+                data-id="side2"
+                class="menuItems"
+              />
+              <input
+                id="mi5-4"
+                data-planday="day5"
+                data-id="other"
+                class="menuItems"
+              />
               <svg
                 id="svgHandle5"
                 class="svgHandles"
@@ -189,10 +289,30 @@
               </svg>
             </div>
             <div id="dsg6" class="daySubGrid" draggable="true">
-              <input id="mi6-1" class="menuItems" />
-              <input id="mi6-2" class="menuItems" />
-              <input id="mi6-3" class="menuItems" />
-              <input id="mi6-4" class="menuItems" />
+              <input
+                id="mi6-1"
+                data-planday="day6"
+                data-id="main"
+                class="menuItems"
+              />
+              <input
+                id="mi6-2"
+                data-planday="day6"
+                data-id="side1"
+                class="menuItems"
+              />
+              <input
+                id="mi6-3"
+                data-planday="day6"
+                data-id="side2"
+                class="menuItems"
+              />
+              <input
+                id="mi6-4"
+                data-planday="day6"
+                data-id="other"
+                class="menuItems"
+              />
               <svg
                 id="svgHandle6"
                 class="svgHandles"
@@ -218,10 +338,30 @@
               </svg>
             </div>
             <div id="dsg7" class="daySubGrid" draggable="true">
-              <input id="mi7-1" class="menuItems" />
-              <input id="mi7-2" class="menuItems" />
-              <input id="mi7-3" class="menuItems" />
-              <input id="mi7-4" class="menuItems" />
+              <input
+                id="mi7-1"
+                data-planday="day7"
+                data-id="main"
+                class="menuItems"
+              />
+              <input
+                id="mi7-2"
+                data-planday="day7"
+                data-id="side1"
+                class="menuItems"
+              />
+              <input
+                id="mi7-3"
+                data-planday="day7"
+                data-id="side2"
+                class="menuItems"
+              />
+              <input
+                id="mi7-4"
+                data-planday="day7"
+                data-id="other"
+                class="menuItems"
+              />
               <svg
                 id="svgHandle7"
                 class="svgHandles"
