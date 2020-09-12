@@ -24,11 +24,11 @@
 
   <body>
     <nav>
-      <ul>
-        <li class="navItem" id="goToDinnerMenu">Dinner Plan</li>
-        <li class="navItem" id="goToLunchMenu">Lunch Plan</li>
-        <li class="navItem" id="goToBreakfastMenu">Breakfast Plan</li>
-        <li class="navItem" id="goToShoppingList">Shopping List</li>
+      <ul class="navList">
+        <li class="navListItem" id="goToDinnerMenu">Dinner Plan</li>
+        <li class="navListItem" id="goToLunchMenu">Lunch Plan</li>
+        <li class="navListItem" id="goToBreakfastMenu">Breakfast Plan</li>
+        <li class="navListItem" id="goToShoppingList">Shopping List</li>
       </ul>
     </nav>
     <hr class="line" />
@@ -390,15 +390,50 @@
         </div>
       </div>
       <div id="listWrapper">
-        <header>
-          <h1>Shopping List</h1>
-          <button id="addItemBtn">Add Item</button>
+        <header class="shoppingListHeader">
+          <h1 class="shoppingListTitle">Shopping List</h1>
+          <p class="listCount" data-list-count>3 items remaining</p>
+          <button class="shoppingListBtn" id="addItemBtn">Add Item</button>
         </header>
-        <div id="shoppingList">
-          <div class="slHeaders">Item</div>
-          <div class="slHeaders">Quantity</div>
-          <div class="slHeaders" id="units">Units<br />(Optional)</div>
-          <div class="slHeaders">Type</div>
+        <div class="shoppingListBody" data-list-body>
+          <div class="items">
+            <div class="listItem" data-list-item>
+              <input
+                type="checkbox"
+                class="sliCheckbox"
+                id="listItem1"
+                data-list-item-input
+              />
+              <label for="listItem1" data-list-item-label>
+                <span class="custom-checkbox" data-list-item-span></span>Cherry
+                Preserves</label
+              >
+            </div>
+            <div class="listItem">
+              <input type="checkbox" class="sliCheckbox" id="listItem2" />
+              <label for="listItem2">
+                <span class="custom-checkbox"></span>Bread</label
+              >
+            </div>
+            <div class="listItem">
+              <input type="checkbox" class="sliCheckbox" id="listItem3" />
+              <label for="listItem3">
+                <span class="custom-checkbox"></span>Bananas</label
+              >
+            </div>
+            <div class="listItem">
+              <input type="checkbox" class="sliCheckbox" id="listItem4" />
+              <label for="listItem4">
+                <span class="custom-checkbox"></span>Broccoli</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="clearAndDelete">
+          <button class="shoppingListBtn btnDelete">
+            Clear Completed Tasks
+          </button>
+          <button class="shoppingListBtn btnDelete">Clear All Tasks</button>
         </div>
       </div>
     </main>
@@ -427,5 +462,63 @@
         <span class="clearYesNo" id="clearNo">No</span>
       </div>
     </div>
+    <!-- Starting New Shopping List Item Modal Box -->
+    <div id="shoppingListItemModal" class="sliModal">
+      <!-- Modal content -->
+      <div class="sliModal-content">
+        <header class="sliModalHeader" id="sliHeader">
+          <h4 class="sliModalH4">Enter New Item Information</h4>
+          <span id="shoppingListItemClose" class="sliClose">&times;</span>
+        </header>
+        <form action="" class="sliModalForm" data-new-list-form>
+          <label for="itemName" class="sliLabel">Name</label>
+          <input type="text" class="sliInput" id="itemName" />
+          <label for="itemType" class="sliLabel">Type</label>
+          <select class="sliInput" id="itemType">
+            <option value=""></option>
+            <option value="vegetables">Vegetables</option>
+            <option value="fruits">Fruits</option>
+            <option value="refrigerated">Refrigerated</option>
+            <option value="drygoods">Dry Goods</option>
+            <option value="bakery">Bakery</option>
+            <option value="meats">Meats</option>
+            <option value="miscellaneous">Miscellaneous</option>
+          </select>
+          <label for="itemQuantity" class="sliLabel">Quantity</label>
+          <input
+            type="number"
+            class="sliInput"
+            id="itemQuantity"
+            value="1"
+            min="1"
+          />
+          <label for="itemUnits" class="sliLabel">Units (optional)</label>
+          <select class="sliInput" id="itemUnits">
+            Units
+            <option value=""></option>
+            <option value="teaspoon">tsp</option>
+            <option value="tablespoon">tbsp</option>
+            <option value="fluid ounce">fl oz</option>
+            <option value="cup">c</option>
+            <option value="gallon">gal</option>
+            <option value="ounce">oz</option>
+            <option value="pound">lb</option>
+            <option value="bag">bag</option>
+            <option value="box">box</option>
+            <option value="can">can</option>
+            <option value="jar">jar</option>
+          </select>
+          <button id="newItemBtn">Enter</button>
+        </form>
+      </div>
+    </div>
+    <template id="listItemTemplate">
+      <div class="listItem">
+        <input type="checkbox" class="sliCheckbox" />
+        <label>
+          <span class="custom-checkbox"></span>
+        </label>
+      </div>
+    </template>
   </body>
 </html>

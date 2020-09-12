@@ -27,8 +27,10 @@ let menuItemsContent = {
 const menuGrid = document.querySelector("#menuGrid");
 const reorderBtn = document.querySelector("#reorderBtn");
 const modal = document.querySelector("#myModal");
+const shoppingListItemModal = document.querySelector("#shoppingListItemModal");
 const reorderClose = document.querySelector("#reorderClose");
 const clearClose = document.querySelector("#clearClose");
+const shoppingListItemClose = document.querySelector("#shoppingListItemClose");
 const modalContent = document.querySelector(".modal-content");
 const selectDay = document.querySelectorAll(".clickableDays");
 const clearYes = document.querySelector("#clearYes");
@@ -222,6 +224,11 @@ clearNo.addEventListener("click", exitClearModal);
 // Handle event = close Modal Box Selection Tool without choosing a new starting day
 clearClose.addEventListener("click", exitClearModal);
 
+// Handle event = close Modal Box without adding a new shopping list item
+shoppingListItemClose.addEventListener("click", function () {
+  shoppingListItemModal.style.display = "none";
+});
+
 // ADD DRAG AND DROP FUNCTIONALITY FOR MENU ITEMS
 const subGrid = document.querySelector("#subGrid");
 
@@ -351,65 +358,134 @@ dinnerLink.addEventListener("click", function () {
 
 listLink.addEventListener("click", function () {
   dinnerDisplay.style.display = "none";
-  listDisplay.style.display = "grid";
+  listDisplay.style.display = "flex";
 });
 
 // ***SHOPPING LIST PAGE***
 
-// ADD NEW LINE TO SHOPPING LIST
+// declare constants and variables for shopping list page
+const addItemBtn = document.querySelector("#addItemBtn");
+const listCount = document.querySelector("[data-list-count");
+const listBody = document.querySelector("[data-list-body]");
+const listItem = document.querySelector("[data-list-item]");
+const listItemInput = document.querySelector("[data-list-item-input");
+const listItemLabel = document.querySelector("[data-list-item-label");
+const listItemSpan = document.querySelector("[data-list-item-span");
+const newDiv = document.createElement("div");
+const newInput = document.createElement("input");
+const newLabel = document.createElement("label");
+const newSpan = document.createElement("span");
+const newSLItemForm = document.querySelector("[data-new-list-form]");
 
-const newLine = document.querySelector("#addItemBtn");
+const nliName = document.querySelector("#itemName");
+const nliType = document.querySelector("#itemType");
+const nliQty = document.querySelector("#itemQuantity");
+const nliUnits = document.querySelector("#itemUnits");
 
-const listContainer = document.querySelector("#shoppingList");
+const listItemTemplate = document.querySelector("#listItemTemplate");
 
-const typeOptions = [
-  "",
-  "Veggies",
-  "Fruits",
-  "Refrigerated",
-  "Dairy",
-  "Snacks",
-  "Dry Goods",
-  "Frozen",
-  "Bread",
-  "Meats",
-];
+let list = [];
 
-const unitsOptions = ["", "lbs", "oz", "c", "cans", "bags", "boxes"];
-
-// Create each individual field within a new line
-newLine.addEventListener("click", function () {
-  const newItem = document.createElement("input");
-  const newQuantity = document.createElement("input");
-  const newUnits = document.createElement("select");
-  const newType = document.createElement("select");
-
-  listContainer.appendChild(newItem);
-  listContainer.appendChild(newQuantity);
-  listContainer.appendChild(newUnits);
-  listContainer.appendChild(newType);
-
-  // Set input type for shopping list item
-  newItem.type = "text";
-
-  // Set input type for shopping list quantity
-  newQuantity.type = "number";
-
-  // Set input type for shopping list units
-  newUnits.type = "select";
-
-  // Set input type for shopping list type
-  newType.type = "select";
-
-  // Add options for units selection drop down
-  for (i = 0; i < unitsOptions.length; i++) {
-    let uoList = new Option(unitsOptions[i], i);
-    newUnits.options.add(uoList);
-  }
-
-  // Add options for type selection drop down
-  for (i = 0; i < typeOptions.length; i++) {
-    let toList = new Option(typeOptions[i], i);
-    newType.options.add(toList);
-  }
+// Handle Event - Add Item Button Click
+addItemBtn.addEventListener("click", function () {
+  shoppingListItemModal.style.display = "block";
+  nliName.focus();
 });
+
+// handle event - Submit New Item Information
+
+newSLItemForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  if (nliName.value == null || nliName.value === "") return;
+
+  let newObject = {
+    name: nliName.value,
+    type: nliType.value,
+    quantity: nliQty.value,
+    units: nliUnits.value,
+  };
+  list.push(newObject);
+  nliName.value = "";
+  nliType.value = "";
+  nliQty.value = "1";
+  nliUnits.value = "";
+
+  shoppingListItemModal.style.display = "none";
+  renderShoppingList();
+});
+
+function renderShoppingList() {
+  clearElement(listBody);
+
+  list.forEach((item) => {
+    console.log(item);
+    const listItemElement = document.importNode(listItemTemplate.content, true);
+    const checkbox = listItemElement.querySelector("input");
+    checkbox.id = item.id;
+    checkbox.checked = item.complete;
+    const label = listItemElement.querySelector("label");
+    label.htmlFor = item.id;
+
+    if (item.units !== "") {
+      if (item.quantity > 1) {
+        if (item.units === "box") {
+          label.append(
+            item.name + ", " + item.quantity + " " + item.units + "es"
+          );
+          listBody.appendChild(listItemElement);
+        } else {
+          label.append(
+            item.name + ", " + item.quantity + " " + item.units + "s"
+          );
+          listBody.appendChild(listItemElement);
+        }
+      } else {
+        label.append(item.name);
+        listBody.appendChild(listItemElement);
+      }
+    } else {
+      if (item.quantity > 1) {
+        label.append(item.name + ", " + item.quantity);
+        listBody.appendChild(listItemElement);
+      } else {
+        label.append(item.name);
+        listBody.appendChild(listItemElement);
+      }
+    }
+  });
+}
+
+//     if (item.quantity === item.quantity) {
+//       if (item.quantity === 1) {
+//         label.append(item.name + ", " + item.quantity + " " + item.units);
+//         listBody.appendChild(listItemElement);
+//       } else {
+//         if (item.units !== "" && item.units !== null && item.units !== "box") {
+//           label.append(
+//             item.name + ", " + item.quantity + " " + item.units + "s"
+//           );
+//           listBody.appendChild(listItemElement);
+//         } else {
+//           if (item.units !== "" && item.units !== null) {
+//             label.append(
+//               item.name + ", " + item.quantity + " " + item.units + "es"
+//             );
+//             listBody.appendChild(listItemElement);
+//           }
+//         }
+//       }
+//     } else {
+//       label.append(item.name);
+//       listBody.appendChild(listItemElement);
+//     }
+//   });
+// }
+
+function clearElement(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+}
+
+renderShoppingList();
