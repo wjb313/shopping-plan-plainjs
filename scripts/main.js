@@ -1,3 +1,44 @@
+// ***DEFINE EVENT HANDLERS FOR PAGE NAVIGATION***
+const dinnerLink = document.querySelector("[data-nav-to-dinner]");
+const lunchLink = document.querySelector("[data-nav-to-lunch]");
+const breakfastLink = document.querySelector("[data-nav-to-breakfast]");
+const listLink = document.querySelector("[data-nav-to-shopping-list]");
+
+const dinnerDisplay = document.querySelector("#dinnerWrapper");
+const lunchDisplay = document.querySelector("#lunchWrapper");
+const breakfastDisplay = document.querySelector("#breakfastWrapper");
+const listDisplay = document.querySelector("#listWrapper");
+
+dinnerLink.addEventListener("click", function () {
+  dinnerDisplay.style.display = "grid";
+  listDisplay.style.display = "none";
+  saveCurrentPage();
+});
+
+listLink.addEventListener("click", function () {
+  dinnerDisplay.style.display = "none";
+  listDisplay.style.display = "flex";
+  saveCurrentPage();
+});
+
+// save current page to local storage
+const LOCAL_STORAGE_CURRENTPAGE_KEY = "current.page";
+
+let page;
+
+if (localStorage.getItem(LOCAL_STORAGE_CURRENTPAGE_KEY) !== null) {
+  page = JSON.parse(localStorage.getItem(LOCAL_STORAGE_CURRENTPAGE_KEY));
+  dinnerDisplay.style.display = page[0];
+  listDisplay.style.display = page[1];
+} else {
+  dinnerDisplay.style.display = "grid";
+  listDisplay.style.display = "none";
+}
+
+function saveCurrentPage() {
+  page = [dinnerDisplay.style.display, listDisplay.style.display];
+  localStorage.setItem(LOCAL_STORAGE_CURRENTPAGE_KEY, JSON.stringify(page));
+}
 // ***MENU PLAN PAGE***
 
 // define arrays and objects
@@ -23,20 +64,63 @@ let menuItemsContent = {
   day7: { main: "", side1: "", side2: "", other: "" },
 };
 
-// declare variables and constants for manipluating the DOM
-const menuGrid = document.querySelector("#menuGrid");
-const reorderBtn = document.querySelector("#reorderBtn");
-const modal = document.querySelector("#myModal");
-const shoppingListItemModal = document.querySelector("#shoppingListItemModal");
-const reorderClose = document.querySelector("#reorderClose");
-const clearClose = document.querySelector("#clearClose");
-const shoppingListItemClose = document.querySelector("#shoppingListItemClose");
-const modalContent = document.querySelector(".modal-content");
+// declare variables and constants for general DOM manipulation
+const menuGrid = document.querySelector("[data-dinner-menu-grid");
+const reorderBtn = document.querySelector("[data-btn-reorder]");
 const selectDay = document.querySelectorAll(".clickableDays");
-const clearYes = document.querySelector("#clearYes");
-const clearNo = document.querySelector("#clearNo");
+const reorderClose = document.querySelector("[data-reorder-close]");
+const clearBtn = document.querySelector("[data-btn-clear]");
+const clearClose = document.querySelector("[data-clear-close]");
+const clearYes = document.querySelector("[data-clear-yes]");
+const clearNo = document.querySelector("[data-clear-no]");
+const shoppingListItemModal = document.querySelector(
+  "[data-shopping-list-item-modal]"
+);
+const shoppingListItemClose = document.querySelector(
+  "[data-shopping-list-item-close]"
+);
 
 let inputs = document.getElementsByTagName("input");
+
+// *** SETUP DATA PERSISTENCE VIA LOCAL STORAGE ***
+// declare constants and variables for local storage
+const LOCAL_STORAGE_DINNERMENU_KEY = "dinner.menu";
+const LOCAL_STORAGE_SHOPPINGLIST_KEY = "shopping.list";
+
+// call to localStorage to load saved data
+if (localStorage.getItem(LOCAL_STORAGE_DINNERMENU_KEY) !== null) {
+  menuItemsContent = JSON.parse(
+    localStorage.getItem(LOCAL_STORAGE_DINNERMENU_KEY)
+  );
+}
+
+// *** LAYOUT MENU GRID - HEADERS AND DAYS OF THE WEEK ***
+// generate headers for menu grid
+for (let i = 0; i < menuItemHeaders.length; i++) {
+  const headerItem = document.createElement("div");
+
+  if (i === menuItemHeaders.length - 1) {
+    headerItem.textContent = menuItemHeaders[i];
+    headerItem.className = "Headers";
+    headerItem.id = "lastHeader";
+    menuGrid.appendChild(headerItem);
+  } else {
+    headerItem.textContent = menuItemHeaders[i];
+    headerItem.className = "headers";
+    headerItem.id = "header" + [i + 1];
+    menuGrid.appendChild(headerItem);
+  }
+}
+
+// define function to loop through days and populate on dinner menu plan
+for (let i = 0; i < days.length; i++) {
+  const daysBox = document.createElement("div");
+
+  daysBox.textContent = days[i];
+  daysBox.className = "days";
+  daysBox.id = "day" + (i + 1);
+  menuGrid.appendChild(daysBox);
+}
 
 // declare variables to populate menu items from localStorage
 let day1Main = document.querySelector("#mi1-1");
@@ -73,19 +157,6 @@ let day7Main = document.querySelector("#mi7-1");
 let day7Side1 = document.querySelector("#mi7-2");
 let day7Side2 = document.querySelector("#mi7-3");
 let day7Other = document.querySelector("#mi7-4");
-
-// declare constants and variables for storing data
-const LOCAL_STORAGE_DINNERMENU_KEY = "dinner.menu";
-
-// call to localStorage to load saved data
-if (localStorage.getItem(LOCAL_STORAGE_DINNERMENU_KEY) !== null) {
-  console.log("setting mIC to localStorage version");
-  menuItemsContent = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_DINNERMENU_KEY)
-  );
-} else {
-  console.log("lsdmk is null");
-}
 
 // populate menu item containers with data from local storage
 day1Main.value = menuItemsContent.day1.main;
@@ -128,42 +199,12 @@ function save(e) {
   let planDay = e.target.dataset.planday;
   let menuItemName = e.target.dataset.id;
 
-  console.log(planDay);
-  console.log(menuItemName);
-
   menuItemsContent[planDay][menuItemName] = e.target.value;
 
   localStorage.setItem(
     LOCAL_STORAGE_DINNERMENU_KEY,
     JSON.stringify(menuItemsContent)
   );
-}
-
-// generate headers for menu grid
-for (let i = 0; i < menuItemHeaders.length; i++) {
-  const headerItem = document.createElement("div");
-
-  if (i === menuItemHeaders.length - 1) {
-    headerItem.textContent = menuItemHeaders[i];
-    headerItem.className = "Headers";
-    headerItem.id = "lastHeader";
-    menuGrid.appendChild(headerItem);
-  } else {
-    headerItem.textContent = menuItemHeaders[i];
-    headerItem.className = "headers";
-    headerItem.id = "header" + [i + 1];
-    menuGrid.appendChild(headerItem);
-  }
-}
-
-// define function to loop through days and populate on dinner menu plan
-for (let i = 0; i < days.length; i++) {
-  const daysBox = document.createElement("div");
-
-  daysBox.textContent = days[i];
-  daysBox.className = "days";
-  daysBox.id = "day" + (i + 1);
-  menuGrid.appendChild(daysBox);
 }
 
 // EVENT HANDLER - REORDER BUTTON
@@ -229,8 +270,9 @@ shoppingListItemClose.addEventListener("click", function () {
   shoppingListItemModal.style.display = "none";
 });
 
-// ADD DRAG AND DROP FUNCTIONALITY FOR MENU ITEMS
-const subGrid = document.querySelector("#subGrid");
+// *** DRAG AND DROP FUNCTIONALITY ***
+// define drag and drop functionality for menu items grid
+const subGrid = document.querySelector("[data-dinner-menu-subgrid]");
 
 let dragIndex = 0;
 let clone = "";
@@ -289,7 +331,7 @@ function drop_handler(e) {
   }
 }
 
-// ADD ALL EVENT HANDLERS FOR DRAG AND DROP TO ALL MENU ITEMS
+// ADD ALL DRAG AND DROP EVENT LISTENERS TO ALL MENU ITEMS
 
 // Calls function upon loading all content
 window.addEventListener("DOMContentLoaded", addEListen);
@@ -299,11 +341,11 @@ function addEListen() {
   addDrag();
   addDropZone();
   addLocalStorageSave();
-  // addEdit();
 }
 
+// adds dragstart handler to
 function addDrag() {
-  const dsgDrag = document.querySelectorAll(".daySubGrid");
+  const dsgDrag = document.querySelectorAll("[data-dsg-drag-units]");
 
   dsgDrag.forEach(function (e) {
     e.addEventListener("dragstart", dragstart_handler);
@@ -311,7 +353,7 @@ function addDrag() {
 }
 
 function addDropZone() {
-  const dsgDrag = document.querySelectorAll(".daySubGrid");
+  const dsgDrag = document.querySelectorAll("[data-dsg-drag-units]");
 
   dsgDrag.forEach(function (e) {
     e.addEventListener("dragover", dragover_handler);
@@ -327,55 +369,20 @@ function addLocalStorageSave() {
   });
 }
 
-// function saveInput(e) {
-//   console.log(e.contentEditable);
-//   e.target.contentEditable = true;
-//   //e.target.textContent = "";
-//   e.target.focus();
-
-//   let input = e.target;
-//   input.onblur = inputBlur;
-//   function inputBlur() {
-//     save();
-//   }
-// }
-
-// ***DEFINE EVENT HANDLERS FOR PAGE NAVIGATION***
-const dinnerLink = document.querySelector("#goToDinnerMenu");
-const lunchLink = document.querySelector("#goToLunchMenu");
-const breakfastLink = document.querySelector("#goToBreakfastMenu");
-const listLink = document.querySelector("#goToShoppingList");
-
-const dinnerDisplay = document.querySelector("#dinnerWrapper");
-const lunchDisplay = document.querySelector("#lunchWrapper");
-const breakfastDisplay = document.querySelector("#breakfastWrapper");
-const listDisplay = document.querySelector("#listWrapper");
-
-dinnerLink.addEventListener("click", function () {
-  dinnerDisplay.style.display = "grid";
-  listDisplay.style.display = "none";
-});
-
-listLink.addEventListener("click", function () {
-  dinnerDisplay.style.display = "none";
-  listDisplay.style.display = "flex";
-});
-
-// ***SHOPPING LIST PAGE***
+// *** SHOPPING LIST PAGE ***
 
 // declare constants and variables for shopping list page
-const addItemBtn = document.querySelector("#addItemBtn");
+const addItemBtn = document.querySelector("[data-btn-add-item]");
 const listCount = document.querySelector("[data-list-count");
 const listBody = document.querySelector("[data-list-body]");
 const listItem = document.querySelector("[data-list-item]");
 const listItemInput = document.querySelector("[data-list-item-input");
 const listItemLabel = document.querySelector("[data-list-item-label");
 const listItemSpan = document.querySelector("[data-list-item-span");
-const newDiv = document.createElement("div");
-const newInput = document.createElement("input");
-const newLabel = document.createElement("label");
-const newSpan = document.createElement("span");
 const newSLItemForm = document.querySelector("[data-new-list-form]");
+
+const completedItems = document.querySelector("[data-btn-clear-complete]");
+const allItems = document.querySelector("[data-btn-clear-all]");
 
 const nliName = document.querySelector("#itemName");
 const nliType = document.querySelector("#itemType");
@@ -386,13 +393,17 @@ const listItemTemplate = document.querySelector("#listItemTemplate");
 
 let list = [];
 
+if (localStorage.getItem(LOCAL_STORAGE_SHOPPINGLIST_KEY) !== null) {
+  list = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SHOPPINGLIST_KEY));
+}
+
 // Handle Event - Add Item Button Click
 addItemBtn.addEventListener("click", function () {
   shoppingListItemModal.style.display = "block";
   nliName.focus();
 });
 
-// handle event - Submit New Item Information
+// Handle Event - Submit New Item Information
 
 newSLItemForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -400,10 +411,12 @@ newSLItemForm.addEventListener("submit", (e) => {
   if (nliName.value == null || nliName.value === "") return;
 
   let newObject = {
+    id: Date.now().toString(),
     name: nliName.value,
     type: nliType.value,
     quantity: nliQty.value,
     units: nliUnits.value,
+    complete: false,
   };
   list.push(newObject);
   nliName.value = "";
@@ -412,21 +425,27 @@ newSLItemForm.addEventListener("submit", (e) => {
   nliUnits.value = "";
 
   shoppingListItemModal.style.display = "none";
+
+  localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
+
   renderShoppingList();
 });
 
+// *** RENDER SHOPPING LIST AND LIST ITEM COUNT CONTENTS
+// shopping list items
 function renderShoppingList() {
+  // clear all existing elements from list
   clearElement(listBody);
-
+  // iterate through list array
   list.forEach((item) => {
-    console.log(item);
+    // create new list item for each array object
     const listItemElement = document.importNode(listItemTemplate.content, true);
     const checkbox = listItemElement.querySelector("input");
     checkbox.id = item.id;
     checkbox.checked = item.complete;
     const label = listItemElement.querySelector("label");
     label.htmlFor = item.id;
-
+    // conditionals to define how to render items depending on data entered
     if (item.units !== "") {
       if (item.quantity > 1) {
         if (item.units === "box") {
@@ -456,31 +475,28 @@ function renderShoppingList() {
   });
 }
 
-//     if (item.quantity === item.quantity) {
-//       if (item.quantity === 1) {
-//         label.append(item.name + ", " + item.quantity + " " + item.units);
-//         listBody.appendChild(listItemElement);
-//       } else {
-//         if (item.units !== "" && item.units !== null && item.units !== "box") {
-//           label.append(
-//             item.name + ", " + item.quantity + " " + item.units + "s"
-//           );
-//           listBody.appendChild(listItemElement);
-//         } else {
-//           if (item.units !== "" && item.units !== null) {
-//             label.append(
-//               item.name + ", " + item.quantity + " " + item.units + "es"
-//             );
-//             listBody.appendChild(listItemElement);
-//           }
-//         }
-//       }
-//     } else {
-//       label.append(item.name);
-//       listBody.appendChild(listItemElement);
-//     }
-//   });
-// }
+// count of remaining list items
+function renderListCount() {
+  const incompleteListCount = list.filter((list) => list.complete === false);
+  const taskString = incompleteListCount.length === 1 ? "item" : "items";
+  listCount.textContent = `${incompleteListCount.length} ${taskString} remaining`;
+}
+
+// Event Handler - change array object 'complete' property when item is clicked
+// then save the new array entry information to local storage
+listBody.addEventListener("click", (e) => {
+  if (e.target.tagName.toLowerCase() === "input") {
+    let selectedListItem = list.find((list) => list.id === e.target.id);
+    selectedListItem.complete = e.target.checked;
+  }
+  localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
+  renderListCount();
+});
+
+// Event Handler - clear completed items button
+completedItems.addEventListener("click", clearCompletedItems);
+// Event Handler - clear all items button
+allItems.addEventListener("click", clearAllItems);
 
 function clearElement(element) {
   while (element.firstChild) {
@@ -488,4 +504,20 @@ function clearElement(element) {
   }
 }
 
+function clearCompletedItems() {
+  list = list.filter((list) => list.complete === false);
+  console.log(list);
+  localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
+  renderShoppingList();
+  renderListCount();
+}
+
+function clearAllItems() {
+  list = [];
+  localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
+  renderShoppingList();
+  renderListCount();
+}
+
 renderShoppingList();
+renderListCount();

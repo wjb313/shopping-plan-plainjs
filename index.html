@@ -5,7 +5,6 @@
 
     <title>ShopPlan</title>
 
-    
     <meta
       name="description"
       content="This project is an app that helps assist in the process of amassing a grocery/household staples list via a weekly menu plan."
@@ -26,10 +25,10 @@
   <body>
     <nav>
       <ul class="navList">
-        <li class="navListItem" id="goToDinnerMenu">Dinner Plan</li>
-        <li class="navListItem" id="goToLunchMenu">Lunch Plan</li>
-        <li class="navListItem" id="goToBreakfastMenu">Breakfast Plan</li>
-        <li class="navListItem" id="goToShoppingList">Shopping List</li>
+        <li class="navListItem" data-nav-to-dinner>Dinner Plan</li>
+        <li class="navListItem" data-nav-to-lunch>Lunch Plan</li>
+        <li class="navListItem" data-nav-to-breakfast>Breakfast Plan</li>
+        <li class="navListItem" data-nav-to-shopping-list>Shopping List</li>
       </ul>
     </nav>
     <hr class="line" />
@@ -38,13 +37,18 @@
         <header>
           <h1>Dinner Menu Plan</h1>
           <div id="btnDiv">
-            <button id="reorderBtn">Change Starting Day</button>
-            <button id="clearBtn">Clear All Menu Items</button>
+            <button class="btn" data-btn-reorder>Change Starting Day</button>
+            <button class="btn" data-btn-clear>Clear All Menu Items</button>
           </div>
         </header>
-        <div id="menuGrid">
-          <div id="subGrid">
-            <div id="dsg1" class="daySubGrid" draggable="true">
+        <div id="menuGrid" data-dinner-menu-grid>
+          <div id="subGrid" data-dinner-menu-subgrid>
+            <div
+              id="dsg1"
+              class="daySubGrid"
+              data-dsg-drag-units
+              draggable="true"
+            >
               <input
                 id="mi1-1"
                 data-planday="day1"
@@ -93,7 +97,12 @@
                 />
               </svg>
             </div>
-            <div id="dsg2" class="daySubGrid" draggable="true">
+            <div
+              id="dsg2"
+              class="daySubGrid"
+              data-dsg-drag-units
+              draggable="true"
+            >
               <input
                 id="mi2-1"
                 data-planday="day2"
@@ -142,7 +151,12 @@
                 />
               </svg>
             </div>
-            <div id="dsg3" class="daySubGrid" draggable="true">
+            <div
+              id="dsg3"
+              class="daySubGrid"
+              data-dsg-drag-units
+              draggable="true"
+            >
               <input
                 id="mi3-1"
                 data-planday="day3"
@@ -191,7 +205,12 @@
                 />
               </svg>
             </div>
-            <div id="dsg4" class="daySubGrid" draggable="true">
+            <div
+              id="dsg4"
+              class="daySubGrid"
+              data-dsg-drag-units
+              draggable="true"
+            >
               <input
                 id="mi4-1"
                 data-planday="day4"
@@ -240,7 +259,12 @@
                 />
               </svg>
             </div>
-            <div id="dsg5" class="daySubGrid" draggable="true">
+            <div
+              id="dsg5"
+              class="daySubGrid"
+              data-dsg-drag-units
+              draggable="true"
+            >
               <input
                 id="mi5-1"
                 data-planday="day5"
@@ -289,7 +313,12 @@
                 />
               </svg>
             </div>
-            <div id="dsg6" class="daySubGrid" draggable="true">
+            <div
+              id="dsg6"
+              class="daySubGrid"
+              data-dsg-drag-units
+              draggable="true"
+            >
               <input
                 id="mi6-1"
                 data-planday="day6"
@@ -338,7 +367,12 @@
                 />
               </svg>
             </div>
-            <div id="dsg7" class="daySubGrid" draggable="true">
+            <div
+              id="dsg7"
+              class="daySubGrid"
+              data-dsg-drag-units
+              draggable="true"
+            >
               <input
                 id="mi7-1"
                 data-planday="day7"
@@ -393,8 +427,8 @@
       <div id="listWrapper">
         <header class="shoppingListHeader">
           <h1 class="shoppingListTitle">Shopping List</h1>
-          <p class="listCount" data-list-count>3 items remaining</p>
-          <button class="shoppingListBtn" id="addItemBtn">Add Item</button>
+          <p class="listCount" data-list-count></p>
+          <button class="btn" data-btn-add-item>Add Item</button>
         </header>
         <div class="shoppingListBody" data-list-body>
           <div class="items">
@@ -406,35 +440,36 @@
                 data-list-item-input
               />
               <label for="listItem1" data-list-item-label>
-                <span class="custom-checkbox" data-list-item-span></span>Cherry
-                Preserves</label
-              >
+                <span class="custom-checkbox" data-list-item-span></span
+              ></label>
             </div>
             <div class="listItem">
               <input type="checkbox" class="sliCheckbox" id="listItem2" />
               <label for="listItem2">
-                <span class="custom-checkbox"></span>Bread</label
-              >
+                <span class="custom-checkbox"></span
+              ></label>
             </div>
             <div class="listItem">
               <input type="checkbox" class="sliCheckbox" id="listItem3" />
               <label for="listItem3">
-                <span class="custom-checkbox"></span>Bananas</label
-              >
+                <span class="custom-checkbox"></span
+              ></label>
             </div>
             <div class="listItem">
               <input type="checkbox" class="sliCheckbox" id="listItem4" />
               <label for="listItem4">
-                <span class="custom-checkbox"></span>Broccoli</label
-              >
+                <span class="custom-checkbox"></span
+              ></label>
             </div>
           </div>
         </div>
         <div class="clearAndDelete">
-          <button class="shoppingListBtn btnDelete">
+          <button class="btn btnDelete" data-btn-clear-complete>
             Clear Completed Tasks
           </button>
-          <button class="shoppingListBtn btnDelete">Clear All Tasks</button>
+          <button class="btn btnDelete" data-btn-clear-all>
+            Clear All Tasks
+          </button>
         </div>
       </div>
     </main>
@@ -442,7 +477,7 @@
     <div id="reorderModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
-        <span id="reorderClose" class="close">&times;</span>
+        <span id="reorderClose" class="close" data-reorder-close>&times;</span>
         <h4 class="modalH4">Select day with which to begin your week:</h4>
         <span class="clickableDays">Saturday</span>
         <span class="clickableDays">Sunday</span>
@@ -457,19 +492,28 @@
     <div id="clearModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
-        <span id="clearClose" class="close">&times;</span>
+        <span id="clearClose" class="close" data-clear-close>&times;</span>
         <h4 class="modalH4">Are you sure you wish to clear all menu items?</h4>
-        <span class="clearYesNo" id="clearYes">Yes</span>
-        <span class="clearYesNo" id="clearNo">No</span>
+        <span class="clearYesNo" id="clearYes" data-clear-yes>Yes</span>
+        <span class="clearYesNo" id="clearNo" data-clear-no>No</span>
       </div>
     </div>
     <!-- Starting New Shopping List Item Modal Box -->
-    <div id="shoppingListItemModal" class="sliModal">
+    <div
+      id="shoppingListItemModal"
+      class="sliModal"
+      data-shopping-list-item-modal
+    >
       <!-- Modal content -->
       <div class="sliModal-content">
         <header class="sliModalHeader" id="sliHeader">
           <h4 class="sliModalH4">Enter New Item Information</h4>
-          <span id="shoppingListItemClose" class="sliClose">&times;</span>
+          <span
+            id="shoppingListItemClose"
+            class="sliClose"
+            data-shopping-list-item-close
+            >&times;</span
+          >
         </header>
         <form action="" class="sliModalForm" data-new-list-form>
           <label for="itemName" class="sliLabel">Name</label>
@@ -509,7 +553,7 @@
             <option value="can">can</option>
             <option value="jar">jar</option>
           </select>
-          <button id="newItemBtn">Enter</button>
+          <button class="btn" id="newItemSubmit">Enter</button>
         </form>
       </div>
     </div>
