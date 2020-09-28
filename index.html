@@ -18,408 +18,336 @@
       href="styles/style.css"
       media="screen"
     />
-    <script defer src="scripts/main.js"></script>
-    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
-  </head>
 
+    <script defer src="scripts/main.js"></script>
+  </head>
   <body>
-    <nav>
-      <ul class="navList">
-        <li class="navListItem" data-nav-to-dinner>Dinner Plan</li>
-        <li class="navListItem" data-nav-to-lunch>Lunch Plan</li>
-        <li class="navListItem" data-nav-to-breakfast>Breakfast Plan</li>
-        <li class="navListItem" data-nav-to-shopping-list>Shopping List</li>
-      </ul>
-    </nav>
-    <hr class="line" />
     <main>
+      <header data-js-dmpHeader>
+        <h1>Dinner Menu Plan</h1>
+        <div class="dmpHeaderBtn">
+          <button class="btn" data-btn-reorder>Change Starting Day</button>
+          <button class="btn" data-btn-clear>Clear Menu Items</button>
+        </div>
+        <nav>
+          <ul class="navList" id="testItem">
+            <li class="navListItem" data-nav-to-dinner>Dinner Plan</li>
+            <li
+              class="navListItem"
+              id="navListSeparator"
+              data-nav-to-shopping-list
+            >
+              Shopping List
+            </li>
+          </ul>
+        </nav>
+      </header>
       <div id="dinnerWrapper">
-        <header>
-          <h1>Dinner Menu Plan</h1>
-          <div id="btnDiv">
-            <button class="btn" data-btn-reorder>Change Starting Day</button>
-            <button class="btn" data-btn-clear>Clear All Menu Items</button>
+        <div class="daysOfTheWeek dotwToolTip" data-js-dotw="day1"></div>
+        <div class="daysOfTheWeek dotwToolTip" data-js-dotw="day2"></div>
+        <div class="daysOfTheWeek dotwToolTip" data-js-dotw="day3"></div>
+        <div class="daysOfTheWeek dotwToolTip" data-js-dotw="day4"></div>
+        <div class="daysOfTheWeek dotwToolTip" data-js-dotw="day5"></div>
+        <div class="daysOfTheWeek dotwToolTip" data-js-dotw="day6"></div>
+        <div class="daysOfTheWeek dotwToolTip" data-js-dotw="day7"></div>
+        <div class="menuBox" data-js-menu-box-1 data-js-droppable="day1">
+          <div class="listContainer">
+            <div class="allMenuItems mainDish" data-js-main="day1"></div>
+            <div>
+              <ul class="sidesList">
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side1="day1"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side2="day1"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-other="day1"
+                ></li>
+              </ul>
+            </div>
           </div>
-        </header>
-        <div id="menuGrid" data-dinner-menu-grid>
-          <div id="subGrid" data-dinner-menu-subgrid>
-            <div
-              id="dsg1"
-              class="daySubGrid"
-              data-dsg-drag-units
-              draggable="true"
-            >
-              <input
-                id="mi1-1"
-                data-planday="day1"
-                data-id="main"
-                class="menuItems"
-              />
-              <input
-                id="mi1-2"
-                data-planday="day1"
-                data-id="side1"
-                class="menuItems"
-              />
-              <input
-                id="mi1-3"
-                data-planday="day1"
-                data-id="side2"
-                class="menuItems"
-              />
-              <input
-                id="mi1-4"
-                data-planday="day1"
-                data-id="other"
-                class="menuItems"
-              />
-              <svg
-                id="svgHandle1"
-                class="svgHandles"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                focusable="false"
-                width="4.5em"
-                height="4em"
-                style="
-                  -ms-transform: rotate(360deg);
-                  -webkit-transform: rotate(360deg);
-                  transform: rotate(360deg);
-                "
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 23 16"
-              >
-                <path
-                  id="path1"
-                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
-                  fill="#626262"
+          <div class="notesAndEdit">
+            <div class="notesAndDrag">
+              <div class="notesContainer" data-js-edit-notes="day1">
+                Notes<span
+                  class="tooltiptext allMenuItems"
+                  data-js-notes-span="day1"
+                ></span>
+              </div>
+              <div>
+                <img
+                  src="./icons/move.png"
+                  alt="drag and drop icon"
+                  class="dndIcon"
+                  data-js-draggable="day1"
+                  draggable="true"
                 />
-              </svg>
+              </div>
             </div>
-            <div
-              id="dsg2"
-              class="daySubGrid"
-              data-dsg-drag-units
-              draggable="true"
-            >
-              <input
-                id="mi2-1"
-                data-planday="day2"
-                data-id="main"
-                class="menuItems"
-              />
-              <input
-                id="mi2-2"
-                data-planday="day2"
-                data-id="side1"
-                class="menuItems"
-              />
-              <input
-                id="mi2-3"
-                data-planday="day2"
-                data-id="side2"
-                class="menuItems"
-              />
-              <input
-                id="mi2-4"
-                data-planday="day2"
-                data-id="other"
-                class="menuItems"
-              />
-              <svg
-                id="svgHandle2"
-                class="svgHandles"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                focusable="false"
-                width="4.5em"
-                height="4em"
-                style="
-                  -ms-transform: rotate(360deg);
-                  -webkit-transform: rotate(360deg);
-                  transform: rotate(360deg);
-                "
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 23 16"
-              >
-                <path
-                  id="path2"
-                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
-                  fill="#626262"
-                />
-              </svg>
+            <div class="editBtnContainer">
+              <button class="newBtn" data-js-edit-menu="day1">Edit</button>
             </div>
-            <div
-              id="dsg3"
-              class="daySubGrid"
-              data-dsg-drag-units
-              draggable="true"
-            >
-              <input
-                id="mi3-1"
-                data-planday="day3"
-                data-id="main"
-                class="menuItems"
-              />
-              <input
-                id="mi3-2"
-                data-planday="day3"
-                data-id="side1"
-                class="menuItems"
-              />
-              <input
-                id="mi3-3"
-                data-planday="day3"
-                data-id="side2"
-                class="menuItems"
-              />
-              <input
-                id="mi3-4"
-                data-planday="day3"
-                data-id="other"
-                class="menuItems"
-              />
-              <svg
-                id="svgHandle3"
-                class="svgHandles"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                focusable="false"
-                width="4.5em"
-                height="4em"
-                style="
-                  -ms-transform: rotate(360deg);
-                  -webkit-transform: rotate(360deg);
-                  transform: rotate(360deg);
-                "
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 23 16"
-              >
-                <path
-                  id="path3"
-                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
-                  fill="#626262"
-                />
-              </svg>
+          </div>
+        </div>
+        <div class="menuBox" data-js-menu-box-2 data-js-droppable="day2">
+          <div class="listContainer">
+            <div class="allMenuItems mainDish" data-js-main="day2"></div>
+            <div>
+              <ul class="sidesList">
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side1="day2"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side2="day2"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-other="day2"
+                ></li>
+              </ul>
             </div>
-            <div
-              id="dsg4"
-              class="daySubGrid"
-              data-dsg-drag-units
-              draggable="true"
-            >
-              <input
-                id="mi4-1"
-                data-planday="day4"
-                data-id="main"
-                class="menuItems"
-              />
-              <input
-                id="mi4-2"
-                data-planday="day4"
-                data-id="side1"
-                class="menuItems"
-              />
-              <input
-                id="mi4-3"
-                data-planday="day4"
-                data-id="side2"
-                class="menuItems"
-              />
-              <input
-                id="mi4-4"
-                data-planday="day4"
-                data-id="other"
-                class="menuItems"
-              />
-              <svg
-                id="svgHandle4"
-                class="svgHandles"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                focusable="false"
-                width="4.5em"
-                height="4em"
-                style="
-                  -ms-transform: rotate(360deg);
-                  -webkit-transform: rotate(360deg);
-                  transform: rotate(360deg);
-                "
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 23 16"
-              >
-                <path
-                  id="path4"
-                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
-                  fill="#626262"
+          </div>
+          <div class="notesAndEdit">
+            <div class="notesAndDrag">
+              <div class="notesContainer" data-js-edit-notes="day2">
+                Notes<span
+                  class="tooltiptext allMenuItems"
+                  data-js-notes-span="day2"
+                ></span>
+              </div>
+              <div>
+                <img
+                  src="/icons/move.png"
+                  alt="drag and drop icon"
+                  class="dndIcon"
+                  data-js-draggable="day2"
+                  draggable="true"
                 />
-              </svg>
+              </div>
             </div>
-            <div
-              id="dsg5"
-              class="daySubGrid"
-              data-dsg-drag-units
-              draggable="true"
-            >
-              <input
-                id="mi5-1"
-                data-planday="day5"
-                data-id="main"
-                class="menuItems"
-              />
-              <input
-                id="mi5-2"
-                data-planday="day5"
-                data-id="side1"
-                class="menuItems"
-              />
-              <input
-                id="mi5-3"
-                data-planday="day5"
-                data-id="side2"
-                class="menuItems"
-              />
-              <input
-                id="mi5-4"
-                data-planday="day5"
-                data-id="other"
-                class="menuItems"
-              />
-              <svg
-                id="svgHandle5"
-                class="svgHandles"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                focusable="false"
-                width="4.5em"
-                height="4em"
-                style="
-                  -ms-transform: rotate(360deg);
-                  -webkit-transform: rotate(360deg);
-                  transform: rotate(360deg);
-                "
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 23 16"
-              >
-                <path
-                  id="path5"
-                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
-                  fill="#626262"
-                />
-              </svg>
+            <div>
+              <button class="newBtn" data-js-edit-menu="day2">Edit</button>
             </div>
-            <div
-              id="dsg6"
-              class="daySubGrid"
-              data-dsg-drag-units
-              draggable="true"
-            >
-              <input
-                id="mi6-1"
-                data-planday="day6"
-                data-id="main"
-                class="menuItems"
-              />
-              <input
-                id="mi6-2"
-                data-planday="day6"
-                data-id="side1"
-                class="menuItems"
-              />
-              <input
-                id="mi6-3"
-                data-planday="day6"
-                data-id="side2"
-                class="menuItems"
-              />
-              <input
-                id="mi6-4"
-                data-planday="day6"
-                data-id="other"
-                class="menuItems"
-              />
-              <svg
-                id="svgHandle6"
-                class="svgHandles"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                focusable="false"
-                width="4.5em"
-                height="4em"
-                style="
-                  -ms-transform: rotate(360deg);
-                  -webkit-transform: rotate(360deg);
-                  transform: rotate(360deg);
-                "
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 23 16"
-              >
-                <path
-                  id="path6"
-                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
-                  fill="#626262"
-                />
-              </svg>
+          </div>
+        </div>
+        <div class="menuBox" data-js-menu-box-3 data-js-droppable="day3">
+          <div class="listContainer">
+            <div class="allMenuItems mainDish" data-js-main="day3"></div>
+            <div>
+              <ul class="sidesList">
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side1="day3"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side2="day3"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-other="day3"
+                ></li>
+              </ul>
             </div>
-            <div
-              id="dsg7"
-              class="daySubGrid"
-              data-dsg-drag-units
-              draggable="true"
-            >
-              <input
-                id="mi7-1"
-                data-planday="day7"
-                data-id="main"
-                class="menuItems"
-              />
-              <input
-                id="mi7-2"
-                data-planday="day7"
-                data-id="side1"
-                class="menuItems"
-              />
-              <input
-                id="mi7-3"
-                data-planday="day7"
-                data-id="side2"
-                class="menuItems"
-              />
-              <input
-                id="mi7-4"
-                data-planday="day7"
-                data-id="other"
-                class="menuItems"
-              />
-              <svg
-                id="svgHandle7"
-                class="svgHandles"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                focusable="false"
-                width="4.5em"
-                height="4em"
-                style="
-                  -ms-transform: rotate(360deg);
-                  -webkit-transform: rotate(360deg);
-                  transform: rotate(360deg);
-                "
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 23 16"
-              >
-                <path
-                  id="path7"
-                  d="M19 9H5c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1zM5 15h14c.55 0 1-.45 1-1s-.45-1-1-1H5c-.55 0-1 .45-1 1s.45 1 1 1z"
-                  fill="#626262"
+          </div>
+          <div class="notesAndEdit">
+            <div class="notesAndDrag">
+              <div class="notesContainer" data-js-edit-notes="day3">
+                Notes<span
+                  class="tooltiptext allMenuItems"
+                  data-js-notes-span="day3"
+                ></span>
+              </div>
+              <div>
+                <img
+                  src="/icons/move.png"
+                  alt="drag and drop icon"
+                  class="dndIcon"
+                  data-js-draggable="day3"
+                  draggable="true"
                 />
-              </svg>
+              </div>
+            </div>
+            <div>
+              <button class="newBtn" data-js-edit-menu="day3">Edit</button>
+            </div>
+          </div>
+        </div>
+        <div class="menuBox" data-js-menu-box-4 data-js-droppable="day4">
+          <div class="listContainer">
+            <div class="allMenuItems mainDish" data-js-main="day4"></div>
+            <div>
+              <ul class="sidesList">
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side1="day4"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side2="day4"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-other="day4"
+                ></li>
+              </ul>
+            </div>
+          </div>
+          <div class="notesAndEdit">
+            <div class="notesAndDrag">
+              <div class="notesContainer" data-js-edit-notes="day4">
+                Notes<span
+                  class="tooltiptext allMenuItems"
+                  data-js-notes-span="day4"
+                ></span>
+              </div>
+              <div>
+                <img
+                  src="/icons/move.png"
+                  alt="drag and drop icon"
+                  class="dndIcon"
+                  data-js-draggable="day4"
+                  draggable="true"
+                />
+              </div>
+            </div>
+            <div>
+              <button class="newBtn" data-js-edit-menu="day4">Edit</button>
+            </div>
+          </div>
+        </div>
+        <div class="menuBox" data-js-menu-box-5 data-js-droppable="day5">
+          <div class="listContainer">
+            <div class="allMenuItems mainDish" data-js-main="day5"></div>
+            <div>
+              <ul class="sidesList">
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side1="day5"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side2="day5"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-other="day5"
+                ></li>
+              </ul>
+            </div>
+          </div>
+          <div class="notesAndEdit">
+            <div class="notesAndDrag">
+              <div class="notesContainer" data-js-edit-notes="day5">
+                Notes<span
+                  class="tooltiptext allMenuItems"
+                  data-js-notes-span="day5"
+                ></span>
+              </div>
+              <div>
+                <img
+                  src="/icons/move.png"
+                  alt="drag and drop icon"
+                  class="dndIcon"
+                  data-js-draggable="day5"
+                  draggable="true"
+                />
+              </div>
+            </div>
+            <div>
+              <button class="newBtn" data-js-edit-menu="day5">Edit</button>
+            </div>
+          </div>
+        </div>
+        <div class="menuBox" data-js-menu-box-6 data-js-droppable="day6">
+          <div class="listContainer">
+            <div class="allMenuItems mainDish" data-js-main="day6"></div>
+            <div>
+              <ul class="sidesList">
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side1="day6"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side2="day6"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-other="day6"
+                ></li>
+              </ul>
+            </div>
+          </div>
+          <div class="notesAndEdit">
+            <div class="notesAndDrag">
+              <div class="notesContainer" data-js-edit-notes="day6">
+                Notes<span
+                  class="tooltiptext allMenuItems"
+                  data-js-notes-span="day6"
+                ></span>
+              </div>
+              <div>
+                <img
+                  src="/icons/move.png"
+                  alt="drag and drop icon"
+                  class="dndIcon"
+                  data-js-draggable="day6"
+                  draggable="true"
+                />
+              </div>
+            </div>
+            <div>
+              <button class="newBtn" data-js-edit-menu="day6">Edit</button>
+            </div>
+          </div>
+        </div>
+        <div class="menuBox" data-js-menu-box-7 data-js-droppable="day7">
+          <div class="listContainer">
+            <div class="allMenuItems mainDish" data-js-main="day7"></div>
+            <div>
+              <ul class="sidesList">
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side1="day7"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-side2="day7"
+                ></li>
+                <li
+                  class="allMenuItems sidesListItems"
+                  data-js-other="day7"
+                ></li>
+              </ul>
+            </div>
+          </div>
+          <div class="notesAndEdit">
+            <div class="notesAndDrag">
+              <div class="notesContainer" data-js-edit-notes="day7">
+                Notes<span
+                  class="tooltiptext allMenuItems"
+                  data-js-notes-span="day7"
+                ></span>
+              </div>
+              <div>
+                <img
+                  src="/icons/move.png"
+                  alt="drag and drop icon"
+                  class="dndIcon"
+                  data-js-draggable="day7"
+                  draggable="true"
+                />
+              </div>
+            </div>
+            <div>
+              <button class="newBtn" data-js-edit-menu="day7">Edit</button>
             </div>
           </div>
         </div>
@@ -473,12 +401,14 @@
         </div>
       </div>
     </main>
-    <!-- Starting Day of the Week Modal Selector Tool -->
-    <div id="reorderModal" class="modal">
+    <!-- **** DOTW REORDER MODAL **** -->
+    <div class="modal" data-js-reorder-modal>
       <!-- Modal content -->
-      <div class="modal-content">
-        <span id="reorderClose" class="close" data-reorder-close>&times;</span>
-        <h4 class="modalH4">Select day with which to begin your week:</h4>
+      <div class="modalContent" id="dotwReorderModal">
+        <div class="modalContentTop">
+          <h4 class="modalH4">Select first day of the week</h4>
+          <span class="close" data-reorder-close>&times;</span>
+        </div>
         <span class="clickableDays">Saturday</span>
         <span class="clickableDays">Sunday</span>
         <span class="clickableDays">Monday</span>
@@ -488,24 +418,28 @@
         <span class="clickableDays">Friday</span>
       </div>
     </div>
-    <!-- Clear All Items Confirmation Modal Box-->
-    <div id="clearModal" class="modal">
+    <!-- **** CLEAR ALL ITEMS MODAL **** -->
+    <div class="modal" data-js-clear-modal>
       <!-- Modal content -->
-      <div class="modal-content">
-        <span id="clearClose" class="close" data-clear-close>&times;</span>
-        <h4 class="modalH4">Are you sure you wish to clear all menu items?</h4>
-        <span class="clearYesNo" id="clearYes" data-clear-yes>Yes</span>
-        <span class="clearYesNo" id="clearNo" data-clear-no>No</span>
+      <div class="modalContent">
+        <div class="modalContentTop">
+          <h4 class="modalH4">Clear ALL menu items?</h4>
+          <span class="close" data-clear-close>&times;</span>
+        </div>
+        <div class="modalContentBottom">
+          <span class="clearYesNo" id="clearYes" data-clear-yes>Yes</span>
+          <span class="clearYesNo" id="clearNo" data-clear-no>No</span>
+        </div>
       </div>
     </div>
-    <!-- Starting New Shopping List Item Modal Box -->
+    <!-- **** SHOPPING LIST NEW ITEM MODAL **** -->
     <div
       id="shoppingListItemModal"
       class="sliModal"
       data-shopping-list-item-modal
     >
       <!-- Modal content -->
-      <div class="sliModal-content">
+      <div class="sliModalContent">
         <header class="sliModalHeader" id="sliHeader">
           <h4 class="sliModalH4">Enter New Item Information</h4>
           <span
@@ -517,7 +451,12 @@
         </header>
         <form action="" class="sliModalForm" data-new-list-form>
           <label for="itemName" class="sliLabel">Name</label>
-          <input type="text" class="sliInput" id="itemName" />
+          <input
+            type="text"
+            class="sliInput"
+            id="itemName"
+            placeholder="Enter Main Dish Here"
+          />
           <label for="itemType" class="sliLabel">Type</label>
           <select class="sliInput" id="itemType">
             <option value=""></option>
@@ -553,7 +492,77 @@
             <option value="can">can</option>
             <option value="jar">jar</option>
           </select>
-          <button class="btn" id="newItemSubmit">Enter</button>
+          <button class="btn">Enter</button>
+        </form>
+      </div>
+    </div>
+    <!-- **** DINNER MENU PLAN (DMP) MODAL **** -->
+    <div class="modal" id="dmpModal" data-js-dmp-modal tabindex="-1">
+      <div class="modalContent">
+        <header>
+          <h4 class="dmpModalH4" data-js-dmp-modal-header></h4>
+        </header>
+        <form action="" class="dmpModalForm">
+          <label class="dmpModalLabel">Main</label>
+          <input type="text" class="dmpModalInput" data-js-input-one="main" />
+          <p id="mainDishHint" class="inputHint">Enter a main dish here</p>
+          <label class="dmpModalLabel">Side</label>
+          <input type="text" class="dmpModalInput" data-js-input-two="side1" />
+          <p id="mainDishHint" class="inputHint">Enter a side dish here</p>
+          <label class="dmpModalLabel">Side</label>
+          <input
+            type="text"
+            class="dmpModalInput"
+            data-js-input-three="side2"
+          />
+          <p id="mainDishHint" class="inputHint">
+            Enter another side here, if you like
+          </p>
+          <label class="dmpModalLabel">Other</label>
+          <input type="text" class="dmpModalInput" data-js-input-four="other" />
+          <p id="mainDishHint" class="inputHint">
+            Enter miscellaneous items here, if you have any
+          </p>
+          <label class="dmpModalLabel">Notes</label>
+          <textarea
+            name="Notes"
+            rows="3"
+            cols="30"
+            class="dmpModalInput"
+            data-js-input-five="notes"
+          ></textarea>
+          <p id="mainDishHint" class="inputHint">
+            Enter any notes you may want
+          </p>
+          <div class="newBtnDiv">
+            <button class="newBtn" data-js-new-item-submit>Enter</button>
+            <button class="newBtn" data-js-dmp-modal-close>Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- **** DINNER MENU PLAN (DMP) NOTES MODAL **** -->
+    <div class="modal" data-js-notes-modal>
+      <div class="modalContent">
+        <header>
+          <h4 class="dmpModalH4" data-js-dmp-notes-modal-header></h4>
+        </header>
+        <form action="" class="dmpModalForm">
+          <textarea
+            name="Notes"
+            rows="3"
+            cols="30"
+            class="dmpNotesModalInput"
+            data-js-input-notes
+          ></textarea>
+
+          <p id="mainDishHint" class="inputHint">
+            Enter any notes you may want
+          </p>
+          <div class="newBtnDiv">
+            <button class="newBtn" data-js-notes-submit>Enter</button>
+            <button class="newBtn" data-js-notes-modal-close>Close</button>
+          </div>
         </form>
       </div>
     </div>

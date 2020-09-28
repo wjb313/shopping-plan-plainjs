@@ -1,29 +1,109 @@
-// ***DEFINE EVENT HANDLERS FOR PAGE NAVIGATION***
-const dinnerLink = document.querySelector("[data-nav-to-dinner]");
-const lunchLink = document.querySelector("[data-nav-to-lunch]");
-const breakfastLink = document.querySelector("[data-nav-to-breakfast]");
-const listLink = document.querySelector("[data-nav-to-shopping-list]");
+// *** GLOBAL ***
+// variables/constants for manipulating the DOM
+let currentEditDay;
+let currentEditDayNumber;
+let currentDayDisplay;
 
+// ***PAGE NAVIGATION***
+const dinnerLink = document.querySelector("[data-nav-to-dinner]");
+const listLink = document.querySelector("[data-nav-to-shopping-list]");
+const dmpHeader = document.querySelector("[data-js-dmpHeader]");
 const dinnerDisplay = document.querySelector("#dinnerWrapper");
-const lunchDisplay = document.querySelector("#lunchWrapper");
-const breakfastDisplay = document.querySelector("#breakfastWrapper");
 const listDisplay = document.querySelector("#listWrapper");
 
 dinnerLink.addEventListener("click", function () {
   dinnerDisplay.style.display = "grid";
+  dmpHeader.style.display = "flex";
   listDisplay.style.display = "none";
   saveCurrentPage();
 });
 
 listLink.addEventListener("click", function () {
   dinnerDisplay.style.display = "none";
+  dmpHeader.style.display = "none";
   listDisplay.style.display = "flex";
   saveCurrentPage();
 });
 
-// save current page to local storage
-const LOCAL_STORAGE_CURRENTPAGE_KEY = "current.page";
+// ***MENU PLAN PAGE***
 
+// define days of the week
+let days = [
+  "Saturday",
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+];
+
+// declare empty object for dinner menu plan (dmp) content JSON file
+let dmpContent = {
+  day1: {
+    main: "",
+    side1: "",
+    side2: "",
+    other: "",
+    notes: "",
+  },
+  day2: {
+    main: "",
+    side1: "",
+    side2: "",
+    other: "",
+    notes: "",
+  },
+  day3: {
+    main: "",
+    side1: "",
+    side2: "",
+    other: "",
+    notes: "",
+  },
+  day4: {
+    main: "",
+    side1: "",
+    side2: "",
+    other: "",
+    notes: "",
+  },
+  day5: {
+    main: "",
+    side1: "",
+    side2: "",
+    other: "",
+    notes: "",
+  },
+  day6: {
+    main: "",
+    side1: "",
+    side2: "",
+    other: "",
+    notes: "",
+  },
+  day7: {
+    main: "",
+    side1: "",
+    side2: "",
+    other: "",
+    notes: "",
+  },
+};
+
+// *** SETUP DATA PERSISTENCE VIA LOCAL STORAGE ***
+// declare constants and variables for local storage
+const LOCAL_STORAGE_SHOPPINGLIST_KEY = "shopping.list";
+const LOCAL_STORAGE_CURRENTPAGE_KEY = "current.page";
+const LOCAL_STORAGE_CURRENTDOTW_KEY = "current.dotw";
+const LOCAL_STORAGE_DMP_KEY = "dinnermenu.plan";
+
+// save menu to/restore menu from local storage
+if (localStorage.getItem(LOCAL_STORAGE_DMP_KEY) !== null) {
+  dmpContent = JSON.parse(localStorage.getItem(LOCAL_STORAGE_DMP_KEY));
+}
+
+// persist user's current page via local storage
 let page;
 
 if (localStorage.getItem(LOCAL_STORAGE_CURRENTPAGE_KEY) !== null) {
@@ -39,261 +119,297 @@ function saveCurrentPage() {
   page = [dinnerDisplay.style.display, listDisplay.style.display];
   localStorage.setItem(LOCAL_STORAGE_CURRENTPAGE_KEY, JSON.stringify(page));
 }
-// ***MENU PLAN PAGE***
 
-// define arrays and objects
-const days = [
-  "Saturday",
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-];
-
-const menuItemHeaders = ["Day", "Main", "Side", "Side", "Other", ""];
-
-let menuItemsContent = {
-  day1: { main: "", side1: "", side2: "", other: "" },
-  day2: { main: "", side1: "", side2: "", other: "" },
-  day3: { main: "", side1: "", side2: "", other: "" },
-  day4: { main: "", side1: "", side2: "", other: "" },
-  day5: { main: "", side1: "", side2: "", other: "" },
-  day6: { main: "", side1: "", side2: "", other: "" },
-  day7: { main: "", side1: "", side2: "", other: "" },
-};
-
-// declare variables and constants for general DOM manipulation
-const menuGrid = document.querySelector("[data-dinner-menu-grid");
-const reorderBtn = document.querySelector("[data-btn-reorder]");
-const selectDay = document.querySelectorAll(".clickableDays");
-const reorderClose = document.querySelector("[data-reorder-close]");
-const clearBtn = document.querySelector("[data-btn-clear]");
-const clearClose = document.querySelector("[data-clear-close]");
-const clearYes = document.querySelector("[data-clear-yes]");
-const clearNo = document.querySelector("[data-clear-no]");
-const shoppingListItemModal = document.querySelector(
-  "[data-shopping-list-item-modal]"
-);
-const shoppingListItemClose = document.querySelector(
-  "[data-shopping-list-item-close]"
-);
-
-let inputs = document.getElementsByTagName("input");
-
-// *** SETUP DATA PERSISTENCE VIA LOCAL STORAGE ***
-// declare constants and variables for local storage
-const LOCAL_STORAGE_DINNERMENU_KEY = "dinner.menu";
-const LOCAL_STORAGE_SHOPPINGLIST_KEY = "shopping.list";
-
-// call to localStorage to load saved data
-if (localStorage.getItem(LOCAL_STORAGE_DINNERMENU_KEY) !== null) {
-  menuItemsContent = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_DINNERMENU_KEY)
-  );
+// persist user's days of the week (dotw) configuration via local storage
+if (localStorage.getItem(LOCAL_STORAGE_CURRENTDOTW_KEY) !== null) {
+  days = JSON.parse(localStorage.getItem(LOCAL_STORAGE_CURRENTDOTW_KEY));
+} else {
 }
 
-// *** LAYOUT MENU GRID - HEADERS AND DAYS OF THE WEEK ***
-// generate headers for menu grid
-for (let i = 0; i < menuItemHeaders.length; i++) {
-  const headerItem = document.createElement("div");
+function saveCurrentDOTW() {
+  localStorage.setItem(LOCAL_STORAGE_CURRENTDOTW_KEY, JSON.stringify(days));
+}
 
-  if (i === menuItemHeaders.length - 1) {
-    headerItem.textContent = menuItemHeaders[i];
-    headerItem.className = "Headers";
-    headerItem.id = "lastHeader";
-    menuGrid.appendChild(headerItem);
-  } else {
-    headerItem.textContent = menuItemHeaders[i];
-    headerItem.className = "headers";
-    headerItem.id = "header" + [i + 1];
-    menuGrid.appendChild(headerItem);
+// *** POPULATE DAYS OF THE WEEK
+const dotw1 = document.querySelector("[data-js-day1-dotw]");
+const dotw2 = document.querySelector("[data-js-day2-dotw]");
+const dotw3 = document.querySelector("[data-js-day3-dotw]");
+const dotw4 = document.querySelector("[data-js-day4-dotw]");
+const dotw5 = document.querySelector("[data-js-day5-dotw]");
+const dotw6 = document.querySelector("[data-js-day6-dotw]");
+const dotw7 = document.querySelector("[data-js-day7-dotw]");
+
+const dotwClassSelect = document.querySelectorAll("[data-js-dotw]");
+
+function dotwPopulate() {
+  for (i = 0; i < days.length; i++) {
+    const dotwSpanCreate = document.createElement("span");
+    let currentDayDOM = document.querySelector(
+      '[data-js-dotw="day' + [i + 1] + '"]'
+    );
+    currentDayDOM.textContent = days[i].charAt(0);
+    dotwSpanCreate.textContent = days[i];
+    dotwSpanCreate.className = "tooltiptext";
+    currentDayDOM.appendChild(dotwSpanCreate);
   }
 }
 
-// define function to loop through days and populate on dinner menu plan
-for (let i = 0; i < days.length; i++) {
-  const daysBox = document.createElement("div");
+// *** LOAD DINNER MENU PLAN CONTENT INTO PAGE
+// define function to load content into page, assign to proper fields
+// ami = 'all menu items'
+function loadMenuContent() {
+  let amiList = document.querySelectorAll(".allMenuItems");
 
-  daysBox.textContent = days[i];
-  daysBox.className = "days";
-  daysBox.id = "day" + (i + 1);
-  menuGrid.appendChild(daysBox);
+  amiList.forEach((item) => {
+    if (item.dataset.jsMain) {
+      let currentDay = item.dataset.jsMain;
+      item.textContent = dmpContent[currentDay]["main"];
+    } else if (item.dataset.jsSide1) {
+      let currentDay = item.dataset.jsSide1;
+      item.textContent = dmpContent[currentDay]["side1"];
+    } else if (item.dataset.jsSide2) {
+      let currentDay = item.dataset.jsSide2;
+      item.textContent = dmpContent[currentDay]["side2"];
+    } else if (item.dataset.jsOther) {
+      let currentDay = item.dataset.jsOther;
+      item.textContent = dmpContent[currentDay]["other"];
+    } else {
+      let currentDay = item.dataset.jsNotesSpan;
+      item.textContent = dmpContent[currentDay]["notes"];
+    }
+  });
 }
 
-// declare variables to populate menu items from localStorage
-let day1Main = document.querySelector("#mi1-1");
-let day1Side1 = document.querySelector("#mi1-2");
-let day1Side2 = document.querySelector("#mi1-3");
-let day1Other = document.querySelector("#mi1-4");
+// *** EDIT MENU ITEMS AND MENU ITEM NOTES
 
-let day2Main = document.querySelector("#mi2-1");
-let day2Side1 = document.querySelector("#mi2-2");
-let day2Side2 = document.querySelector("#mi2-3");
-let day2Other = document.querySelector("#mi2-4");
+// *** EDIT DINNER MENU PLAN ENTRIES ***
+// variables/constants for DOM manipulation
+const dmpModal = document.querySelector("[data-js-dmp-modal]");
+const editMenu = document.querySelectorAll("[data-js-edit-menu]");
+const submitMenuEdit = document.querySelector("[data-js-new-item-submit]");
+const dmpModalClose = document.querySelector("[data-js-dmp-modal-close]");
+const inputFields = document.querySelectorAll(".dmpModalInput");
+const dmpModalHeader = document.querySelector("[data-js-dmp-modal-header]");
 
-let day3Main = document.querySelector("#mi3-1");
-let day3Side1 = document.querySelector("#mi3-2");
-let day3Side2 = document.querySelector("#mi3-3");
-let day3Other = document.querySelector("#mi3-4");
+// handle event --> button click to call open dmp edit modal function
+editMenu.forEach(function (e) {
+  e.addEventListener("click", openEditModal);
+});
 
-let day4Main = document.querySelector("#mi4-1");
-let day4Side1 = document.querySelector("#mi4-2");
-let day4Side2 = document.querySelector("#mi4-3");
-let day4Other = document.querySelector("#mi4-4");
+// define function to open modal and populate existing data where applicable
+function openEditModal(e) {
+  e.preventDefault();
 
-let day5Main = document.querySelector("#mi5-1");
-let day5Side1 = document.querySelector("#mi5-2");
-let day5Side2 = document.querySelector("#mi5-3");
-let day5Other = document.querySelector("#mi5-4");
+  dmpModal.style.display = "block";
 
-let day6Main = document.querySelector("#mi6-1");
-let day6Side1 = document.querySelector("#mi6-2");
-let day6Side2 = document.querySelector("#mi6-3");
-let day6Other = document.querySelector("#mi6-4");
-
-let day7Main = document.querySelector("#mi7-1");
-let day7Side1 = document.querySelector("#mi7-2");
-let day7Side2 = document.querySelector("#mi7-3");
-let day7Other = document.querySelector("#mi7-4");
-
-// populate menu item containers with data from local storage
-day1Main.value = menuItemsContent.day1.main;
-day1Side1.value = menuItemsContent.day1.side1;
-day1Side2.value = menuItemsContent.day1.side2;
-day1Other.value = menuItemsContent.day1.other;
-
-day2Main.value = menuItemsContent.day2.main;
-day2Side1.value = menuItemsContent.day2.side1;
-day2Side2.value = menuItemsContent.day2.side2;
-day2Other.value = menuItemsContent.day2.other;
-
-day3Main.value = menuItemsContent.day3.main;
-day3Side1.value = menuItemsContent.day3.side1;
-day3Side2.value = menuItemsContent.day3.side2;
-day3Other.value = menuItemsContent.day3.other;
-
-day4Main.value = menuItemsContent.day4.main;
-day4Side1.value = menuItemsContent.day4.side1;
-day4Side2.value = menuItemsContent.day4.side2;
-day4Other.value = menuItemsContent.day4.other;
-
-day5Main.value = menuItemsContent.day5.main;
-day5Side1.value = menuItemsContent.day5.side1;
-day5Side2.value = menuItemsContent.day5.side2;
-day5Other.value = menuItemsContent.day5.other;
-
-day6Main.value = menuItemsContent.day6.main;
-day6Side1.value = menuItemsContent.day6.side1;
-day6Side2.value = menuItemsContent.day6.side2;
-day6Other.value = menuItemsContent.day6.other;
-
-day7Main.value = menuItemsContent.day7.main;
-day7Side1.value = menuItemsContent.day7.side1;
-day7Side2.value = menuItemsContent.day7.side2;
-day7Other.value = menuItemsContent.day7.other;
-
-// save menuItemsContent to localStorage
-function save(e) {
-  let planDay = e.target.dataset.planday;
-  let menuItemName = e.target.dataset.id;
-
-  menuItemsContent[planDay][menuItemName] = e.target.value;
-
-  localStorage.setItem(
-    LOCAL_STORAGE_DINNERMENU_KEY,
-    JSON.stringify(menuItemsContent)
+  currentEditDay = e.target.dataset.jsEditMenu;
+  currentEditDayNumber = parseInt(
+    currentEditDay.charAt(currentEditDay.length - 1)
   );
+  currentDayDisplay = days[currentEditDayNumber - 1];
+
+  dmpModalHeader.textContent = `${currentDayDisplay} Menu Items`;
+
+  inputFields.forEach((item) => {
+    if (item.dataset.jsInputOne) {
+      item.value = dmpContent[currentEditDay]["main"];
+    } else if (item.dataset.jsInputTwo) {
+      item.value = dmpContent[currentEditDay]["side1"];
+    } else if (item.dataset.jsInputThree) {
+      item.value = dmpContent[currentEditDay]["side2"];
+    } else if (item.dataset.jsInputFour) {
+      item.value = dmpContent[currentEditDay]["other"];
+    } else {
+      item.value = dmpContent[currentEditDay]["notes"];
+    }
+  });
+
+  let dmpModalMain = document.querySelector("[data-js-input-one]");
+  dmpModalMain.focus();
+  dmpModalMain.setSelectionRange(0, 100);
 }
 
-// EVENT HANDLER - REORDER BUTTON
+// handle event --> submit new dmp entries and save to local storage
+submitMenuEdit.addEventListener("click", (e) => {
+  e.preventDefault();
 
-// define event listener for reorder button; open modal box
+  dmpModal.style.display = "none";
 
+  inputFields.forEach((item) => {
+    if (item.dataset.jsInputOne) {
+      dmpContent[currentEditDay]["main"] = item.value;
+    } else if (item.dataset.jsInputTwo) {
+      dmpContent[currentEditDay]["side1"] = item.value;
+    } else if (item.dataset.jsInputThree) {
+      dmpContent[currentEditDay]["side2"] = item.value;
+    } else if (item.dataset.jsInputFour) {
+      dmpContent[currentEditDay]["other"] = item.value;
+    } else {
+      dmpContent[currentEditDay]["notes"] = item.value;
+    }
+  });
+
+  localStorage.setItem(LOCAL_STORAGE_DMP_KEY, JSON.stringify(dmpContent));
+  loadMenuContent();
+});
+
+// handle event --> close modal without entering new information
+dmpModalClose.addEventListener("click", (e) => {
+  e.preventDefault();
+  dmpModal.style.display = "none";
+});
+
+// *** EDIT DINNER MENU PLAN NOTES ENTRIES ***
+// variables/constants for DOM manipulation
+const editNotes = document.querySelectorAll("[data-js-edit-notes]");
+const notesContainer = document.querySelector("[data-js-notes-container]");
+const submitNotesEdit = document.querySelector("[data-js-notes-submit]");
+const dmpNotesModal = document.querySelector("[data-js-notes-modal]");
+const dmpNotesModalClose = document.querySelector(
+  "[data-js-notes-modal-close]"
+);
+const dmpNotesModalInput = document.querySelector("[data-js-input-notes]");
+const dmpNotesModalHeader = document.querySelector(
+  "[data-js-dmp-notes-modal-header]"
+);
+
+// handle event --> button click to open dmp notes edit modal
+editNotes.forEach(function (e) {
+  e.addEventListener("click", openNotesEditModal);
+});
+
+// define function to open notes modal and populate existing data where applicable
+function openNotesEditModal(e) {
+  e.preventDefault();
+
+  dmpNotesModal.style.display = "block";
+
+  currentEditDay = e.target.dataset.jsEditNotes;
+  currentEditDayNumber = parseInt(
+    currentEditDay.charAt(currentEditDay.length - 1)
+  );
+  currentDayDisplay = days[currentEditDayNumber - 1];
+
+  dmpNotesModalHeader.textContent = `${currentDayDisplay} Notes`;
+  dmpNotesModalInput.value = dmpContent[currentEditDay]["notes"];
+}
+
+// handle event --> submit new dmp entries and save to local storage
+submitNotesEdit.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  dmpNotesModal.style.display = "none";
+
+  let notes = currentEditDay + "Notes";
+
+  dmpContent[currentEditDay]["notes"] = dmpNotesModalInput.value;
+
+  notes.textContent = dmpContent[currentEditDay]["notes"];
+
+  localStorage.setItem(LOCAL_STORAGE_DMP_KEY, JSON.stringify(dmpContent));
+  loadMenuContent();
+});
+
+// handle event --> close modal without entering new information
+dmpNotesModalClose.addEventListener("click", (e) => {
+  e.preventDefault();
+  dmpNotesModal.style.display = "none";
+});
+
+// *** REORDER DAYS OF THE WEEK
+// variables/constants for DOM manipulation
+const reorderBtn = document.querySelector("[data-btn-reorder]");
+const selectDay = document.querySelectorAll(".clickableDays");
+const reorderClose = document.querySelector("[data-reorder-close]");
+const reorderModal = document.querySelector("[data-js-reorder-modal]");
+
+// handle event --> button click to open modal
 reorderBtn.addEventListener("click", function () {
   reorderModal.style.display = "block";
 });
 
-// add event listener to each day in the modal box
-// set selected day as first day of week and repopulate days column
+// handle event --> select new first day of the week, close modal, repopulate days column accordingly, and save the new configuration to local storage
 selectDay.forEach(function (e) {
   e.addEventListener("click", function (e) {
     days1 = days.slice(days.indexOf(e.target.textContent));
     days2 = days.slice(0, days.indexOf(e.target.textContent));
     days1.push(...days2);
+    days = days1;
     reorderModal.style.display = "none";
 
-    for (let i = 0; i < days1.length; i++) {
-      let currentDay = "day" + (i + 1);
-      let currentDayDOM = document.querySelector("#" + currentDay);
-
-      currentDayDOM.textContent = days1[i];
-    }
+    dotwPopulate();
+    saveCurrentDOTW();
   });
 });
 
-// Handle event = close Modal Box Selection Tool without choosing a new starting day
+// handle event --> close modal without choosing a new first day
 reorderClose.addEventListener("click", function () {
   reorderModal.style.display = "none";
 });
 
-// EVENT HANDLER - CLEAR BUTTON
+// *** CLEAR ALL MENU ITEMS
+// variables/constants for DOM manipulation
+const clearBtn = document.querySelector("[data-btn-clear]");
+const clearClose = document.querySelector("[data-clear-close]");
+const clearYes = document.querySelector("[data-clear-yes]");
+const clearNo = document.querySelector("[data-clear-no]");
+const clearModal = document.querySelector("[data-js-clear-modal]");
 
-// define event listener for clear button; open modal box
-exitClearModal = function () {
-  clearModal.style.display = "none";
-};
-
-clearAll = function () {
-  for (let i = 0; i < inputs.length; i++) {
-    if (inputs[i].type === "text") {
-      inputs[i].value = "";
-    }
-    exitClearModal();
-  }
-};
-
+// handle event --> button click to open modal
 clearBtn.addEventListener("click", function () {
   clearModal.style.display = "block";
 });
 
+// define functions to execute modal options
+// exit without clearing items
+exitClearModal = function () {
+  clearModal.style.display = "none";
+};
+
+// clear all items, save to local storage, reload menu content and exit
+clearAll = function () {
+  for (let i = 1; i < 8; i++) {
+    currentEditDay = "day" + i;
+    dmpContent[currentEditDay]["main"] = "";
+    dmpContent[currentEditDay]["side1"] = "";
+    dmpContent[currentEditDay]["side2"] = "";
+    dmpContent[currentEditDay]["other"] = "";
+    dmpContent[currentEditDay]["notes"] = "";
+  }
+
+  localStorage.setItem(LOCAL_STORAGE_DMP_KEY, JSON.stringify(dmpContent));
+
+  exitClearModal();
+  loadMenuContent();
+};
+
+// handle event --> call function to clear all menu items
 clearYes.addEventListener("click", clearAll);
 
+// handle event --> call function to exit without clearing all menu items
 clearNo.addEventListener("click", exitClearModal);
-
-// Handle event = close Modal Box Selection Tool without choosing a new starting day
 clearClose.addEventListener("click", exitClearModal);
 
-// Handle event = close Modal Box without adding a new shopping list item
-shoppingListItemClose.addEventListener("click", function () {
-  shoppingListItemModal.style.display = "none";
-});
-
-// *** DRAG AND DROP FUNCTIONALITY ***
-// define drag and drop functionality for menu items grid
-const subGrid = document.querySelector("[data-dinner-menu-subgrid]");
-
-let dragIndex = 0;
-let clone = "";
-let dataFrom;
-let dataTo;
-let targetClass;
-
+// *** DRAG AND DROP FUNCTIONALITY FOR DMP CONTENT ***
+// define dragstart handler and assign to all draggable elements
 function dragstart_handler(e) {
-  e.dataTransfer.setData("text/plain", e.target.id);
-  e.dataTransfer.dropEffect = "move";
+  e.dataTransfer.setData("text/plain", e.target.dataset.jsDraggable);
 }
 
+function addDrag() {
+  const dmpContentsDrag = document.querySelectorAll("[data-js-draggable]");
+
+  dmpContentsDrag.forEach(function (e) {
+    e.addEventListener("dragstart", dragstart_handler);
+  });
+}
+
+//define dragover and drop zone handlers and assign to all droppable elements
 function dragover_handler(e) {
   dataFrom = e.dataTransfer.getData("text/plain");
-  dataTo = e.target.id;
+  dataTo = e.currentTarget.dataset.jsDroppable;
 
-  console.log("dataFrom: " + dataFrom);
-  console.log(typeof dataTo);
-  console.log(dataTo.includes("dsg"));
-
-  if (dataTo.includes("dsg") && dataFrom !== dataTo) {
+  if (dataFrom !== dataTo) {
     e.preventDefault();
   }
 }
@@ -301,73 +417,27 @@ function dragover_handler(e) {
 function drop_handler(e) {
   e.preventDefault();
 
-  targetClass = e.target.className;
+  let dmpContentFrom = dmpContent[dataFrom];
+  let dmpContentTo = dmpContent[dataTo];
 
-  let modifiedTarget;
+  dmpContent[dataTo] = dmpContentFrom;
+  dmpContent[dataFrom] = dmpContentTo;
 
-  clone = e.target.cloneNode(true);
+  loadMenuContent();
 
-  dataFrom = e.dataTransfer.getData("text/plain");
-
-  let nodelist = subGrid.childNodes;
-  for (let i = 0; i < nodelist.length; i++) {
-    if (nodelist[i].id == dataFrom) {
-      dragIndex = i;
-    }
-  }
-
-  if (targetClass === "menuItems") {
-    modifiedTarget = e.target.parentNode;
-    clone = modifiedTarget.cloneNode(true);
-    subGrid.replaceChild(document.getElementById(dataFrom), modifiedTarget);
-    subGrid.insertBefore(clone, subGrid.childNodes[dragIndex]);
-    addEListen();
-  } else {
-    clone = e.target.cloneNode(true);
-    console.log("ran the else");
-    subGrid.replaceChild(document.getElementById(dataFrom), e.target);
-    subGrid.insertBefore(clone, subGrid.childNodes[dragIndex]);
-    addEListen();
-  }
-}
-
-// ADD ALL DRAG AND DROP EVENT LISTENERS TO ALL MENU ITEMS
-
-// Calls function upon loading all content
-window.addEventListener("DOMContentLoaded", addEListen);
-//window.addEventListener("DOMContentLoaded", populateDays);
-// Function adds all event listeners; gets called at end of every drop action
-function addEListen() {
-  addDrag();
-  addDropZone();
-  addLocalStorageSave();
-}
-
-// adds dragstart handler to
-function addDrag() {
-  const dsgDrag = document.querySelectorAll("[data-dsg-drag-units]");
-
-  dsgDrag.forEach(function (e) {
-    e.addEventListener("dragstart", dragstart_handler);
-  });
+  localStorage.setItem(LOCAL_STORAGE_DMP_KEY, JSON.stringify(dmpContent));
 }
 
 function addDropZone() {
-  const dsgDrag = document.querySelectorAll("[data-dsg-drag-units]");
+  const dmpContentsDrop = document.querySelectorAll("[data-js-droppable]");
 
-  dsgDrag.forEach(function (e) {
+  dmpContentsDrop.forEach(function (e) {
     e.addEventListener("dragover", dragover_handler);
     e.addEventListener("drop", drop_handler);
   });
 }
 
-function addLocalStorageSave() {
-  const menuItems = document.querySelectorAll(".menuItems");
-
-  menuItems.forEach(function (e) {
-    e.addEventListener("blur", save);
-  });
-}
+// **** ALL CODE ABOVE HAS BEEN CLEANED UP AS OF 9/24 ****
 
 // *** SHOPPING LIST PAGE ***
 
@@ -380,6 +450,12 @@ const listItemInput = document.querySelector("[data-list-item-input");
 const listItemLabel = document.querySelector("[data-list-item-label");
 const listItemSpan = document.querySelector("[data-list-item-span");
 const newSLItemForm = document.querySelector("[data-new-list-form]");
+const shoppingListItemModal = document.querySelector(
+  "[data-shopping-list-item-modal]"
+);
+const shoppingListItemClose = document.querySelector(
+  "[data-shopping-list-item-close]"
+);
 
 const completedItems = document.querySelector("[data-btn-clear-complete]");
 const allItems = document.querySelector("[data-btn-clear-all]");
@@ -401,6 +477,11 @@ if (localStorage.getItem(LOCAL_STORAGE_SHOPPINGLIST_KEY) !== null) {
 addItemBtn.addEventListener("click", function () {
   shoppingListItemModal.style.display = "block";
   nliName.focus();
+});
+
+// handle event -->
+shoppingListItemClose.addEventListener("click", function () {
+  shoppingListItemModal.style.display = "none";
 });
 
 // Handle Event - Submit New Item Information
@@ -506,7 +587,7 @@ function clearElement(element) {
 
 function clearCompletedItems() {
   list = list.filter((list) => list.complete === false);
-  console.log(list);
+
   localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
   renderShoppingList();
   renderListCount();
@@ -521,3 +602,12 @@ function clearAllItems() {
 
 renderShoppingList();
 renderListCount();
+
+// populate days of the week and menu content, add event listeners for drag and drop functionality upon first loading page
+
+document.addEventListener("DOMContentLoaded", (e) => {
+  dotwPopulate();
+  loadMenuContent();
+  addDrag();
+  addDropZone();
+});
