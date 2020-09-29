@@ -1,3 +1,5 @@
+/* THIS IS A GIT TEST */
+
 /* General baseline settings*/
 
 *,
@@ -16,7 +18,7 @@
 /* Define standard HTML element settings */
 html {
   font-size: 62.5%; /* Sets font size for document at 10px */
-  background-color: rgb(225, 225, 225); /* Sets all background to white */
+  background-color: white; /* Sets all background to white */
 }
 
 body,
@@ -28,15 +30,19 @@ textarea {
 }
 
 main {
-  display: grid;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* display: grid;
   grid-template-columns: 1fr 50% 1fr;
   grid-template-rows: 7.5vh 5vh 82.5vh 5vh;
-  /* row-gap: 3vh; */
   grid-template-areas:
     "header header header"
     "...... ...... ......"
     ". menuGrid ."
-    "...... ...... ......";
+    "...... ...... ......"; */
 }
 
 h1 {
@@ -47,9 +53,13 @@ h1 {
 header {
   display: flex;
   background-color: white;
-  grid-area: header;
-  justify-content: space-around;
-  border-bottom: 0.5px solid grey;
+  justify-content: space-between;
+}
+
+footer {
+  display: flex;
+  background-color: white;
+  justify-content: space-evenly;
 }
 
 /* ====================================
@@ -116,16 +126,43 @@ nav {
    ===========================
    =========================== */
 
+/* START NEW FORMATTING - FLEXBOX CONTAINER FOR GRID */
+.dmpContainer,
+.sliContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 65%;
+  height: 90%;
+  border: 1px #aaccba solid;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 5px 5px 2.5px 0px #b1c9a8;
+}
+
+.dmpContainerHeader,
+.sliContainerHeader {
+  width: 90%;
+}
+
+.dmpContainerFooter,
+.sliContainerFooter {
+  width: 90%;
+}
+
 /* GRID LAYOUT --> DAYS OF THE WEEK AND DMP CONTENT */
 /* GRID CONTAINER FOR DMP */
-#dinnerWrapper {
+.dinnerWrapper {
   display: grid;
-  grid-template-columns: 33% 67%;
+  grid-template-columns: 25% 75%;
   grid-template-rows: repeat(7, minmax(50px, 1fr));
   grid-auto-flow: column;
   grid-area: menuGrid;
   justify-content: space-between;
-  border-radius: 10px;
+  box-shadow: 1px 1px 2.5px 0px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  height: 85%;
 }
 
 /* DAYS OF THE WEEK (DOTW) */
@@ -133,9 +170,9 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(53, 53, 204);
-  color: whitesmoke;
-  border: 0.25px grey solid;
+  background: rgba(177, 207, 168, 0.85);
+  color: white;
+  border: 0.25px white solid;
   font-size: 5rem;
   border-top-left-radius: 7.5px;
   border-bottom-left-radius: 7.5px;
@@ -145,15 +182,17 @@ nav {
 /* HOVER OVER DOTW LETTERS FOR FULL DAY NAME */
 .dotwToolTip .tooltiptext {
   display: inline-flex;
+  justify-content: center;
   align-items: center;
   visibility: hidden;
   height: 100%;
-  background-color: rgb(53, 53, 204);
+  width: 100%;
+  background-color: rgb(177, 207, 168);
   color: #fff;
   text-align: center;
   border-radius: 6px;
   padding: 5px;
-  font-size: 2rem;
+  font-size: 2.5rem;
   /* Position the tooltip */
   position: absolute;
   z-index: 1;
@@ -172,10 +211,11 @@ nav {
 .menuBox {
   display: flex;
   justify-content: space-between;
-  border: 0.25px grey solid;
-  background: whitesmoke;
+  border: 0.25px white solid;
+  background: rgba(170, 204, 186, 0.1);
   font-size: 1.25rem;
   padding: 5px;
+  padding-left: 20px;
 }
 
 .listContainer {
@@ -187,10 +227,12 @@ nav {
 
 .mainDish {
   font-size: 2.5rem;
+  border-bottom: 0.1px rgba(170, 204, 186, 0.3) solid;
 }
 
 .sidesList {
   display: flex;
+  padding-left: 5px;
   justify-content: space-evenly;
 }
 
@@ -265,11 +307,16 @@ nav {
    ========================
    ======================== */
 
-#listWrapper {
-  display: none;
+.listWrapper {
   flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 1px 1px 2.5px 0px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  height: 85%;
+  /* display: none;
+
   width: 75vw;
-  --spacer: 2rem;
+  --spacer: 2rem; */
 }
 
 .shoppingListHeader {
@@ -495,9 +542,6 @@ nav {
   padding-top: 80px;
 }
 
-.dmpModalContent {
-}
-
 .dmpModalForm {
   display: flex;
   flex-direction: column;
@@ -530,8 +574,6 @@ nav {
 }
 
 /* DMP NOTES MODAL */
-.dmpNotesModal {
-}
 
 /* SHOPPING LIST (SLI) MODAL */
 .sliModal {

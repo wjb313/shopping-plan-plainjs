@@ -5,23 +5,21 @@ let currentEditDayNumber;
 let currentDayDisplay;
 
 // ***PAGE NAVIGATION***
-const dinnerLink = document.querySelector("[data-nav-to-dinner]");
-const listLink = document.querySelector("[data-nav-to-shopping-list]");
-const dmpHeader = document.querySelector("[data-js-dmpHeader]");
-const dinnerDisplay = document.querySelector("#dinnerWrapper");
-const listDisplay = document.querySelector("#listWrapper");
+const dinnerLink = document.querySelector("[data-nav-to-dinner='sli']");
+const listLink = document.querySelector("[data-nav-to-shopping-list='dmp']");
+const dmpHeader = document.querySelector("[data-js-dmp-header]");
+const dmpDisplay = document.querySelector("[data-js-dmp-display]");
+const sliDisplay = document.querySelector("[data-js-sli-display]");
 
 dinnerLink.addEventListener("click", function () {
-  dinnerDisplay.style.display = "grid";
-  dmpHeader.style.display = "flex";
-  listDisplay.style.display = "none";
+  dmpDisplay.style.display = "flex";
+  sliDisplay.style.display = "none";
   saveCurrentPage();
 });
 
 listLink.addEventListener("click", function () {
-  dinnerDisplay.style.display = "none";
-  dmpHeader.style.display = "none";
-  listDisplay.style.display = "flex";
+  dmpDisplay.style.display = "none";
+  sliDisplay.style.display = "flex";
   saveCurrentPage();
 });
 
@@ -108,15 +106,15 @@ let page;
 
 if (localStorage.getItem(LOCAL_STORAGE_CURRENTPAGE_KEY) !== null) {
   page = JSON.parse(localStorage.getItem(LOCAL_STORAGE_CURRENTPAGE_KEY));
-  dinnerDisplay.style.display = page[0];
-  listDisplay.style.display = page[1];
+  dmpDisplay.style.display = page[0];
+  sliDisplay.style.display = page[1];
 } else {
-  dinnerDisplay.style.display = "grid";
-  listDisplay.style.display = "none";
+  dmpDisplay.style.display = "flex";
+  sliDisplay.style.display = "none";
 }
 
 function saveCurrentPage() {
-  page = [dinnerDisplay.style.display, listDisplay.style.display];
+  page = [dmpDisplay.style.display, sliDisplay.style.display];
   localStorage.setItem(LOCAL_STORAGE_CURRENTPAGE_KEY, JSON.stringify(page));
 }
 
@@ -324,9 +322,9 @@ const reorderClose = document.querySelector("[data-reorder-close]");
 const reorderModal = document.querySelector("[data-js-reorder-modal]");
 
 // handle event --> button click to open modal
-reorderBtn.addEventListener("click", function () {
-  reorderModal.style.display = "block";
-});
+// reorderBtn.addEventListener("click", function () {
+//   reorderModal.style.display = "block";
+// });
 
 // handle event --> select new first day of the week, close modal, repopulate days column accordingly, and save the new configuration to local storage
 selectDay.forEach(function (e) {
@@ -356,9 +354,9 @@ const clearNo = document.querySelector("[data-clear-no]");
 const clearModal = document.querySelector("[data-js-clear-modal]");
 
 // handle event --> button click to open modal
-clearBtn.addEventListener("click", function () {
-  clearModal.style.display = "block";
-});
+// clearBtn.addEventListener("click", function () {
+//   clearModal.style.display = "block";
+// });
 
 // define functions to execute modal options
 // exit without clearing items
