@@ -18,7 +18,16 @@
 /* Define standard HTML element settings */
 html {
   font-size: 62.5%; /* Sets font size for document at 10px */
-  background-color: white; /* Sets all background to white */
+  background: var(--primary-bkgd-color); /* Sets all background to white */
+  --primary-bkgd-color: white;
+  --secondary-bkgd-color: rgba(107, 122, 102, 1);
+  --modal-opaque-bkgd-color: rgba(255, 2, 2, 0.4);
+  --modal-input-font-color: rgb(206, 0, 0);
+  --primary-font-color: rgba(0, 0, 0, 0.7);
+  --invert-font-color: white;
+  --interactive-hover-color: rgba(206, 0, 0, 1);
+  --primary-container-border-color: rgba(134, 154, 128, 0.5);
+  --primary-container-shadow-color: rgba(134, 154, 128, 0.25);
 }
 
 body,
@@ -26,7 +35,8 @@ input,
 button,
 textarea {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1rem; /* Sets font size of body equivalent to 10px based on html element formatting */
+  font-size: 1rem; /* Sets font size to 10px */
+  color: var(--primary-font-color);
 }
 
 main {
@@ -35,30 +45,19 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* display: grid;
-  grid-template-columns: 1fr 50% 1fr;
-  grid-template-rows: 7.5vh 5vh 82.5vh 5vh;
-  grid-template-areas:
-    "header header header"
-    "...... ...... ......"
-    ". menuGrid ."
-    "...... ...... ......"; */
 }
 
-h1 {
-  font-size: 3rem;
-  padding: 5px;
+h2 {
+  font-size: 1.5rem;
 }
 
 header {
   display: flex;
-  background-color: white;
   justify-content: space-between;
 }
 
 footer {
   display: flex;
-  background-color: white;
   justify-content: space-evenly;
 }
 
@@ -83,23 +82,34 @@ nav {
 .navListItem {
   padding-left: 20px;
   margin: 10px;
+}
+
+.navListItem:hover,
+.navListItem:focus {
   cursor: pointer;
+  outline: none;
+  color: var(--interactive-hover-color);
 }
 
 #navListSeparator {
   border-left: 2px solid black;
 }
 
+/* FORMATTING DINNER PLAN AND SHOPPING LIST HEADER TEXT */
+.pageHeader {
+  font-size: 3rem;
+}
+
 /* BUTTONS IN DMP HEADER --> START DAY AND CLEAR ITEMS */
 /* ALSO CONTAINER THAT STYLES THOSE BUTTONS POSITIONING */
 /* *** LIKELY GOING TO CHANGE BUT CURRENTLY BUTTONS ON SLI MODAL, TOO */
-.dmpHeaderBtn {
+/* .dmpHeaderBtn {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   font-size: 1.5rem;
   width: 30vw;
-}
+} */
 
 .btn {
   cursor: pointer;
@@ -107,17 +117,19 @@ nav {
   border: 0;
   padding: 0;
   font-size: 1.5rem;
-  color: black;
+
   font-weight: 700;
   letter-spacing: 1px;
 }
 
-.btn:hover {
+.btn:hover,
+.btn:focus {
   cursor: pointer;
+  outline: none;
   background: 0;
   border: 0;
   padding: 0;
-  opacity: 0.7;
+  color: var(--interactive-hover-color);
 }
 
 /* ===========================
@@ -135,15 +147,20 @@ nav {
   align-items: center;
   width: 65%;
   height: 90%;
-  border: 1px #aaccba solid;
+  border: 1px var(--primary-container-border-color) solid;
   border-radius: 5px;
-  background: white;
-  box-shadow: 5px 5px 2.5px 0px #b1c9a8;
+  background: var(--primary-bkgd-color);
+  box-shadow: 5px 5px 1px 0px var(--primary-container-shadow-color);
 }
 
 .dmpContainerHeader,
 .sliContainerHeader {
   width: 90%;
+}
+
+.sliContainerSubHeader {
+  width: 70%;
+  margin: 5px 0 20px 0;
 }
 
 .dmpContainerFooter,
@@ -160,7 +177,6 @@ nav {
   grid-auto-flow: column;
   grid-area: menuGrid;
   justify-content: space-between;
-  box-shadow: 1px 1px 2.5px 0px rgba(0, 0, 0, 0.25);
   width: 90%;
   height: 85%;
 }
@@ -170,9 +186,9 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(177, 207, 168, 0.85);
-  color: white;
-  border: 0.25px white solid;
+  background: var(--secondary-bkgd-color);
+  color: var(--invert-font-color);
+  border: 1px var(--primary-container-shadow-color) solid;
   font-size: 5rem;
   border-top-left-radius: 7.5px;
   border-bottom-left-radius: 7.5px;
@@ -187,10 +203,11 @@ nav {
   visibility: hidden;
   height: 100%;
   width: 100%;
-  background-color: rgb(177, 207, 168);
-  color: #fff;
+  background: var(--secondary-bkgd-color);
+  color: var(--invert-font-color);
   text-align: center;
-  border-radius: 6px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
   padding: 5px;
   font-size: 2.5rem;
   /* Position the tooltip */
@@ -211,11 +228,10 @@ nav {
 .menuBox {
   display: flex;
   justify-content: space-between;
-  border: 0.25px white solid;
-  background: rgba(170, 204, 186, 0.1);
   font-size: 1.25rem;
   padding: 5px;
   padding-left: 20px;
+  border: 1px var(--primary-container-shadow-color) solid;
 }
 
 .listContainer {
@@ -227,7 +243,7 @@ nav {
 
 .mainDish {
   font-size: 2.5rem;
-  border-bottom: 0.1px rgba(170, 204, 186, 0.3) solid;
+  border-bottom: 1px var(--primary-container-shadow-color) solid;
 }
 
 .sidesList {
@@ -260,12 +276,13 @@ nav {
 }
 
 .dndIcon {
+  opacity: 0.7;
   padding-left: 20px;
 }
 
-/* EDIT BUTTON CONTAINER */
-.editBtnContainer {
-  display: flex;
+.dndIcon:hover {
+  opacity: 1;
+  cursor: move;
 }
 
 /* NOTES HOVER TOOLTIP POPUP */
@@ -274,19 +291,22 @@ nav {
   position: relative;
   justify-content: flex-end;
   font-weight: 700;
+  color: var(--secondary-bkgd-color);
   /* visibility: hidden; */
 }
 
-.notesContainer:hover {
-  color: rgb(4, 134, 0);
+.notesContainer:hover,
+.notesContainer:focus {
+  outline: none;
+  color: var(--interactive-hover-color);
   cursor: pointer;
 }
 
 .notesContainer .tooltiptext {
   visibility: hidden;
   width: 120px;
-  background-color: black;
-  color: #fff;
+  background: var(--secondary-bkgd-color);
+  color: var(--invert-font-color);
   text-align: center;
   border-radius: 6px;
   padding: 5px;
@@ -310,63 +330,43 @@ nav {
 .listWrapper {
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
   box-shadow: 1px 1px 2.5px 0px rgba(0, 0, 0, 0.25);
   width: 90%;
-  height: 85%;
-  /* display: none;
-
-  width: 75vw;
-  --spacer: 2rem; */
+  height: 75%;
 }
 
-.shoppingListHeader {
-  background-color: rgb(171, 179, 187);
-  padding: var(--spacer);
-  margin: 0;
-  align-items: baseline;
-  justify-content: space-between;
-}
+/* SHOPPING LIST CONTAINER (.sliContainer), SHOPPING LIST HEADER (.sliContainerHeader), AND SHOPPING LIST SUBHEADER (.sliContainerSubHeader) ARE ALL ABOVE (IN DMP SECTION) AS THEY SHARE DMP CONTAINER, HEADER, AND SUBHEADER SETTINGS */
 
-.shoppingListTitle {
-  font-size: 3rem;
-}
-
+/* SLI 'ITEMS REMAINING' FORMATTING */
 .listCount {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* SLI ITEM LIST FORMATTING */
+.listItem label {
+  display: inline-flex; /* INLINE-FLEX FORMATTING ==> CROSS-OUT LINE ONLY AS WIDE CONTENT */
+  align-items: center; /* ALIGNS CUSTOM CHEKCBOX WITH CONTENT VERTICALLY */
+  position: relative; /* CROSS-OUT LINE ==> CENTERED ON LIST ITEM CONTENT */
+  margin-top: 0.5em; /* SIZES CONTENT BOX - TOP */
+  margin-bottom: 0.5em; /* SIZES CONTENT BOX - BOTTOM */
+  padding-left: 1em; /* INDENT CONTENT */
   font-size: 1.5rem;
 }
 
-.shoppingListBody {
-  background: white;
-  padding: var(--spacer);
-}
-
-.listItem label {
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-  margin-bottom: 1.5em;
-}
-
-.listItem {
-  position: relative;
-}
-
-.listItem::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  left: 0;
-  bottom: 5px;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.1;
-}
-
+/* HIDES STANDARD CHECKBOX FROM VIEW WHILE MAINTAINING POSITIONING */
 .sliCheckbox {
   opacity: 0;
   position: absolute;
 }
 
+.sliCheckboxEven {
+  opacity: 0;
+  position: absolute;
+}
+
+/* CREATES AND STYLES CUSTOM CHECKBOX VISUAL */
 .custom-checkbox {
   --sizer: 1em;
 
@@ -382,15 +382,16 @@ nav {
   transition: transform 200ms ease-in-out;
 }
 
+/* MODIFIES CUSTOM CHECKBOX WHEN HOVERING OVER THE LIST ITEM OR WHEN FOCUSED ON THE CHECKBOX  */
 .listItem:hover .custom-checkbox,
 .sliCheckbox:focus + label .custom-checkbox {
   transform: scale(1.2);
-  color: green;
 }
 
+/* MODIFIES CUSTOM CHECKBOX STYLING WHEN CHECKED */
 .sliCheckbox:checked + label .custom-checkbox {
-  background: green;
-  border-color: green;
+  background: var(--secondary-bkgd-color);
+  border: var(--secondary-bkgd-color);
   box-shadow: inset 0 0 0 2px white;
 }
 
@@ -398,14 +399,31 @@ nav {
   opacity: 0.5;
 }
 
+.sliCheckboxEven:focus + label .custom-checkbox {
+  transform: scale(1.2);
+  /* color: green; */
+}
+
+/* MODIFIES CUSTOM CHECKBOX STYLING WHEN CHECKED */
+.listItemEven:hover .custom-checkbox,
+.sliCheckboxEven:checked + label .custom-checkbox {
+  background: var(--primary-bkgd-color);
+  border: var(--primary-bkgd-color);
+  box-shadow: inset 0 0 0 2px var(--secondary-bkgd-color);
+}
+
+.sliCheckboxEven:checked + label {
+  opacity: 0.5;
+}
+
+/* CROSS-OUT LINE FOR COMPLETED ITEMS WHEN CHECKBOX CHECKED */
 .listItem label::after {
   content: "";
   position: absolute;
-  left: 0;
+  left: 3em;
   right: 0;
-  height: 2px;
+  height: 1.5px;
   top: 50%;
-  left: 2em;
   background: currentColor;
   transform: scaleX(0);
   transform-origin: right;
@@ -417,10 +435,9 @@ nav {
   transform-origin: left;
 }
 
-.clearAndDelete {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 1rem;
+.sliCheckboxEven:checked + label::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* ====================
@@ -440,64 +457,105 @@ nav {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(252, 2, 2); /* Fallback color */
-  background-color: rgba(255, 2, 2, 0.4); /* Black w/ opacity */
+  background: var(--primary-font-color); /* Fallback color */
+  background: var(--modal-opaque-bkgd-color); /* Red w/ opacity */
 }
 
 .modalContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #fefefe;
+  background: var(--primary-bkgd-color);
   margin: auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--primary-container-border-color);
   width: 30%;
   font-size: 2rem;
   border-radius: 10px;
 }
 
-.modalContentTop {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.modalContentBottom {
+.modalContentHeader {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  color: var(--primary-font-color);
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-bottom: 1px var(--primary-container-shadow-color) solid;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
 }
 
-.close {
-  color: #aaaaaa;
-
-  font-size: 28px;
-  font-weight: bold;
+.modalContentFooter {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
 }
 
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-center;
+  margin: 0 5px 0 5px;
+}
+
+.modalFormInput {
+  padding: 5px;
+  background: 0;
+  border: 0;
+  border-bottom: 1px var(--primary-container-shadow-color) solid;
+  color: var(--modal-input-font-color);
+  font-size: 1.75rem;
+}
+
+.modalFormInput:focus {
+  outline: none;
+  padding: 5px;
+  background: 0;
+  border: 0;
+  border-bottom: 1px var(--primary-container-shadow-color) solid;
+}
+
+.modalFormLabel {
+  padding: 10px 0 0 0;
+  margin-top: 5px;
+}
+
+.modalBtn {
   cursor: pointer;
+  background: 0;
+  border: 0;
+  padding: 0;
+  font-size: 1.5rem;
+  color: var(--primary-font-color);
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-.newBtn {
+.modalBtn:hover {
+  cursor: pointer;
+  background: 0;
+  border: 0;
+  padding: 0;
+  color: var(--interactive-hover-color);
+}
+
+.editBtn {
   background: 0;
   border: 0;
   font-size: 1.25rem;
   font-weight: 700;
   padding: 20px 0 0 10px;
+  color: var(--secondary-bkgd-color);
 }
 
-.newBtn:hover,
-.newBtn:focus {
+.editBtn:hover,
+.editBtn:focus {
   outline: none;
-  color: rgb(2, 99, 2);
+  color: var(--interactive-hover-color);
   border: 0;
   border-radius: 20px;
   padding: 20px 0 0 10px;
@@ -505,7 +563,7 @@ nav {
   cursor: pointer;
 }
 
-.newBtnDiv {
+.editBtnDiv {
   display: flex;
   justify-content: space-evenly;
 }
@@ -515,116 +573,31 @@ nav {
 /* REORDER MODAL */
 .clickableDays:hover,
 .clickableDays:focus {
-  color: #aaaaaa;
+  color: var(--interactive-hover-color);
   text-decoration: none;
   cursor: pointer;
 }
 
 /* CENTER DOTW SELECTIONS IN MODAL CONTENT BOX */
-#dotwReorderModal {
+.modalContentCentered {
+  justify-content: center;
   align-items: center;
 }
 
 /* CLEAR MODAL */
-.clearYesNo {
-  margin-right: 30px;
-}
-
-.clearYesNo:hover,
-.clearYesNo:focus {
-  color: #aaaaaa;
-  text-decoration: none;
-  cursor: pointer;
-}
 
 /* DMP MODAL */
 #dmpModal {
   padding-top: 80px;
 }
 
-.dmpModalForm {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-center;
-  margin: 0 5px 0 5px;
-}
-
-.dmpModalInput,
-.dmpNotesModalInput {
-  padding: 5px;
-  background: 0;
-  border: 0;
-  border-bottom: 1px grey solid;
-  color: rgb(168, 0, 0);
-
-  font-size: 1.75rem;
-}
-
-.dmpModalInput:focus {
-  outline: none;
-  padding: 5px;
-  background: 0;
-  border: 0;
-  border-bottom: 1px grey solid;
-}
-
-.dmpModalLabel {
-  padding: 10px 0 0 0;
-  margin-top: 5px;
-}
-
 /* DMP NOTES MODAL */
 
 /* SHOPPING LIST (SLI) MODAL */
-.sliModal {
-  /* display: none; Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-}
-
-.sliModalContent {
-  display: flex;
-  flex-direction: column;
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 25%;
-  font-size: 2rem;
-  border-radius: 10px;
-}
 
 /* Shopping List New Item */
 
-#shoppingListItemModal {
-  display: none;
-}
-
-.sliInput,
-.sliLabel {
-  border: 0;
-  padding: 5px;
-  margin: 5px;
-}
-
-.sliInput {
-  font-size: 1.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.sliLabel {
-  opacity: 0.7;
-}
-
-.sliClose {
+/* .sliClose {
   color: #aaaaaa;
   font-size: 28px;
   font-weight: bold;
@@ -635,21 +608,7 @@ nav {
   color: #000;
   text-decoration: none;
   cursor: pointer;
-}
-
-.sliModalHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  opacity: 0.7;
-}
-
-.sliModalForm {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-center;
-  margin: 0 5px 0 5px;
-}
+} */
 
 .inputHint {
   font-size: 1.25rem;

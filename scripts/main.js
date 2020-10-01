@@ -5,23 +5,27 @@ let currentEditDayNumber;
 let currentDayDisplay;
 
 // ***PAGE NAVIGATION***
-const dinnerLink = document.querySelector("[data-nav-to-dinner='sli']");
-const listLink = document.querySelector("[data-nav-to-shopping-list='dmp']");
+const dmpLink = document.querySelectorAll("[data-js-nav-to-dinner]");
+const sliLink = document.querySelectorAll("[data-js-nav-to-shopping-list]");
 const dmpHeader = document.querySelector("[data-js-dmp-header]");
 const dmpDisplay = document.querySelector("[data-js-dmp-display]");
 const sliDisplay = document.querySelector("[data-js-sli-display]");
 
-dinnerLink.addEventListener("click", function () {
+dmpLink.forEach((e) => e.addEventListener("click", navToDmp));
+
+sliLink.forEach((e) => e.addEventListener("click", navToSli));
+
+function navToDmp() {
   dmpDisplay.style.display = "flex";
   sliDisplay.style.display = "none";
   saveCurrentPage();
-});
+}
 
-listLink.addEventListener("click", function () {
+function navToSli() {
   dmpDisplay.style.display = "none";
   sliDisplay.style.display = "flex";
   saveCurrentPage();
-});
+}
 
 // ***MENU PLAN PAGE***
 
@@ -90,13 +94,13 @@ let dmpContent = {
 };
 
 // *** SETUP DATA PERSISTENCE VIA LOCAL STORAGE ***
-// declare constants and variables for local storage
+// declare constants and variables --> local storage
 const LOCAL_STORAGE_SHOPPINGLIST_KEY = "shopping.list";
 const LOCAL_STORAGE_CURRENTPAGE_KEY = "current.page";
 const LOCAL_STORAGE_CURRENTDOTW_KEY = "current.dotw";
 const LOCAL_STORAGE_DMP_KEY = "dinnermenu.plan";
 
-// save menu to/restore menu from local storage
+// load existing menu from local storage
 if (localStorage.getItem(LOCAL_STORAGE_DMP_KEY) !== null) {
   dmpContent = JSON.parse(localStorage.getItem(LOCAL_STORAGE_DMP_KEY));
 }
@@ -186,13 +190,11 @@ const dmpModal = document.querySelector("[data-js-dmp-modal]");
 const editMenu = document.querySelectorAll("[data-js-edit-menu]");
 const submitMenuEdit = document.querySelector("[data-js-new-item-submit]");
 const dmpModalClose = document.querySelector("[data-js-dmp-modal-close]");
-const inputFields = document.querySelectorAll(".dmpModalInput");
+const inputFields = document.querySelectorAll(".modalFormInput");
 const dmpModalHeader = document.querySelector("[data-js-dmp-modal-header]");
 
 // handle event --> button click to call open dmp edit modal function
-editMenu.forEach(function (e) {
-  e.addEventListener("click", openEditModal);
-});
+editMenu.forEach((e) => e.addEventListener("click", openEditModal));
 
 // define function to open modal and populate existing data where applicable
 function openEditModal(e) {
@@ -217,7 +219,7 @@ function openEditModal(e) {
       item.value = dmpContent[currentEditDay]["side2"];
     } else if (item.dataset.jsInputFour) {
       item.value = dmpContent[currentEditDay]["other"];
-    } else {
+    } else if (item.dataset.jsInputFive) {
       item.value = dmpContent[currentEditDay]["notes"];
     }
   });
@@ -242,7 +244,7 @@ submitMenuEdit.addEventListener("click", (e) => {
       dmpContent[currentEditDay]["side2"] = item.value;
     } else if (item.dataset.jsInputFour) {
       dmpContent[currentEditDay]["other"] = item.value;
-    } else {
+    } else if (item.dataset.jsInputFive) {
       dmpContent[currentEditDay]["notes"] = item.value;
     }
   });
@@ -272,9 +274,7 @@ const dmpNotesModalHeader = document.querySelector(
 );
 
 // handle event --> button click to open dmp notes edit modal
-editNotes.forEach(function (e) {
-  e.addEventListener("click", openNotesEditModal);
-});
+editNotes.forEach((e) => e.addEventListener("click", openNotesEditModal));
 
 // define function to open notes modal and populate existing data where applicable
 function openNotesEditModal(e) {
@@ -316,18 +316,19 @@ dmpNotesModalClose.addEventListener("click", (e) => {
 
 // *** REORDER DAYS OF THE WEEK
 // variables/constants for DOM manipulation
-const reorderBtn = document.querySelector("[data-btn-reorder]");
+const reorderBtn = document.querySelector("[data-js-btn-reorder]");
 const selectDay = document.querySelectorAll(".clickableDays");
-const reorderClose = document.querySelector("[data-reorder-close]");
+const reorderClose = document.querySelector("[data-js-reorder-modal-close]");
 const reorderModal = document.querySelector("[data-js-reorder-modal]");
 
 // handle event --> button click to open modal
-// reorderBtn.addEventListener("click", function () {
-//   reorderModal.style.display = "block";
-// });
+reorderBtn.addEventListener(
+  "click",
+  () => (reorderModal.style.display = "block")
+);
 
 // handle event --> select new first day of the week, close modal, repopulate days column accordingly, and save the new configuration to local storage
-selectDay.forEach(function (e) {
+selectDay.forEach((e) => {
   e.addEventListener("click", function (e) {
     days1 = days.slice(days.indexOf(e.target.textContent));
     days2 = days.slice(0, days.indexOf(e.target.textContent));
@@ -341,31 +342,27 @@ selectDay.forEach(function (e) {
 });
 
 // handle event --> close modal without choosing a new first day
-reorderClose.addEventListener("click", function () {
-  reorderModal.style.display = "none";
-});
+reorderClose.addEventListener(
+  "click",
+  () => (reorderModal.style.display = "none")
+);
 
 // *** CLEAR ALL MENU ITEMS
 // variables/constants for DOM manipulation
-const clearBtn = document.querySelector("[data-btn-clear]");
-const clearClose = document.querySelector("[data-clear-close]");
-const clearYes = document.querySelector("[data-clear-yes]");
-const clearNo = document.querySelector("[data-clear-no]");
+const clearBtn = document.querySelector("[data-js-btn-clear]");
+const clearYes = document.querySelector("[data-js-clear-yes]");
+const clearNo = document.querySelector("[data-js-clear-no]");
 const clearModal = document.querySelector("[data-js-clear-modal]");
 
 // handle event --> button click to open modal
-// clearBtn.addEventListener("click", function () {
-//   clearModal.style.display = "block";
-// });
+clearBtn.addEventListener("click", () => (clearModal.style.display = "block"));
 
 // define functions to execute modal options
 // exit without clearing items
-exitClearModal = function () {
-  clearModal.style.display = "none";
-};
+exitClearModal = () => (clearModal.style.display = "none");
 
 // clear all items, save to local storage, reload menu content and exit
-clearAll = function () {
+clearAllMenuItems = function () {
   for (let i = 1; i < 8; i++) {
     currentEditDay = "day" + i;
     dmpContent[currentEditDay]["main"] = "";
@@ -382,11 +379,11 @@ clearAll = function () {
 };
 
 // handle event --> call function to clear all menu items
-clearYes.addEventListener("click", clearAll);
+clearYes.addEventListener("click", clearAllMenuItems);
 
 // handle event --> call function to exit without clearing all menu items
 clearNo.addEventListener("click", exitClearModal);
-clearClose.addEventListener("click", exitClearModal);
+// clearClose.addEventListener("click", exitClearModal);
 
 // *** DRAG AND DROP FUNCTIONALITY FOR DMP CONTENT ***
 // define dragstart handler and assign to all draggable elements
@@ -397,9 +394,9 @@ function dragstart_handler(e) {
 function addDrag() {
   const dmpContentsDrag = document.querySelectorAll("[data-js-draggable]");
 
-  dmpContentsDrag.forEach(function (e) {
-    e.addEventListener("dragstart", dragstart_handler);
-  });
+  dmpContentsDrag.forEach((e) =>
+    e.addEventListener("dragstart", dragstart_handler)
+  );
 }
 
 //define dragover and drop zone handlers and assign to all droppable elements
@@ -429,89 +426,44 @@ function drop_handler(e) {
 function addDropZone() {
   const dmpContentsDrop = document.querySelectorAll("[data-js-droppable]");
 
-  dmpContentsDrop.forEach(function (e) {
+  dmpContentsDrop.forEach((e) => {
     e.addEventListener("dragover", dragover_handler);
     e.addEventListener("drop", drop_handler);
   });
 }
 
-// **** ALL CODE ABOVE HAS BEEN CLEANED UP AS OF 9/24 ****
-
 // *** SHOPPING LIST PAGE ***
 
-// declare constants and variables for shopping list page
-const addItemBtn = document.querySelector("[data-btn-add-item]");
-const listCount = document.querySelector("[data-list-count");
-const listBody = document.querySelector("[data-list-body]");
-const listItem = document.querySelector("[data-list-item]");
-const listItemInput = document.querySelector("[data-list-item-input");
-const listItemLabel = document.querySelector("[data-list-item-label");
-const listItemSpan = document.querySelector("[data-list-item-span");
-const newSLItemForm = document.querySelector("[data-new-list-form]");
-const shoppingListItemModal = document.querySelector(
-  "[data-shopping-list-item-modal]"
-);
-const shoppingListItemClose = document.querySelector(
-  "[data-shopping-list-item-close]"
-);
+let list = []; // array to store shopping list items
 
-const completedItems = document.querySelector("[data-btn-clear-complete]");
-const allItems = document.querySelector("[data-btn-clear-all]");
-
-const nliName = document.querySelector("#itemName");
-const nliType = document.querySelector("#itemType");
-const nliQty = document.querySelector("#itemQuantity");
-const nliUnits = document.querySelector("#itemUnits");
-
-const listItemTemplate = document.querySelector("#listItemTemplate");
-
-let list = [];
-
+// load existing shopping list items from local storage
+// local storage key declared above
 if (localStorage.getItem(LOCAL_STORAGE_SHOPPINGLIST_KEY) !== null) {
   list = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SHOPPINGLIST_KEY));
 }
 
-// Handle Event - Add Item Button Click
-addItemBtn.addEventListener("click", function () {
-  shoppingListItemModal.style.display = "block";
-  nliName.focus();
-});
-
-// handle event -->
-shoppingListItemClose.addEventListener("click", function () {
-  shoppingListItemModal.style.display = "none";
-});
-
-// Handle Event - Submit New Item Information
-
-newSLItemForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  if (nliName.value == null || nliName.value === "") return;
-
-  let newObject = {
-    id: Date.now().toString(),
-    name: nliName.value,
-    type: nliType.value,
-    quantity: nliQty.value,
-    units: nliUnits.value,
-    complete: false,
-  };
-  list.push(newObject);
-  nliName.value = "";
-  nliType.value = "";
-  nliQty.value = "1";
-  nliUnits.value = "";
-
-  shoppingListItemModal.style.display = "none";
-
-  localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
-
-  renderShoppingList();
-});
-
 // *** RENDER SHOPPING LIST AND LIST ITEM COUNT CONTENTS
-// shopping list items
+
+// declare constants and variables --> render shopping list items
+const listCount = document.querySelector("[data-js-list-count");
+const listBody = document.querySelector("[data-js-list-body]");
+const listItemTemplate = document.querySelector("#listItemTemplate");
+
+// clear all existing list items from list body
+function clearElement(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+}
+
+//  render current count of remaining list items
+function renderListCount() {
+  const incompleteListCount = list.filter((list) => list.complete === false);
+  const taskString = incompleteListCount.length === 1 ? "item" : "items";
+  listCount.textContent = `${incompleteListCount.length} ${taskString} remaining`;
+}
+
+// render shopping list items in body of list
 function renderShoppingList() {
   // clear all existing elements from list
   clearElement(listBody);
@@ -551,18 +503,78 @@ function renderShoppingList() {
         listBody.appendChild(listItemElement);
       }
     }
+
+    const listItemBkgd = document.querySelectorAll(".listItem");
+
+    listItemBkgd.forEach(function (item, index) {
+      if (parseInt(index) % 2 === 0) {
+        item.style.background = "#6b7a66";
+        item.style.color = "white";
+        item.classList.add = "listItemEven";
+        item.firstElementChild.className = "sliCheckboxEven";
+      }
+    });
   });
+
+  renderListCount();
 }
 
-// count of remaining list items
-function renderListCount() {
-  const incompleteListCount = list.filter((list) => list.complete === false);
-  const taskString = incompleteListCount.length === 1 ? "item" : "items";
-  listCount.textContent = `${incompleteListCount.length} ${taskString} remaining`;
-}
+// **** ADD NEW SHOPPING LIST ITEM (SLI) FUNCTIONALITY ****
+// declare constants and variables --> add new shopping list item
+const addItemBtn = document.querySelector("[data-js-btn-add-item]");
+const addItemModal = document.querySelector("[data-js-add-item-modal]");
+const addItemForm = document.querySelector("[data-js-add-item-form]");
+const addItemClose = document.querySelector("[data-js-add-item-close]");
 
-// Event Handler - change array object 'complete' property when item is clicked
-// then save the new array entry information to local storage
+const nliName = document.querySelector("[data-js-add-item-name]");
+const nliType = document.querySelector("[data-js-add-item-type]");
+const nliQty = document.querySelector("[data-js-add-item-quantity]");
+const nliUnits = document.querySelector("[data-js-add-item-units]");
+
+// handle event --> shopping list add item button
+addItemBtn.addEventListener("click", () => {
+  addItemModal.style.display = "block";
+  nliName.focus();
+});
+
+// handle event --> close add item modal without adding new item
+addItemClose.addEventListener(
+  "click",
+  () => (addItemModal.style.display = "none")
+);
+
+// handle event --> submit new sli, close add item modal
+
+addItemForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  if (nliName.value == null || nliName.value === "") return;
+
+  let newObject = {
+    id: Date.now().toString(),
+    name: nliName.value,
+    type: nliType.value,
+    quantity: nliQty.value,
+    units: nliUnits.value,
+    complete: false,
+  };
+
+  list.push(newObject);
+  nliName.value = "";
+  nliType.value = "";
+  nliQty.value = "1";
+  nliUnits.value = "";
+
+  addItemModal.style.display = "none";
+
+  localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
+
+  renderShoppingList();
+});
+
+// **** MANAGE EXISTING LIST ITEMS ****
+
+// event handler --> mark sli as completed, save to local storage
 listBody.addEventListener("click", (e) => {
   if (e.target.tagName.toLowerCase() === "input") {
     let selectedListItem = list.find((list) => list.id === e.target.id);
@@ -572,40 +584,101 @@ listBody.addEventListener("click", (e) => {
   renderListCount();
 });
 
-// Event Handler - clear completed items button
-completedItems.addEventListener("click", clearCompletedItems);
-// Event Handler - clear all items button
-allItems.addEventListener("click", clearAllItems);
+// declare constants and variables --> clear completed shopping list items
+const completedItemsBtn = document.querySelector(
+  "[data-js-btn-clear-completed]"
+);
+const completedItemsModal = document.querySelector(
+  "[data-js-clear-completed-modal]"
+);
+const clearCompletedYes = document.querySelector(
+  "[data-js-clear-completed-yes]"
+);
+const clearCompletedNo = document.querySelector("[data-js-clear-completed-no]");
 
-function clearElement(element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
+// event handler --> clear completed items button, opens confirmation modal
+// if no applicable items opens informational modal
+completedItemsBtn.addEventListener("click", () => {
+  completedItemsCheck = list.filter((list) => list.complete === true);
+
+  if (completedItemsCheck.length > 0) {
+    completedItemsModal.style.display = "block";
+  } else {
+    noItemsToClearModal.style.display = "block";
   }
-}
+});
 
+// define function to clear completed sli from list, save to local storage
 function clearCompletedItems() {
   list = list.filter((list) => list.complete === false);
 
   localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
+  completedItemsModal.style.display = "none";
   renderShoppingList();
   renderListCount();
 }
 
-function clearAllItems() {
+// event handler --> clear completed items confirmation
+clearCompletedYes.addEventListener("click", clearCompletedItems);
+
+// event handler --> close clear completed items modal without clearing items
+clearCompletedNo.addEventListener(
+  "click",
+  () => (completedItemsModal.style.display = "none")
+);
+
+// declare constants and variables --> clear all shopping list items
+const allItemsBtn = document.querySelector("[data-js-btn-clear-all]");
+const allItemsModal = document.querySelector("[data-js-clear-all-modal]");
+const clearAllYes = document.querySelector("[data-js-clear-all-yes]");
+const clearAllNo = document.querySelector("[data-js-clear-all-no]");
+
+// event handler --> clear all items button, opens confirmation modal
+// if no applicable items opens informational modal
+allItemsBtn.addEventListener("click", () => {
+  if (list.length > 0) {
+    allItemsModal.style.display = "block";
+  } else {
+    noItemsToClearModal.style.display = "block";
+  }
+});
+
+// define function to clear all sli from list, save to local storage
+function clearAllSli() {
   list = [];
+  allItemsModal.style.display = "none";
   localStorage.setItem(LOCAL_STORAGE_SHOPPINGLIST_KEY, JSON.stringify(list));
   renderShoppingList();
   renderListCount();
 }
 
-renderShoppingList();
-renderListCount();
+// event handler --> clear all items confirmation
+clearAllYes.addEventListener("click", clearAllSli);
 
-// populate days of the week and menu content, add event listeners for drag and drop functionality upon first loading page
+// event handler --> close clear all items modal without clearing items
+clearAllNo.addEventListener(
+  "click",
+  () => (allItemsModal.style.display = "none")
+);
 
+// declare constants and variables --> no shopping list items to clear
+const noItemsToClearModal = document.querySelector("[data-js-no-items-modal]");
+const noItemsModalClose = document.querySelector("[data-js-no-items-close");
+
+// event handler --> close no items to clear modal
+// opened when there are no applicable items to clear
+noItemsModalClose.addEventListener(
+  "click",
+  () => (noItemsToClearModal.style.display = "none")
+);
+
+// populate days of the week and menu content, add event listeners for drag and drop functionality, render shopping list items upon first loading page
 document.addEventListener("DOMContentLoaded", (e) => {
   dotwPopulate();
   loadMenuContent();
   addDrag();
   addDropZone();
+  renderShoppingList();
 });
+
+// **** ALL CODE ABOVE HAS BEEN CLEANED UP AS OF 10/01 ****
