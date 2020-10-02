@@ -180,6 +180,8 @@ function loadMenuContent() {
       item.textContent = dmpContent[currentDay]["notes"];
     }
   });
+
+  addOrEdit();
 }
 
 // *** EDIT MENU ITEMS AND MENU ITEM NOTES
@@ -192,6 +194,20 @@ const submitMenuEdit = document.querySelector("[data-js-new-item-submit]");
 const dmpModalClose = document.querySelector("[data-js-dmp-modal-close]");
 const inputFields = document.querySelectorAll(".modalFormInput");
 const dmpModalHeader = document.querySelector("[data-js-dmp-modal-header]");
+
+// check for content and adjust add/edit text accordingly
+function addOrEdit() {
+  let btnText = document.querySelectorAll("[data-js-edit-menu]");
+  let mainDishList = document.querySelectorAll(".mainDish");
+
+  mainDishList.forEach(function (item, index) {
+    if (item.textContent !== "") {
+      btnText[index].textContent = "Edit";
+    } else {
+      btnText[index].textContent = "Add";
+    }
+  });
+}
 
 // handle event --> button click to call open dmp edit modal function
 editMenu.forEach((e) => e.addEventListener("click", openEditModal));
@@ -476,6 +492,8 @@ function renderShoppingList() {
     checkbox.checked = item.complete;
     const label = listItemElement.querySelector("label");
     label.htmlFor = item.id;
+    const edit = listItemElement.querySelector(".sliEdit");
+    edit.id = item.id;
     // conditionals to define how to render items depending on data entered
     if (item.units !== "") {
       if (item.quantity > 1) {
@@ -491,7 +509,7 @@ function renderShoppingList() {
           listBody.appendChild(listItemElement);
         }
       } else {
-        label.append(item.name);
+        label.append(item.name + ", " + item.quantity + " " + item.units);
         listBody.appendChild(listItemElement);
       }
     } else {
@@ -504,6 +522,7 @@ function renderShoppingList() {
       }
     }
 
+    // alternating background colors for list items
     const listItemBkgd = document.querySelectorAll(".listItem");
 
     listItemBkgd.forEach(function (item, index) {
@@ -516,10 +535,15 @@ function renderShoppingList() {
     });
   });
 
+  // add edit event handler
+  const editItemBtn = document.querySelectorAll(".sliEdit");
+
+  editItemBtn.forEach((e) => e.addEventListener("click", editSli));
+
   renderListCount();
 }
 
-// **** ADD NEW SHOPPING LIST ITEM (SLI) FUNCTIONALITY ****
+// **** ADD SHOPPING LIST ITEM (SLI) ****
 // declare constants and variables --> add new shopping list item
 const addItemBtn = document.querySelector("[data-js-btn-add-item]");
 const addItemModal = document.querySelector("[data-js-add-item-modal]");
@@ -531,9 +555,12 @@ const nliType = document.querySelector("[data-js-add-item-type]");
 const nliQty = document.querySelector("[data-js-add-item-quantity]");
 const nliUnits = document.querySelector("[data-js-add-item-units]");
 
+let editItemId;
+
 // handle event --> shopping list add item button
 addItemBtn.addEventListener("click", () => {
   addItemModal.style.display = "block";
+  addItemForm.dataset.jsAddItemForm = "new";
   nliName.focus();
 });
 
@@ -543,27 +570,43 @@ addItemClose.addEventListener(
   () => (addItemModal.style.display = "none")
 );
 
-// handle event --> submit new sli, close add item modal
+// handle event --> check new or edit, submit new item/changes, close add item modal
 
 addItemForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   if (nliName.value == null || nliName.value === "") return;
 
-  let newObject = {
-    id: Date.now().toString(),
-    name: nliName.value,
-    type: nliType.value,
-    quantity: nliQty.value,
-    units: nliUnits.value,
-    complete: false,
-  };
+  if (addItemForm.dataset.jsAddItemForm === "new") {
+    let newObject = {
+      id: Date.now().toString(),
+      name: nliName.value,
+      type: nliType.value,
+      quantity: nliQty.value,
+      units: nliUnits.value,
+      complete: false,
+    };
 
-  list.push(newObject);
-  nliName.value = "";
-  nliType.value = "";
-  nliQty.value = "1";
-  nliUnits.value = "";
+    list.push(newObject);
+    nliName.value = "";
+    nliType.value = "";
+    nliQty.value = "1";
+    nliUnits.value = "";
+  } else if (addItemForm.dataset.jsAddItemForm === "edit") {
+    list.forEach((item, index) => {
+      if (item.id === editItemId) {
+        list[index].name = nliName.value;
+        list[index].type = nliType.value;
+        list[index].quantity = nliQty.value;
+        list[index].units = nliUnits.value;
+
+        nliName.value = "";
+        nliType.value = "";
+        nliQty.value = "1";
+        nliUnits.value = "";
+      }
+    });
+  }
 
   addItemModal.style.display = "none";
 
@@ -573,6 +616,48 @@ addItemForm.addEventListener("submit", (e) => {
 });
 
 // **** MANAGE EXISTING LIST ITEMS ****
+
+// handle event --> shopping list edit item button
+function editSli(e) {
+  editItemId = e.target.id;
+  console.log(editItemId);
+
+  const modal = document.querySelector("[data-js-add-item-form]");
+  console.log(modal);
+  modal.dataset.jsAddItemForm = "edit";
+  console.log(modal.dataset.jsAddItemForm);
+
+  list.forEach((item, index) => {
+    if (item.id === editItemId) {
+      addItemModal.style.display = "block";
+
+      nliName.value = list[index].name;
+      nliType.value = list[index].type;
+      nliQty.value = list[index].quantity;
+      nliUnits.value = list[index].units;
+    } else {
+      console.log("nope");
+    }
+  });
+
+  // addItemModal.style.display = "block";
+
+  // nliName.value = editItemTarget[0].name;
+  // nliType.value = editItemTarget[0].type;
+  // nliQty.value = editItemTarget[0].quantity;
+  // nliUnits.value = editItemTarget[0].units;
+
+  // let editItemTarget = list.filter((list) => list.id === itemId);
+
+  // addItemModal.style.display = "block";
+
+  // nliName.value = editItemTarget[0].name;
+  // nliType.value = editItemTarget[0].type;
+  // nliQty.value = editItemTarget[0].quantity;
+  // nliUnits.value = editItemTarget[0].units;
+
+  nliName.focus();
+}
 
 // event handler --> mark sli as completed, save to local storage
 listBody.addEventListener("click", (e) => {

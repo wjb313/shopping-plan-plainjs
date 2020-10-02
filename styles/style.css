@@ -328,8 +328,8 @@ nav {
    ======================== */
 
 .listWrapper {
-  flex-direction: column;
-  justify-content: space-between;
+  /* flex-direction: column;
+  justify-content: space-between; */
   overflow-y: auto;
   box-shadow: 1px 1px 2.5px 0px rgba(0, 0, 0, 0.25);
   width: 90%;
@@ -344,7 +344,27 @@ nav {
   font-weight: 700;
 }
 
-/* SLI ITEM LIST FORMATTING */
+/* SLI LIST FORMATTING */
+.listItem {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sliEdit {
+  align-self: center;
+  font-size: 1.15rem;
+  padding: 0 10px 0 10px;
+}
+
+.sliEdit:hover,
+.sliEdit:focus {
+  cursor: pointer;
+  background: 0;
+  border: 0;
+  font-weight: 800;
+  color: var(--interactive-hover-color);
+}
+
 .listItem label {
   display: inline-flex; /* INLINE-FLEX FORMATTING ==> CROSS-OUT LINE ONLY AS WIDE CONTENT */
   align-items: center; /* ALIGNS CUSTOM CHEKCBOX WITH CONTENT VERTICALLY */
