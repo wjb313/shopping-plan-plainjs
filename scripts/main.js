@@ -105,7 +105,7 @@ if (localStorage.getItem(LOCAL_STORAGE_DMP_KEY) !== null) {
   dmpContent = JSON.parse(localStorage.getItem(LOCAL_STORAGE_DMP_KEY));
 }
 
-// persist user's current page via local storage
+// // persist user's current page via local storage
 let page;
 
 if (localStorage.getItem(LOCAL_STORAGE_CURRENTPAGE_KEY) !== null) {
@@ -144,7 +144,7 @@ const dotw7 = document.querySelector("[data-js-day7-dotw]");
 const dotwClassSelect = document.querySelectorAll("[data-js-dotw]");
 
 function dotwPopulate() {
-  for (i = 0; i < days.length; i++) {
+  for (let i = 0; i < days.length; i++) {
     const dotwSpanCreate = document.createElement("span");
     let currentDayDOM = document.querySelector(
       '[data-js-dotw="day' + [i + 1] + '"]'
@@ -375,10 +375,10 @@ clearBtn.addEventListener("click", () => (clearModal.style.display = "block"));
 
 // define functions to execute modal options
 // exit without clearing items
-exitClearModal = () => (clearModal.style.display = "none");
+let exitClearModal = () => (clearModal.style.display = "none");
 
 // clear all items, save to local storage, reload menu content and exit
-clearAllMenuItems = function () {
+let clearAllMenuItems = function () {
   for (let i = 1; i < 8; i++) {
     currentEditDay = "day" + i;
     dmpContent[currentEditDay]["main"] = "";

@@ -11,5 +11,8 @@
   "license": "Unlicense",
   "devDependencies": {
     "lite-server": "^2.5.4"
+  },
+  "dependencies": {
+    "airtable": "^0.10.0"
   }
 }
