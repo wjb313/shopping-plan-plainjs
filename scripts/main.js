@@ -20,16 +20,16 @@ const db = getFirestore(app);
 
 // *** PAGE NAVIGATION ***
 const sections = {
-    dinnerPlan: document.querySelector("#dinnerWrapper"),
-    shoppingList: document.querySelector("#listWrapper")
+    dinnerPlan: document.querySelector("[data-js-dmp-display]"),
+    shoppingList: document.querySelector("[data-js-sli-display]")
 };
 
-document.querySelectorAll("[data-nav-to-dinner]").forEach(el => el.addEventListener("click", () => switchPage("dinnerPlan")));
-document.querySelectorAll("[data-nav-to-shopping-list]").forEach(el => el.addEventListener("click", () => switchPage("shoppingList")));
+document.querySelectorAll("[data-js-nav-to-dinner]").forEach(el => el.addEventListener("click", () => switchPage("dinnerPlan")));
+document.querySelectorAll("[data-js-nav-to-shopping-list]").forEach(el => el.addEventListener("click", () => switchPage("shoppingList")));
 
 function switchPage(section) {
-    Object.values(sections).forEach(s => s.classList.add("hidden"));
-    sections[section].classList.remove("hidden");
+    Object.values(sections).forEach(s => s.style.display = "none");
+    sections[section].style.display = "flex";
     saveCurrentPage(section);
 }
 
@@ -51,12 +51,40 @@ async function loadCurrentPage() {
     }
 }
 
+// *** DINNER MENU PLAN MANAGEMENT ***
+let dmpContent = {};
+async function loadMenuContent() {
+    const docSnap = await getDoc(doc(db, FIRESTORE_DOC, "dinnerMenu"));
+    if (docSnap.exists()) {
+        dmpContent = docSnap.data();
+        document.querySelectorAll(".allMenuItems").forEach(item => {
+            let day = item.dataset.jsDay;
+            let field = item.dataset.jsField;
+            if (dmpContent[day]) item.textContent = dmpContent[day][field] || "";
+        });
+    }
+}
+
+document.querySelectorAll("[data-js-edit-menu]").forEach(el => el.addEventListener("click", openEditModal));
+
+document.querySelector("[data-js-new-item-submit]").addEventListener("click", async (e) => {
+    e.preventDefault();
+    document.querySelector("[data-js-dmp-modal]").style.display = "none";
+    let updatedData = {};
+    document.querySelectorAll(".modalFormInput").forEach(item => {
+        updatedData[item.dataset.jsField] = item.value;
+    });
+    dmpContent[currentEditDay] = updatedData;
+    await setDoc(doc(db, FIRESTORE_DOC, "dinnerMenu"), dmpContent, { merge: true });
+    loadMenuContent();
+});
+
 // *** SHOPPING LIST MANAGEMENT ***
-const listBody = document.querySelector("[data-list-body]");
-document.querySelector("[data-btn-add-item]").addEventListener("click", addShoppingItem);
+const listBody = document.querySelector("[data-js-list-body]");
+document.querySelector("[data-js-btn-add-item]").addEventListener("click", addShoppingItem);
 
 async function addShoppingItem() {
-    const input = document.querySelector("[data-list-item-input]");
+    const input = document.querySelector("[data-js-list-item-input]");
     const newItem = input.value.trim();
     if (!newItem) return;
 
@@ -82,7 +110,7 @@ async function renderShoppingList() {
 
 async function deleteShoppingItem(id) {
     try {
-        await deleteDoc(doc(db, "userData", "shoppingList", id));
+        await deleteDoc(doc(db, FIRESTORE_DOC, "shoppingList", id));
         renderShoppingList();
     } catch (e) {
         console.error("❌ Error deleting shopping item: ", e);
@@ -92,6 +120,7 @@ async function deleteShoppingItem(id) {
 // *** INITIALIZE APP ***
 document.addEventListener("DOMContentLoaded", async () => {
     await loadCurrentPage();
+    await loadMenuContent();
     await renderShoppingList();
-    console.log("✅ Firestore connected, page state and shopping list loaded.");
+    console.log("✅ Firestore connected, page state, menu, and shopping list loaded.");
 });
