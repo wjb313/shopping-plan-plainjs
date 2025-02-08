@@ -19,18 +19,23 @@ const db = firebase.firestore();
 
 // Function to test Firestore connection
 async function testFirestore() {
+    console.log("🔥 Attempting to write to Firestore...");
+    
     try {
         const docRef = await db.collection("testCollection").add({
-            message: "Hello, Firestore!"
+            message: "Hello, Firestore!",
+            timestamp: new Date()
         });
-        console.log("Document written with ID: ", docRef.id);
+
+        console.log("✅ Document written with ID: ", docRef.id);
     } catch (e) {
-        console.error("Error adding document: ", e);
+        console.error("❌ Firestore error: ", e);
     }
 }
 
 // Run Firestore test
 testFirestore();
+
 
 document.addEventListener("DOMContentLoaded", () => {
     // Section Mapping
