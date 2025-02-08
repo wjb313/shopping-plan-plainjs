@@ -1,5 +1,3 @@
-Fixed main.js Implementation
-
 // Storage keys for consistent localStorage access
 const STORAGE_KEYS = {
   SHOPPING_LIST: 'shopping.list',
@@ -174,27 +172,114 @@ class UIController {
   }
 }
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', () => {
-  const state = new AppState();
-  state.loadFromStorage();
+class MenuManager {
+    constructor(state) {
+      this.state = state;
+      this.initializeMenuElements();
+      this.setupDragAndDrop();
+    }
   
-  const ui = new UIController(state);
+    initializeMenuElements() {
+      this.elements = {
+        dayContainers: document.querySelectorAll('[data-js-dotw]'),
+        menuItems: document.querySelectorAll('.allMenuItems'),
+        mainDishes: document.querySelectorAll('[data-js-main]'),
+        sides1: document.querySelectorAll('[data-js-side1]'),
+        sides2: document.querySelectorAll('[data-js-side2]'),
+        others: document.querySelectorAll('[data-js-other]'),
+        notes: document.querySelectorAll('[data-js-notes-span]'),
+        editButtons: document.querySelectorAll('[data-js-edit-menu]')
+      };
+    }
   
-  // Set initial page display
-  const storedPage = localStorage.getItem(STORAGE_KEYS.CURRENT_PAGE);
-  if (storedPage) {
-    const [dmpDisplay, sliDisplay] = JSON.parse(storedPage);
-    ui.elements.dmpDisplay.style.display = dmpDisplay;
-    ui.elements.sliDisplay.style.display = sliDisplay;
-  } else {
-    ui.elements.dmpDisplay.style.display = 'flex';
-    ui.elements.sliDisplay.style.display = 'none';
+    setupDragAndDrop() {
+      const draggables = document.querySelectorAll('[data-js-draggable]');
+      const dropZones = document.querySelectorAll('[data-js-droppable]');
+  
+      draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', e => {
+          e.dataTransfer.setData('text/plain', e.target.dataset.jsDraggable);
+        });
+      });
+  
+      dropZones.forEach(dropZone => {
+        dropZone.addEventListener('dragover', e => {
+          const dataTo = dropZone.dataset.jsDroppable;
+          if (e.dataTransfer.getData('text/plain') !== dataTo) {
+            e.preventDefault();
+          }
+        });
+  
+        dropZone.addEventListener('drop', e => this.handleDrop(e));
+      });
+    }
+  
+    handleDrop(e) {
+      e.preventDefault();
+      const dataFrom = e.dataTransfer.getData('text/plain');
+      const dataTo = e.currentTarget.dataset.jsDroppable;
+  
+      // Swap menu items
+      const tempContent = { ...this.state.dinnerMenu[dataFrom] };
+      this.state.dinnerMenu[dataFrom] = this.state.dinnerMenu[dataTo];
+      this.state.dinnerMenu[dataTo] = tempContent;
+  
+      this.saveAndRenderMenu();
+    }
+  
+    renderMenu() {
+      // Update day labels
+      this.elements.dayContainers.forEach((container, index) => {
+        const day = this.state.days[index];
+        container.textContent = day.charAt(0);
+        
+        const tooltip = document.createElement('span');
+        tooltip.className = 'tooltiptext';
+        tooltip.textContent = day;
+        container.appendChild(tooltip);
+      });
+  
+      // Update menu items
+      this.elements.menuItems.forEach(item => {
+        let dayId;
+        let content = '';
+  
+        if (item.dataset.jsMain) {
+          dayId = item.dataset.jsMain;
+          content = this.state.dinnerMenu[dayId].main;
+        } else if (item.dataset.jsSide1) {
+          dayId = item.dataset.jsSide1;
+          content = this.state.dinnerMenu[dayId].side1;
+        } else if (item.dataset.jsSide2) {
+          dayId = item.dataset.jsSide2;
+          content = this.state.dinnerMenu[dayId].side2;
+        } else if (item.dataset.jsOther) {
+          dayId = item.dataset.jsOther;
+          content = this.state.dinnerMenu[dayId].other;
+        } else if (item.dataset.jsNotesSpan) {
+          dayId = item.dataset.jsNotesSpan;
+          content = this.state.dinnerMenu[dayId].notes;
+        }
+  
+        item.textContent = content;
+      });
+  
+      this.updateEditButtons();
+    }
+  
+    updateEditButtons() {
+      this.elements.editButtons.forEach((button, index) => {
+        const dayId = `day${index + 1}`;
+        const hasContent = this.state.dinnerMenu[dayId].main !== '';
+        button.textContent = hasContent ? 'Edit' : 'Add';
+      });
+    }
+  
+    saveAndRenderMenu() {
+      localStorage.setItem(STORAGE_KEYS.DINNER_MENU, JSON.stringify(this.state.dinnerMenu));
+      this.renderMenu();
+    }
   }
-});
-
-// Part 3: Modal Controller
-// Add this after the UIController class but before the initialization code
 
 class ModalController {
   constructor(state) {
@@ -510,117 +595,6 @@ class ModalController {
     localStorage.setItem(STORAGE_KEYS.DINNER_MENU, JSON.stringify(this.state.dinnerMenu));
     document.dispatchEvent(new CustomEvent('menuUpdated'));
     this.closeModal(modalElement);
-  }
-}
-// Part 4: Menu Manager and Final Initialization
-// Add this after the ModalController class and replace the existing initialization code
-
-class MenuManager {
-  constructor(state) {
-    this.state = state;
-    this.initializeMenuElements();
-    this.setupDragAndDrop();
-  }
-
-  initializeMenuElements() {
-    this.elements = {
-      dayContainers: document.querySelectorAll('[data-js-dotw]'),
-      menuItems: document.querySelectorAll('.allMenuItems'),
-      mainDishes: document.querySelectorAll('[data-js-main]'),
-      sides1: document.querySelectorAll('[data-js-side1]'),
-      sides2: document.querySelectorAll('[data-js-side2]'),
-      others: document.querySelectorAll('[data-js-other]'),
-      notes: document.querySelectorAll('[data-js-notes-span]'),
-      editButtons: document.querySelectorAll('[data-js-edit-menu]')
-    };
-  }
-
-  setupDragAndDrop() {
-    const draggables = document.querySelectorAll('[data-js-draggable]');
-    const dropZones = document.querySelectorAll('[data-js-droppable]');
-
-    draggables.forEach(draggable => {
-      draggable.addEventListener('dragstart', e => {
-        e.dataTransfer.setData('text/plain', e.target.dataset.jsDraggable);
-      });
-    });
-
-    dropZones.forEach(dropZone => {
-      dropZone.addEventListener('dragover', e => {
-        const dataTo = dropZone.dataset.jsDroppable;
-        if (e.dataTransfer.getData('text/plain') !== dataTo) {
-          e.preventDefault();
-        }
-      });
-
-      dropZone.addEventListener('drop', e => this.handleDrop(e));
-    });
-  }
-
-  handleDrop(e) {
-    e.preventDefault();
-    const dataFrom = e.dataTransfer.getData('text/plain');
-    const dataTo = e.currentTarget.dataset.jsDroppable;
-
-    // Swap menu items
-    const tempContent = { ...this.state.dinnerMenu[dataFrom] };
-    this.state.dinnerMenu[dataFrom] = this.state.dinnerMenu[dataTo];
-    this.state.dinnerMenu[dataTo] = tempContent;
-
-    this.saveAndRenderMenu();
-  }
-
-  renderMenu() {
-    // Update day labels
-    this.elements.dayContainers.forEach((container, index) => {
-      const day = this.state.days[index];
-      container.textContent = day.charAt(0);
-      
-      const tooltip = document.createElement('span');
-      tooltip.className = 'tooltiptext';
-      tooltip.textContent = day;
-      container.appendChild(tooltip);
-    });
-
-    // Update menu items
-    this.elements.menuItems.forEach(item => {
-      let dayId;
-      let content = '';
-
-      if (item.dataset.jsMain) {
-        dayId = item.dataset.jsMain;
-        content = this.state.dinnerMenu[dayId].main;
-      } else if (item.dataset.jsSide1) {
-        dayId = item.dataset.jsSide1;
-        content = this.state.dinnerMenu[dayId].side1;
-      } else if (item.dataset.jsSide2) {
-        dayId = item.dataset.jsSide2;
-        content = this.state.dinnerMenu[dayId].side2;
-      } else if (item.dataset.jsOther) {
-        dayId = item.dataset.jsOther;
-        content = this.state.dinnerMenu[dayId].other;
-      } else if (item.dataset.jsNotesSpan) {
-        dayId = item.dataset.jsNotesSpan;
-        content = this.state.dinnerMenu[dayId].notes;
-      }
-
-      item.textContent = content;
-    });
-
-    this.updateEditButtons();
-  }
-
-  updateEditButtons() {
-    this.elements.editButtons.forEach((button, index) => {
-      const dayId = `day${index + 1}`;
-      const hasContent = this.state.dinnerMenu[dayId].main !== '';
-      button.textContent = hasContent ? 'Edit' : 'Add';
-    });
-  }
-
-  saveAndRenderMenu() {
-    localStorage.setItem(STORAGE_KEYS.DINNER_MENU, JSON.stringify(this.state.dinnerMenu));
-    this.renderMenu();
   }
 }
 
