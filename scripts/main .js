@@ -4,7 +4,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 
-// Your Firebase config
+// Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyD1Ex4V2kW9NVtUr7kg4zid4x4rZRhGqJ4",
     authDomain: "shopplan-56d92.firebaseapp.com",
@@ -14,13 +14,13 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 // Function to test Firestore connection
 async function testFirestore() {
     try {
-        const docRef = await addDoc(collection(db, "testCollection"), {
+        const docRef = await db.collection("testCollection").add({
             message: "Hello, Firestore!"
         });
         console.log("Document written with ID: ", docRef.id);
