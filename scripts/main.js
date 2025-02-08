@@ -1,6 +1,6 @@
-// Part 1: Core Application Classes
-// Save this as main-part1.js
+Fixed main.js Implementation
 
+// Storage keys for consistent localStorage access
 const STORAGE_KEYS = {
   SHOPPING_LIST: 'shopping.list',
   CURRENT_PAGE: 'current.page',
@@ -20,15 +20,17 @@ class AppState {
   }
 
   createInitialDinnerMenu() {
-    return Array.from({ length: 7 }, (_, i) => ({
-      [`day${i + 1}`]: {
+    const menu = {};
+    for (let i = 1; i <= 7; i++) {
+      menu[`day${i}`] = {
         main: '',
         side1: '',
         side2: '',
         other: '',
         notes: ''
-      }
-    })).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+      };
+    }
+    return menu;
   }
 
   loadFromStorage() {
@@ -53,15 +55,6 @@ class AppState {
   }
 }
 
-// Export for part 2
-window.AppState = AppState;
-window.STORAGE_KEYS = STORAGE_KEYS;
-// Part 2: Controllers and App Initialization
-// Save this as main-part2.js
-
-// Import from part 1
-const { AppState, STORAGE_KEYS } = window;
-
 class UIController {
   constructor(state) {
     this.state = state;
@@ -81,23 +74,24 @@ class UIController {
   }
 
   setupEventListeners() {
+    // Navigation
     this.elements.dmpLinks.forEach(link => 
       link.addEventListener('click', () => this.navigateTo('dmp')));
     this.elements.sliLinks.forEach(link => 
       link.addEventListener('click', () => this.navigateTo('sli')));
     
-    this.elements.listBody.addEventListener('click', e => this.handleListItemClick(e));
+    // List item events
+    this.elements.listBody?.addEventListener('click', e => this.handleListItemClick(e));
   }
 
   navigateTo(page) {
-    const displays = {
-      dmp: [this.elements.dmpDisplay, this.elements.sliDisplay],
-      sli: [this.elements.sliDisplay, this.elements.dmpDisplay]
-    };
-    
-    const [show, hide] = displays[page];
-    show.style.display = 'flex';
-    hide.style.display = 'none';
+    if (page === 'dmp') {
+      this.elements.dmpDisplay.style.display = 'flex';
+      this.elements.sliDisplay.style.display = 'none';
+    } else {
+      this.elements.dmpDisplay.style.display = 'none';
+      this.elements.sliDisplay.style.display = 'flex';
+    }
     this.saveCurrentPage();
   }
 
@@ -186,13 +180,11 @@ document.addEventListener('DOMContentLoaded', () => {
   state.loadFromStorage();
   
   const ui = new UIController(state);
-  ui.renderShoppingList();
-
-  // Load stored page state
-  if (localStorage.getItem(STORAGE_KEYS.CURRENT_PAGE)) {
-    const [dmpDisplay, sliDisplay] = JSON.parse(
-      localStorage.getItem(STORAGE_KEYS.CURRENT_PAGE)
-    );
+  
+  // Set initial page display
+  const storedPage = localStorage.getItem(STORAGE_KEYS.CURRENT_PAGE);
+  if (storedPage) {
+    const [dmpDisplay, sliDisplay] = JSON.parse(storedPage);
     ui.elements.dmpDisplay.style.display = dmpDisplay;
     ui.elements.sliDisplay.style.display = sliDisplay;
   } else {
@@ -200,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.elements.sliDisplay.style.display = 'none';
   }
 });
+
 // Part 3: Modal Controller
 // Add this after the UIController class but before the initialization code
 
