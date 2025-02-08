@@ -1,5 +1,37 @@
 // ***FULLY MODERNIZED MAIN.JS***
 
+// Import Firebase modules
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+
+// Your Firebase config
+const firebaseConfig = {
+    apiKey: "AIzaSyD1Ex4V2kW9NVtUr7kg4zid4x4rZRhGqJ4",
+    authDomain: "shopplan-56d92.firebaseapp.com",
+    projectId: "shopplan-56d92",
+    messagingSenderId: "872127731325",
+    appId: "1:872127731325:web:d3216b68097ce8890c4314"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Function to test Firestore connection
+async function testFirestore() {
+    try {
+        const docRef = await addDoc(collection(db, "testCollection"), {
+            message: "Hello, Firestore!"
+        });
+        console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+}
+
+// Run Firestore test
+testFirestore();
+
 document.addEventListener("DOMContentLoaded", () => {
     // Section Mapping
     const sectionMap = {
