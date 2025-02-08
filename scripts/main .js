@@ -1,4 +1,5 @@
-// ***FULLY MODERNIZED MAIN.JS***
+// ***FULLY MODERNIZED MAIN.JS*** 
+console.log("🔥 main.js is running!");
 
 // Import Firebase modules
 import { initializeApp } from "firebase/app";
@@ -13,16 +14,16 @@ const firebaseConfig = {
     appId: "1:872127731325:web:d3216b68097ce8890c4314"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// ✅ Correct Firebase initialization
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// Function to test Firestore connection
+// ✅ Firestore Debugging Function
 async function testFirestore() {
     console.log("🔥 Attempting to write to Firestore...");
-    
+
     try {
-        const docRef = await db.collection("testCollection").add({
+        const docRef = await addDoc(collection(db, "testCollection"), {
             message: "Hello, Firestore!",
             timestamp: new Date()
         });
@@ -35,7 +36,6 @@ async function testFirestore() {
 
 // Run Firestore test
 testFirestore();
-
 
 document.addEventListener("DOMContentLoaded", () => {
     // Section Mapping
