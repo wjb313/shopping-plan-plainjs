@@ -1,399 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>ShopPlan</title>
-    <meta
-      name="description"
-      content="An app that helps create a grocery shopping list through weekly menu planning."
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="wjb" />
-    <link rel="icon" href="./icons/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="styles/style.css" media="screen" />
-    <script defer src="scripts/main.js"></script>
-  </head>
-  <body>
-    <main>
-      <!-- Shared Navigation Template -->
-      <template id="navigationTemplate">
-        <nav class="main-nav">
-          <ul class="navList" role="menubar">
-            <li class="navListItem" role="menuitem" data-js-nav-to-dinner tabindex="0">
-              Dinner Plan
-            </li>
-            <li class="navListItem" role="menuitem" id="navListSeparator" data-js-nav-to-shopping-list tabindex="0">
-              Shopping List
-            </li>
-          </ul>
-        </nav>
-      </template>
 
-      <!-- Dinner Menu Planning View -->
-      <div class="dmpContainer" data-js-dmp-display>
-        <div class="dmpContainerHeader">
-          <header>
-            <h1 class="pageHeader">Dinner Plan</h1>
-          </header>
+<head>
+  <meta charset="utf-8" />
+  <title>ShopPlan</title>
+  <meta name="description" content="An app that helps create a grocery shopping list through weekly menu planning." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="wjb" />
+  <link rel="icon" href="./icons/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="styles/style.css" media="screen" />
+  <script defer src="scripts/main.js"></script>
+</head>
+
+<body>
+  <main>
+    <!-- Shared Navigation Template -->
+    <template id="navigationTemplate">
+      <nav class="main-nav">
+        <ul class="navList" role="menubar">
+          <li class="navListItem" role="menuitem" data-js-nav-to-dinner tabindex="0">
+            Dinner Plan
+          </li>
+          <li class="navListItem" role="menuitem" id="navListSeparator" data-js-nav-to-shopping-list tabindex="0">
+            Shopping List
+          </li>
+        </ul>
+      </nav>
+    </template>
+
+    <!-- Dinner Menu Planning View -->
+    <div class="dmpContainer" data-js-dmp-display>
+      <div class="dmpContainerHeader">
+        <header>
+          <h1 class="pageHeader">Dinner Plan</h1>
+        </header>
+        <!-- Navigation will be inserted here -->
+        <div data-js-nav-container></div>
+      </div>
+
+      <div class="dinnerWrapper">
+        <!-- Day Template - Will be repeated 7 times via JS -->
+        <template id="dayTemplate">
+          <div class="daysOfTheWeek dotwToolTip" data-js-dotw="dayX">
+            <!-- Day letter will be inserted here -->
+            <span class="tooltiptext"></span>
+          </div>
+          <div class="menuBox" data-js-menu-box-X data-js-droppable="dayX">
+            <div class="listContainer">
+              <div class="allMenuItems mainDish" data-js-main="dayX"></div>
+              <div>
+                <ul class="sidesList">
+                  <li class="allMenuItems sidesListItems" data-js-side1="dayX"></li>
+                  <li class="allMenuItems sidesListItems" data-js-side2="dayX"></li>
+                  <li class="allMenuItems sidesListItems" data-js-other="dayX"></li>
+                </ul>
+              </div>
+            </div>
+            <div class="notesAndEdit">
+              <div class="notesAndDrag">
+                <div class="notesContainer" data-js-edit-notes="dayX" tabindex="0">
+                  Notes<span class="tooltiptext allMenuItems" data-js-notes-span="dayX"></span>
+                </div>
+                <div>
+                  <img src="./icons/move.png" alt="drag and drop icon" class="dndIcon" data-js-draggable="dayX"
+                    draggable="true" />
+                </div>
+              </div>
+              <div>
+                <button class="editBtn" data-js-edit-menu="dayX" aria-label="Edit menu for dayX"></button>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Day containers will be inserted here -->
+        <div data-js-days-container></div>
+      </div>
+
+      <div class="dmpContainerFooter">
+        <footer class="dmpFooterBtn">
+          <button class="btn" data-js-btn-reorder>Change Starting Day</button>
+          <button class="btn" data-js-btn-clear>Clear Menu Items</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Shopping List View -->
+    <div class="sliContainer" data-js-sli-display>
+      <div class="sliContainerHeader">
+        <header>
+          <h1 class="pageHeader">Shopping List</h1>
           <!-- Navigation will be inserted here -->
           <div data-js-nav-container></div>
-        </div>
-
-        <div class="dinnerWrapper">
-          <!-- Day Template - Will be repeated 7 times via JS -->
-          <template id="dayTemplate">
-            <div class="daysOfTheWeek dotwToolTip" data-js-dotw="dayX">
-              <!-- Day letter will be inserted here -->
-              <span class="tooltiptext"></span>
-            </div>
-            <div class="menuBox" data-js-menu-box-X data-js-droppable="dayX">
-              <div class="listContainer">
-                <div class="allMenuItems mainDish" data-js-main="dayX"></div>
-                <div>
-                  <ul class="sidesList">
-                    <li class="allMenuItems sidesListItems" data-js-side1="dayX"></li>
-                    <li class="allMenuItems sidesListItems" data-js-side2="dayX"></li>
-                    <li class="allMenuItems sidesListItems" data-js-other="dayX"></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="notesAndEdit">
-                <div class="notesAndDrag">
-                  <div class="notesContainer" data-js-edit-notes="dayX" tabindex="0">
-                    Notes<span class="tooltiptext allMenuItems" data-js-notes-span="dayX"></span>
-                  </div>
-                  <div>
-                    <img
-                      src="./icons/move.png"
-                      alt="drag and drop icon"
-                      class="dndIcon"
-                      data-js-draggable="dayX"
-                      draggable="true"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <button class="editBtn" data-js-edit-menu="dayX" aria-label="Edit menu for dayX"></button>
-                </div>
-              </div>
-            </div>
-          </template>
-
-          <!-- Day containers will be inserted here -->
-          <div data-js-days-container></div>
-        </div>
-
-        <div class="dmpContainerFooter">
-          <footer class="dmpFooterBtn">
-            <button class="btn" data-js-btn-reorder>Change Starting Day</button>
-            <button class="btn" data-js-btn-clear>Clear Menu Items</button>
-          </footer>
-        </div>
+        </header>
       </div>
 
-      <!-- Shopping List View -->
-      <div class="sliContainer" data-js-sli-display>
-        <div class="sliContainerHeader">
-          <header>
-            <h1 class="pageHeader">Shopping List</h1>
-            <!-- Navigation will be inserted here -->
-            <div data-js-nav-container></div>
-          </header>
-        </div>
-
-        <div class="sliContainerSubHeader">
-          <header>
-            <p class="listCount" data-js-list-count></p>
-            <button class="btn" data-js-btn-add-item>Add Item</button>
-          </header>
-        </div>
-
-        <div class="listWrapper" data-js-list-body role="list"></div>
-
-        <div class="sliContainerFooter">
-          <footer class="sliFooterBtn">
-            <button class="btn btnDelete" data-js-btn-clear-completed>
-              Clear Completed Items
-            </button>
-            <button class="btn btnDelete" data-js-btn-clear-all>
-              Clear All Items
-            </button>
-          </footer>
-        </div>
+      <div class="sliContainerSubHeader">
+        <header>
+          <p class="listCount" data-js-list-count></p>
+          <button class="btn" data-js-btn-add-item>Add Item</button>
+        </header>
       </div>
 
-      <!-- Modal System -->
-      <template id="modalTemplate">
-        <div class="modal" data-js-modal role="dialog" aria-modal="true">
-          <div class="modalContent">
-            <header class="modalContentHeader">
-              <h2 data-js-modal-title></h2>
-            </header>
-            <div class="modalContentBody" data-js-modal-body></div>
-            <footer class="modalContentFooter" data-js-modal-footer></footer>
-          </div>
-        </div>
-      </template>
+      <div class="listWrapper" data-js-list-body role="list"></div>
 
-      <!-- Modal Content Templates -->
-      <template id="confirmationModalContent">
-        <p data-js-confirmation-message></p>
+      <div class="sliContainerFooter">
+        <footer class="sliFooterBtn">
+          <button class="btn btnDelete" data-js-btn-clear-completed>
+            Clear Completed Items
+          </button>
+          <button class="btn btnDelete" data-js-btn-clear-all>
+            Clear All Items
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Modal System -->
+    <template id="modalTemplate">
+      <div class="modal" data-js-modal role="dialog" aria-modal="true">
+        <div class="modalContent">
+          <header class="modalContentHeader">
+            <h2 data-js-modal-title></h2>
+          </header>
+          <div class="modalContentBody" data-js-modal-body></div>
+          <footer class="modalContentFooter" data-js-modal-footer></footer>
+        </div>
+      </div>
+    </template>
+
+    <!-- Modal Content Templates -->
+    <template id="confirmationModalContent">
+      <p data-js-confirmation-message></p>
+      <div class="modalContentFooter">
+        <button class="modalBtn" data-js-confirm-yes>Yes</button>
+        <button class="modalBtn" data-js-confirm-no>No</button>
+      </div>
+    </template>
+
+    <template id="dayPickerModalContent">
+      <div class="dayPicker">
+        <div class="dayOptions" data-js-day-options></div>
+      </div>
+      <div class="modalContentFooter">
+        <button class="modalBtn" data-js-modal-close>Close</button>
+      </div>
+    </template>
+
+    <template id="menuItemModalContent">
+      <form class="modalForm">
+        <div class="formGroup">
+          <label class="modalFormLabel" for="mainDish">Main</label>
+          <input type="text" id="mainDish" class="modalFormInput" data-js-input-one="main" />
+          <p class="inputHint">Enter a main dish here</p>
+        </div>
+
+        <div class="formGroup">
+          <label class="modalFormLabel" for="sideDish1">Side</label>
+          <input type="text" id="sideDish1" class="modalFormInput" data-js-input-two="side1" />
+          <p class="inputHint">Enter a side dish here</p>
+        </div>
+
+        <div class="formGroup">
+          <label class="modalFormLabel" for="sideDish2">Side</label>
+          <input type="text" id="sideDish2" class="modalFormInput" data-js-input-three="side2" />
+          <p class="inputHint">Enter another side here, if you like</p>
+        </div>
+
+        <div class="formGroup">
+          <label class="modalFormLabel" for="otherItems">Other</label>
+          <input type="text" id="otherItems" class="modalFormInput" data-js-input-four="other" />
+          <p class="inputHint">Enter miscellaneous items here, if you have any</p>
+        </div>
+
+        <div class="formGroup">
+          <label class="modalFormLabel" for="menuNotes">Notes</label>
+          <textarea id="menuNotes" rows="3" cols="30" class="modalFormInput" data-js-input-five="notes"></textarea>
+          <p class="inputHint">Enter any notes you may want</p>
+        </div>
+
+        <div class="modalContentFooter">
+          <button type="submit" class="modalBtn" data-js-new-item-submit>Enter</button>
+          <button type="button" class="modalBtn" data-js-modal-close>Close</button>
+        </div>
+      </form>
+    </template>
+
+    <template id="addItemModalContent">
+      <form class="modalForm" data-js-add-item-form="new">
+        <div class="formGroup">
+          <label for="itemName" class="modalFormLabel">Name</label>
+          <input type="text" class="modalFormInput" id="itemName" data-js-add-item-name required />
+        </div>
+
+        <div class="formGroup">
+          <label for="itemType" class="modalFormLabel">Type</label>
+          <select class="modalFormInput" id="itemType" data-js-add-item-type>
+            <option value="">Select a type...</option>
+            <option value="vegetable">Vegetable</option>
+            <option value="fruit">Fruit</option>
+            <option value="refrigerated">Refrigerated</option>
+            <option value="drygoods">Dry Goods</option>
+            <option value="bakery">Bakery</option>
+            <option value="meat">Meat</option>
+            <option value="fish">Fish</option>
+            <option value="miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+
+        <div class="formGroup">
+          <label for="itemQuantity" class="modalFormLabel">Quantity</label>
+          <input type="number" class="modalFormInput" id="itemQuantity" value="1" min="1" data-js-add-item-quantity />
+        </div>
+
+        <div class="formGroup">
+          <label for="itemUnits" class="modalFormLabel">Units (optional)</label>
+          <select class="modalFormInput" id="itemUnits" data-js-add-item-units>
+            <option value="">Select units...</option>
+            <option value="teaspoon">tsp</option>
+            <option value="tablespoon">tbsp</option>
+            <option value="fluid ounce">fl oz</option>
+            <option value="cup">c</option>
+            <option value="gallon">gal</option>
+            <option value="ounce">oz</option>
+            <option value="pound">lb</option>
+            <option value="bag">bag</option>
+            <option value="box">box</option>
+            <option value="can">can</option>
+            <option value="jar">jar</option>
+          </select>
+        </div>
+
+        <div class="modalContentFooter">
+          <button type="submit" class="modalBtn">Enter</button>
+          <button type="button" class="modalBtn" data-js-modal-close>Close</button>
+        </div>
+      </form>
+    </template>
+
+    <!-- Shopping List Item Template -->
+    <template id="listItemTemplate">
+      <div class="listItem" role="listitem">
+        <input type="checkbox" class="sliCheckbox" aria-label="Mark item as complete" />
+        <label>
+          <span class="custom-checkbox"></span>
+        </label>
+        <div class="sliEdit" data-js-sli-edit role="button" tabindex="0">Edit</div>
+      </div>
+    </template>
+    <!-- Modal System Templates -->
+    <template id="modalTemplate">
+      <div class="modal" data-js-modal role="dialog" aria-modal="true">
+        <div class="modalContent">
+          <header class="modalContentHeader">
+            <h2 data-js-modal-title></h2>
+          </header>
+          <div class="modalContentBody" data-js-modal-body></div>
+          <footer class="modalContentFooter" data-js-modal-footer></footer>
+        </div>
+      </div>
+    </template>
+
+    <template id="confirmationModalContent">
+      <div class="confirmationModal">
+        <p data-js-confirmation-message>You Sure?!?</p>
         <div class="modalContentFooter">
           <button class="modalBtn" data-js-confirm-yes>Yes</button>
           <button class="modalBtn" data-js-confirm-no>No</button>
         </div>
-      </template>
+      </div>
+    </template>
 
-      <template id="dayPickerModalContent">
-        <div class="dayPicker">
-          <div class="dayOptions" data-js-day-options></div>
+    <template id="dayPickerModalContent">
+      <div class="dayPicker">
+        <div class="dayOptions">
+          <span class="clickableDays">Saturday</span>
+          <span class="clickableDays">Sunday</span>
+          <span class="clickableDays">Monday</span>
+          <span class="clickableDays">Tuesday</span>
+          <span class="clickableDays">Wednesday</span>
+          <span class="clickableDays">Thursday</span>
+          <span class="clickableDays">Friday</span>
         </div>
         <div class="modalContentFooter">
           <button class="modalBtn" data-js-modal-close>Close</button>
         </div>
-      </template>
+      </div>
+    </template>
 
-      <template id="menuItemModalContent">
-        <form class="modalForm">
-          <div class="formGroup">
-            <label class="modalFormLabel" for="mainDish">Main</label>
-            <input type="text" id="mainDish" class="modalFormInput" data-js-input-one="main" />
-            <p class="inputHint">Enter a main dish here</p>
-          </div>
-
-          <div class="formGroup">
-            <label class="modalFormLabel" for="sideDish1">Side</label>
-            <input type="text" id="sideDish1" class="modalFormInput" data-js-input-two="side1" />
-            <p class="inputHint">Enter a side dish here</p>
-          </div>
-
-          <div class="formGroup">
-            <label class="modalFormLabel" for="sideDish2">Side</label>
-            <input type="text" id="sideDish2" class="modalFormInput" data-js-input-three="side2" />
-            <p class="inputHint">Enter another side here, if you like</p>
-          </div>
-
-          <div class="formGroup">
-            <label class="modalFormLabel" for="otherItems">Other</label>
-            <input type="text" id="otherItems" class="modalFormInput" data-js-input-four="other" />
-            <p class="inputHint">Enter miscellaneous items here, if you have any</p>
-          </div>
-
-          <div class="formGroup">
-            <label class="modalFormLabel" for="menuNotes">Notes</label>
-            <textarea
-              id="menuNotes"
-              rows="3"
-              cols="30"
-              class="modalFormInput"
-              data-js-input-five="notes"
-            ></textarea>
-            <p class="inputHint">Enter any notes you may want</p>
-          </div>
-
-          <div class="modalContentFooter">
-            <button type="submit" class="modalBtn" data-js-new-item-submit>Enter</button>
-            <button type="button" class="modalBtn" data-js-modal-close>Close</button>
-          </div>
-        </form>
-      </template>
-
-      <template id="addItemModalContent">
-        <form class="modalForm" data-js-add-item-form="new">
-          <div class="formGroup">
-            <label for="itemName" class="modalFormLabel">Name</label>
-            <input
-              type="text"
-              class="modalFormInput"
-              id="itemName"
-              data-js-add-item-name
-              required
-            />
-          </div>
-
-          <div class="formGroup">
-            <label for="itemType" class="modalFormLabel">Type</label>
-            <select class="modalFormInput" id="itemType" data-js-add-item-type>
-              <option value="">Select a type...</option>
-              <option value="vegetable">Vegetable</option>
-              <option value="fruit">Fruit</option>
-              <option value="refrigerated">Refrigerated</option>
-              <option value="drygoods">Dry Goods</option>
-              <option value="bakery">Bakery</option>
-              <option value="meat">Meat</option>
-              <option value="fish">Fish</option>
-              <option value="miscellaneous">Miscellaneous</option>
-            </select>
-          </div>
-
-          <div class="formGroup">
-            <label for="itemQuantity" class="modalFormLabel">Quantity</label>
-            <input
-              type="number"
-              class="modalFormInput"
-              id="itemQuantity"
-              value="1"
-              min="1"
-              data-js-add-item-quantity
-            />
-          </div>
-
-          <div class="formGroup">
-            <label for="itemUnits" class="modalFormLabel">Units (optional)</label>
-            <select class="modalFormInput" id="itemUnits" data-js-add-item-units>
-              <option value="">Select units...</option>
-              <option value="teaspoon">tsp</option>
-              <option value="tablespoon">tbsp</option>
-              <option value="fluid ounce">fl oz</option>
-              <option value="cup">c</option>
-              <option value="gallon">gal</option>
-              <option value="ounce">oz</option>
-              <option value="pound">lb</option>
-              <option value="bag">bag</option>
-              <option value="box">box</option>
-              <option value="can">can</option>
-              <option value="jar">jar</option>
-            </select>
-          </div>
-
-          <div class="modalContentFooter">
-            <button type="submit" class="modalBtn">Enter</button>
-            <button type="button" class="modalBtn" data-js-modal-close>Close</button>
-          </div>
-        </form>
-      </template>
-
-      <!-- Shopping List Item Template -->
-      <template id="listItemTemplate">
-        <div class="listItem" role="listitem">
-          <input type="checkbox" class="sliCheckbox" aria-label="Mark item as complete" />
-          <label>
-            <span class="custom-checkbox"></span>
-          </label>
-          <div class="sliEdit" data-js-sli-edit role="button" tabindex="0">Edit</div>
+    <template id="menuItemModalContent">
+      <form class="modalForm">
+        <div class="formGroup">
+          <label class="modalFormLabel" for="mainDish">Main</label>
+          <input type="text" id="mainDish" class="modalFormInput" data-js-input-one="main" />
+          <p class="inputHint">Enter a main dish here</p>
         </div>
-      </template>
-      <!-- Modal System Templates -->
-<template id="modalTemplate">
-  <div class="modal" data-js-modal role="dialog" aria-modal="true">
-    <div class="modalContent">
-      <header class="modalContentHeader">
-        <h2 data-js-modal-title></h2>
-      </header>
-      <div class="modalContentBody" data-js-modal-body></div>
-      <footer class="modalContentFooter" data-js-modal-footer></footer>
-    </div>
-  </div>
-</template>
+        <div class="formGroup">
+          <label class="modalFormLabel" for="sideDish1">Side</label>
+          <input type="text" id="sideDish1" class="modalFormInput" data-js-input-two="side1" />
+          <p class="inputHint">Enter a side dish here</p>
+        </div>
+        <div class="formGroup">
+          <label class="modalFormLabel" for="sideDish2">Side</label>
+          <input type="text" id="sideDish2" class="modalFormInput" data-js-input-three="side2" />
+          <p class="inputHint">Enter another side here, if you like</p>
+        </div>
+        <div class="formGroup">
+          <label class="modalFormLabel" for="otherItems">Other</label>
+          <input type="text" id="otherItems" class="modalFormInput" data-js-input-four="other" />
+          <p class="inputHint">Enter miscellaneous items here, if you have any</p>
+        </div>
+        <div class="formGroup">
+          <label class="modalFormLabel" for="menuNotes">Notes</label>
+          <textarea id="menuNotes" rows="3" cols="30" class="modalFormInput" data-js-input-five="notes"></textarea>
+          <p class="inputHint">Enter any notes you may want</p>
+        </div>
+        <div class="modalContentFooter">
+          <button type="submit" class="modalBtn" data-js-new-item-submit>Enter</button>
+          <button type="button" class="modalBtn" data-js-modal-close>Close</button>
+        </div>
+      </form>
+    </template>
 
-<template id="confirmationModalContent">
-  <div class="confirmationModal">
-    <p data-js-confirmation-message>You Sure?!?</p>
-    <div class="modalContentFooter">
-      <button class="modalBtn" data-js-confirm-yes>Yes</button>
-      <button class="modalBtn" data-js-confirm-no>No</button>
-    </div>
-  </div>
-</template>
+    <template id="addItemModalContent">
+      <form class="modalForm" data-js-add-item-form="new">
+        <div class="formGroup">
+          <label for="itemName" class="modalFormLabel">Name</label>
+          <input type="text" class="modalFormInput" id="itemName" data-js-add-item-name required />
+        </div>
+        <div class="formGroup">
+          <label for="itemType" class="modalFormLabel">Type</label>
+          <select class="modalFormInput" id="itemType" data-js-add-item-type>
+            <option value="">Select a type...</option>
+            <option value="vegetable">Vegetable</option>
+            <option value="fruit">Fruit</option>
+            <option value="refrigerated">Refrigerated</option>
+            <option value="drygoods">Dry Goods</option>
+            <option value="bakery">Bakery</option>
+            <option value="meat">Meat</option>
+            <option value="fish">Fish</option>
+            <option value="miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+        <div class="formGroup">
+          <label for="itemQuantity" class="modalFormLabel">Quantity</label>
+          <input type="number" class="modalFormInput" id="itemQuantity" value="1" min="1" data-js-add-item-quantity />
+        </div>
+        <div class="formGroup">
+          <label for="itemUnits" class="modalFormLabel">Units (optional)</label>
+          <select class="modalFormInput" id="itemUnits" data-js-add-item-units>
+            <option value="">Select units...</option>
+            <option value="teaspoon">tsp</option>
+            <option value="tablespoon">tbsp</option>
+            <option value="fluid ounce">fl oz</option>
+            <option value="cup">c</option>
+            <option value="gallon">gal</option>
+            <option value="ounce">oz</option>
+            <option value="pound">lb</option>
+            <option value="bag">bag</option>
+            <option value="box">box</option>
+            <option value="can">can</option>
+            <option value="jar">jar</option>
+          </select>
+        </div>
+        <div class="modalContentFooter">
+          <button type="submit" class="modalBtn">Enter</button>
+          <button type="button" class="modalBtn" data-js-modal-close>Close</button>
+        </div>
+      </form>
+    </template>
+  </main>
+</body>
 
-<template id="dayPickerModalContent">
-  <div class="dayPicker">
-    <div class="dayOptions">
-      <span class="clickableDays">Saturday</span>
-      <span class="clickableDays">Sunday</span>
-      <span class="clickableDays">Monday</span>
-      <span class="clickableDays">Tuesday</span>
-      <span class="clickableDays">Wednesday</span>
-      <span class="clickableDays">Thursday</span>
-      <span class="clickableDays">Friday</span>
-    </div>
-    <div class="modalContentFooter">
-      <button class="modalBtn" data-js-modal-close>Close</button>
-    </div>
-  </div>
-</template>
-
-<template id="menuItemModalContent">
-  <form class="modalForm">
-    <div class="formGroup">
-      <label class="modalFormLabel" for="mainDish">Main</label>
-      <input type="text" id="mainDish" class="modalFormInput" data-js-input-one="main" />
-      <p class="inputHint">Enter a main dish here</p>
-    </div>
-    <div class="formGroup">
-      <label class="modalFormLabel" for="sideDish1">Side</label>
-      <input type="text" id="sideDish1" class="modalFormInput" data-js-input-two="side1" />
-      <p class="inputHint">Enter a side dish here</p>
-    </div>
-    <div class="formGroup">
-      <label class="modalFormLabel" for="sideDish2">Side</label>
-      <input type="text" id="sideDish2" class="modalFormInput" data-js-input-three="side2" />
-      <p class="inputHint">Enter another side here, if you like</p>
-    </div>
-    <div class="formGroup">
-      <label class="modalFormLabel" for="otherItems">Other</label>
-      <input type="text" id="otherItems" class="modalFormInput" data-js-input-four="other" />
-      <p class="inputHint">Enter miscellaneous items here, if you have any</p>
-    </div>
-    <div class="formGroup">
-      <label class="modalFormLabel" for="menuNotes">Notes</label>
-      <textarea id="menuNotes" rows="3" cols="30" class="modalFormInput" data-js-input-five="notes"></textarea>
-      <p class="inputHint">Enter any notes you may want</p>
-    </div>
-    <div class="modalContentFooter">
-      <button type="submit" class="modalBtn" data-js-new-item-submit>Enter</button>
-      <button type="button" class="modalBtn" data-js-modal-close>Close</button>
-    </div>
-  </form>
-</template>
-
-<template id="addItemModalContent">
-  <form class="modalForm" data-js-add-item-form="new">
-    <div class="formGroup">
-      <label for="itemName" class="modalFormLabel">Name</label>
-      <input type="text" class="modalFormInput" id="itemName" data-js-add-item-name required />
-    </div>
-    <div class="formGroup">
-      <label for="itemType" class="modalFormLabel">Type</label>
-      <select class="modalFormInput" id="itemType" data-js-add-item-type>
-        <option value="">Select a type...</option>
-        <option value="vegetable">Vegetable</option>
-        <option value="fruit">Fruit</option>
-        <option value="refrigerated">Refrigerated</option>
-        <option value="drygoods">Dry Goods</option>
-        <option value="bakery">Bakery</option>
-        <option value="meat">Meat</option>
-        <option value="fish">Fish</option>
-        <option value="miscellaneous">Miscellaneous</option>
-      </select>
-    </div>
-    <div class="formGroup">
-      <label for="itemQuantity" class="modalFormLabel">Quantity</label>
-      <input type="number" class="modalFormInput" id="itemQuantity" value="1" min="1" data-js-add-item-quantity />
-    </div>
-    <div class="formGroup">
-      <label for="itemUnits" class="modalFormLabel">Units (optional)</label>
-      <select class="modalFormInput" id="itemUnits" data-js-add-item-units>
-        <option value="">Select units...</option>
-        <option value="teaspoon">tsp</option>
-        <option value="tablespoon">tbsp</option>
-        <option value="fluid ounce">fl oz</option>
-        <option value="cup">c</option>
-        <option value="gallon">gal</option>
-        <option value="ounce">oz</option>
-        <option value="pound">lb</option>
-        <option value="bag">bag</option>
-        <option value="box">box</option>
-        <option value="can">can</option>
-        <option value="jar">jar</option>
-      </select>
-    </div>
-    <div class="modalContentFooter">
-      <button type="submit" class="modalBtn">Enter</button>
-      <button type="button" class="modalBtn" data-js-modal-close>Close</button>
-    </div>
-  </form>
-</template>
-    </main>
-  </body>
 </html>
