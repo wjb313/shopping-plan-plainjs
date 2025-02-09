@@ -505,14 +505,14 @@ class ModalController {
   }
 
     // Setup all modal-specific events
-    this.setupDinnerMenuModalEvents();
-    this.setupNotesModalEvents();
-    this.setupAddItemModalEvents();
-    this.setupClearModalEvents();
-    this.setupReorderModalEvents();
-    this.setupClearCompletedModalEvents();
-    this.setupNoItemsModalEvents();
-  }
+  //   this.setupDinnerMenuModalEvents();
+  //   this.setupNotesModalEvents();
+  //   this.setupAddItemModalEvents();
+  //   this.setupClearModalEvents();
+  //   this.setupReorderModalEvents();
+  //   this.setupClearCompletedModalEvents();
+  //   this.setupNoItemsModalEvents();
+  // }
 
   setupDinnerMenuModalEvents() {
     const { dinnerMenu } = this.modals;
