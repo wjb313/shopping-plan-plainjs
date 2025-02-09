@@ -317,431 +317,253 @@ class MenuManager {
     }
   }
 
-class ModalController {
-  constructor(state) {
-  this.state = state;
-  this.initializeModalSystem();  // Add this line
-  this.initializeModals();
-  this.setupModalEvents();
-}
-
-// Add this as a new method in your ModalController class
-  initializeModalSystem() {
-    this.modalTemplate = document.getElementById('modalTemplate');
-    this.modalTypes = {
-      confirmation: document.getElementById('confirmationModalContent'),
-      dayPicker: document.getElementById('dayPickerModalContent'),
-      menuItem: document.getElementById('menuItemModalContent'),
-      addItem: document.getElementById('addItemModalContent')
-    };
-    
-    // Create modal container if it doesn't exist
-    let modalContainer = document.getElementById('modalContainer');
-    if (!modalContainer) {
-      modalContainer = document.createElement('div');
-      modalContainer.id = 'modalContainer';
-      document.body.appendChild(modalContainer);
+  class ModalController {
+    constructor(state) {
+      this.state = state;
+      this.initializeModalSystem();
+      this.setupModalEvents();
     }
-    this.modalContainer = modalContainer;
-  }
-
-  createModal(type, options = {}) {
-    console.log('Creating modal of type:', type);
-    console.log('Template:', this.modalTemplate);
-    console.log('Content template:', this.modalTypes[type]);
-    // Clone the base modal template
-    const modalClone = this.modalTemplate.content.cloneNode(true);
-    const modal = modalClone.querySelector('.modal');
-    
-    // Set unique ID for the modal
-    const modalId = `modal-${Date.now()}`;
-    modal.id = modalId;
-    
-    // Set the title if provided
-    if (options.title) {
-      modalClone.querySelector('[data-js-modal-title]').textContent = options.title;
-    }
-    
-    // Clone and insert the specific content template
-    const contentTemplate = this.modalTypes[type];
-    if (contentTemplate) {
-      const contentClone = contentTemplate.content.cloneNode(true);
-      modalClone.querySelector('[data-js-modal-body]').appendChild(contentClone);
-    }
-    
-    // Add to the DOM
-    this.modalContainer.appendChild(modalClone);
-    
-    return modalId;
-  }
-
-  openModal(type, options = {}) {
-    console.log('Opening modal with type:', type, 'and options:', options);
-    const modalId = this.createModal(type, options);
-    console.log('Created modal with ID:', modalId);
-    const modal = document.getElementById(modalId);
-    console.log('Found modal element:', modal);
-    
-    // Set up close handlers
-    const closeButtons = modal.querySelectorAll('[data-js-modal-close]');
-    closeButtons.forEach(button => {
-      button.addEventListener('click', () => this.closeModal(modalId));
-    });
-    
-    // Set up any custom handlers
-    if (options.onConfirm) {
-      const confirmButton = modal.querySelector('[data-js-confirm-yes]');
-      confirmButton?.addEventListener('click', () => {
-        options.onConfirm();
-        this.closeModal(modalId);
-      });
-    }
-    
-    if (options.onCancel) {
-      const cancelButton = modal.querySelector('[data-js-confirm-no]');
-      cancelButton?.addEventListener('click', () => {
-        options.onCancel();
-        this.closeModal(modalId);
-      });
-    }
-    
-    // Show the modal
-    modal.style.display = 'block';
-    
-    // Focus the first input if it exists
-    const firstInput = modal.querySelector('input, select, textarea');
-    firstInput?.focus();
-    
-    return modalId;
-  }
-
-  closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-      modal.style.display = 'none';
-      modal.remove(); // Remove from DOM since we create new ones each time
-    }
-  }
-
-  initializeModals() {
-    this.modals = {
-      dinnerMenu: {
-        element: document.querySelector('[data-js-dmp-modal]'),
-        header: document.querySelector('[data-js-dmp-modal-header]'),
-        form: document.querySelector('[data-js-dmp-modal] form'),
-        closeBtn: document.querySelector('[data-js-dmp-modal-close]'),
-        submitBtn: document.querySelector('[data-js-new-item-submit]'),
-        inputs: {
-          main: document.querySelector('[data-js-input-one="main"]'),
-          side1: document.querySelector('[data-js-input-two="side1"]'),
-          side2: document.querySelector('[data-js-input-three="side2"]'),
-          other: document.querySelector('[data-js-input-four="other"]'),
-          notes: document.querySelector('[data-js-input-five="notes"]')
-        }
-      },
-      notes: {
-        element: document.querySelector('[data-js-notes-modal]'),
-        header: document.querySelector('[data-js-dmp-notes-modal-header]'),
-        input: document.querySelector('[data-js-input-notes]'),
-        closeBtn: document.querySelector('[data-js-notes-modal-close]'),
-        submitBtn: document.querySelector('[data-js-notes-submit]')
-      },
-      addItem: {
-        element: document.querySelector('[data-js-add-item-modal]'),
-        form: document.querySelector('[data-js-add-item-form]'),
-        closeBtn: document.querySelector('[data-js-add-item-close]'),
-        inputs: {
-          name: document.querySelector('[data-js-add-item-name]'),
-          type: document.querySelector('[data-js-add-item-type]'),
-          quantity: document.querySelector('[data-js-add-item-quantity]'),
-          units: document.querySelector('[data-js-add-item-units]')
-        }
-      },
-      clearAll: {
-        element: document.querySelector('[data-js-clear-modal]'),
-        yesBtn: document.querySelector('[data-js-clear-yes]'),
-        noBtn: document.querySelector('[data-js-clear-no]')
-      },
-      reorder: {
-        element: document.querySelector('[data-js-reorder-modal]'),
-        closeBtn: document.querySelector('[data-js-reorder-modal-close]'),
-        dayOptions: document.querySelectorAll('.clickableDays')
-      },
-      clearCompleted: {
-        element: document.querySelector('[data-js-clear-completed-modal]'),
-        yesBtn: document.querySelector('[data-js-clear-completed-yes]'),
-        noBtn: document.querySelector('[data-js-clear-completed-no]')
-      },
-      noItems: {
-        element: document.querySelector('[data-js-no-items-modal]'),
-        closeBtn: document.querySelector('[data-js-no-items-close]')
-      }
-    };
-  }
-
-  setupModalEvents() {
-    // Button triggers
-    const addItemBtn = document.querySelector('[data-js-btn-add-item]');
-    const clearBtn = document.querySelector('[data-js-btn-clear]');
-    const reorderBtn = document.querySelector('[data-js-btn-reorder]');
-    const clearCompletedBtn = document.querySelector('[data-js-btn-clear-completed]');
-    const clearAllItemsBtn = document.querySelector('[data-js-btn-clear-all]');
-    
-    // Setup button click handlers
-    addItemBtn?.addEventListener('click', () => this.openAddItemModal());
-    clearBtn?.addEventListener('click', () => this.openModal(this.modals.clearAll.element));
-    reorderBtn?.addEventListener('click', () => this.openModal(this.modals.reorder.element));
-    clearCompletedBtn?.addEventListener('click', () => this.handleClearCompletedClick());
-    clearAllItemsBtn?.addEventListener('click', () => this.handleClearAllClick());
   
-    // Comment out the old modal-specific events for now
-    // this.setupDinnerMenuModalEvents();
-    // this.setupNotesModalEvents();
-    // this.setupAddItemModalEvents();
-    // this.setupClearModalEvents();
-    // this.setupReorderModalEvents();
-    // this.setupClearCompletedModalEvents();
-    // this.setupNoItemsModalEvents();
-  }
-
-    // Setup all modal-specific events
-  //   this.setupDinnerMenuModalEvents();
-  //   this.setupNotesModalEvents();
-  //   this.setupAddItemModalEvents();
-  //   this.setupClearModalEvents();
-  //   this.setupReorderModalEvents();
-  //   this.setupClearCompletedModalEvents();
-  //   this.setupNoItemsModalEvents();
-  // }
-
-  setupDinnerMenuModalEvents() {
-    const { dinnerMenu } = this.modals;
-    dinnerMenu.closeBtn.addEventListener('click', e => this.handleModalClose(e, dinnerMenu.element));
-    dinnerMenu.submitBtn.addEventListener('click', e => this.handleDinnerMenuSubmit(e));
-
-    // Setup edit menu buttons
-    const editButtons = document.querySelectorAll('[data-js-edit-menu]');
-    editButtons.forEach(button => {
-      button.addEventListener('click', e => this.handleMenuEdit(e));
-    });
-  }
-
-  setupNotesModalEvents() {
-    const { notes } = this.modals;
-    notes.closeBtn.addEventListener('click', e => this.handleModalClose(e, notes.element));
-    notes.submitBtn.addEventListener('click', e => this.handleNotesSubmit(e));
-
-    // Setup notes buttons
-    const notesButtons = document.querySelectorAll('[data-js-edit-notes]');
-    notesButtons.forEach(button => {
-      button.addEventListener('click', e => this.handleNotesEdit(e));
-    });
-  }
-
-  setupAddItemModalEvents() {
-    const { addItem } = this.modals;
-    addItem.closeBtn.addEventListener('click', e => this.handleModalClose(e, addItem.element));
-    addItem.form.addEventListener('submit', e => this.handleAddItemSubmit(e));
-  }
-
-  setupClearModalEvents() {
-    const { clearAll } = this.modals;
-    clearAll.yesBtn.addEventListener('click', () => this.handleClearAll());
-    clearAll.noBtn.addEventListener('click', () => this.closeModal(clearAll.element));
-  }
-
-  setupReorderModalEvents() {
-    const { reorder } = this.modals;
-    reorder.closeBtn.addEventListener('click', () => this.closeModal(reorder.element));
-    reorder.dayOptions.forEach(option => {
-      option.addEventListener('click', e => this.handleDayReorder(e));
-    });
-  }
-
-  setupClearCompletedModalEvents() {
-    const { clearCompleted } = this.modals;
-    clearCompleted.yesBtn.addEventListener('click', () => this.handleClearCompleted());
-    clearCompleted.noBtn.addEventListener('click', () => this.closeModal(clearCompleted.element));
-  }
-
-  setupNoItemsModalEvents() {
-    const { noItems } = this.modals;
-    noItems.closeBtn.addEventListener('click', () => this.closeModal(noItems.element));
-  }
-
-  // Modal Operation Handlers
-  handleMenuEdit(e) {
-    const dayId = e.target.dataset.jsEditMenu;
-    const dayNumber = parseInt(dayId.slice(-1));
-    const dayName = this.state.days[dayNumber - 1];
-
-    this.state.currentEditDay = dayId;
-    this.state.currentEditDayNumber = dayNumber;
-    this.state.currentDayDisplay = dayName;
-
-    const { dinnerMenu } = this.modals;
-    dinnerMenu.header.textContent = `${dayName} Menu Items`;
-
-    Object.entries(dinnerMenu.inputs).forEach(([key, input]) => {
-      input.value = this.state.dinnerMenu[dayId][key] || '';
-    });
-
-    this.openModal(dinnerMenu.element);
-    dinnerMenu.inputs.main.focus();
-  }
-
-  handleNotesEdit(e) {
-    const dayId = e.target.dataset.jsEditNotes;
-    const dayNumber = parseInt(dayId.slice(-1));
-    const dayName = this.state.days[dayNumber - 1];
-
-    this.state.currentEditDay = dayId;
-    this.modals.notes.header.textContent = `${dayName} Notes`;
-    this.modals.notes.input.value = this.state.dinnerMenu[dayId].notes || '';
-
-    this.openModal(this.modals.notes.element);
-  }
-
-  handleDinnerMenuSubmit(e) {
-    e.preventDefault();
-    
-    const { dinnerMenu } = this.modals;
-    const updatedContent = {};
-    
-    Object.entries(dinnerMenu.inputs).forEach(([key, input]) => {
-      updatedContent[key] = input.value;
-    });
-
-    this.state.dinnerMenu[this.state.currentEditDay] = updatedContent;
-    this.saveMenuAndClose(dinnerMenu.element);
-  }
-
-  handleNotesSubmit(e) {
-    e.preventDefault();
-    
-    this.state.dinnerMenu[this.state.currentEditDay].notes = this.modals.notes.input.value;
-    this.saveMenuAndClose(this.modals.notes.element);
-  }
-
-  handleDayReorder(e) {
-    const selectedDay = e.target.textContent;
-    const currentIndex = this.state.days.indexOf(selectedDay);
-    
-    const reorderedDays = [
-      ...this.state.days.slice(currentIndex),
-      ...this.state.days.slice(0, currentIndex)
-    ];
-    
-    this.state.days = reorderedDays;
-    localStorage.setItem(STORAGE_KEYS.CURRENT_DOTW, JSON.stringify(this.state.days));
-    document.dispatchEvent(new CustomEvent('daysUpdated'));
-    
-    this.closeModal(this.modals.reorder.element);
-  }
-
-  handleClearAll() {
-    Object.keys(this.state.dinnerMenu).forEach(day => {
-      this.state.dinnerMenu[day] = {
-        main: '', side1: '', side2: '', other: '', notes: ''
+    initializeModalSystem() {
+      this.modalTemplate = document.getElementById('modalTemplate');
+      this.modalTypes = {
+        confirmation: document.getElementById('confirmationModalContent'),
+        dayPicker: document.getElementById('dayPickerModalContent'),
+        menuItem: document.getElementById('menuItemModalContent'),
+        addItem: document.getElementById('addItemModalContent')
       };
-    });
-    
-    this.saveMenuAndClose(this.modals.clearAll.element);
-  }
-
-  handleClearCompletedClick() {
-    const completedItems = this.state.shoppingList.filter(item => item.complete);
-    if (completedItems.length > 0) {
-      this.openModal(this.modals.clearCompleted.element);
-    } else {
-      this.openModal(this.modals.noItems.element);
-    }
-  }
-
-  handleClearAllClick() {
-    if (this.state.shoppingList.length > 0) {
-      this.openModal(this.modals.clearAll.element);
-    } else {
-      this.openModal(this.modals.noItems.element);
-    }
-  }
-
-  handleClearCompleted() {
-    this.state.shoppingList = this.state.shoppingList.filter(item => !item.complete);
-    localStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(this.state.shoppingList));
-    document.dispatchEvent(new CustomEvent('listUpdated'));
-    this.closeModal(this.modals.clearCompleted.element);
-  }
-
-  handleAddItemSubmit(e) {
-    e.preventDefault();
-    
-    const { inputs, form } = this.modals.addItem;
-    const { name, type, quantity, units } = inputs;
-    
-    if (!name.value.trim()) return;
-
-    const newItem = {
-      id: Date.now().toString(),
-      name: name.value,
-      type: type.value,
-      quantity: parseInt(quantity.value) || 1,
-      units: units.value,
-      complete: false
-    };
-
-    if (form.dataset.jsAddItemForm === 'edit') {
-      const index = this.state.shoppingList.findIndex(item => item.id === this.state.editItemId);
-      if (index !== -1) {
-        this.state.shoppingList[index] = { ...this.state.shoppingList[index], ...newItem };
+      
+      // Create modal container
+      let modalContainer = document.getElementById('modalContainer');
+      if (!modalContainer) {
+        modalContainer = document.createElement('div');
+        modalContainer.id = 'modalContainer';
+        document.body.appendChild(modalContainer);
       }
-    } else {
-      this.state.shoppingList.push(newItem);
+      this.modalContainer = modalContainer;
     }
-
-    localStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(this.state.shoppingList));
-    document.dispatchEvent(new CustomEvent('listUpdated'));
-    
-    this.resetAddItemForm();
-    this.closeModal(this.modals.addItem.element);
+  
+    setupModalEvents() {
+      // Button triggers
+      const addItemBtn = document.querySelector('[data-js-btn-add-item]');
+      const clearBtn = document.querySelector('[data-js-btn-clear]');
+      const reorderBtn = document.querySelector('[data-js-btn-reorder]');
+      const clearCompletedBtn = document.querySelector('[data-js-btn-clear-completed]');
+      const clearAllItemsBtn = document.querySelector('[data-js-btn-clear-all]');
+      const editButtons = document.querySelectorAll('[data-js-edit-menu]');
+      const notesButtons = document.querySelectorAll('[data-js-edit-notes]');
+      
+      // Setup event handlers
+      addItemBtn?.addEventListener('click', () => {
+        this.openModal('addItem', {
+          title: 'New Item',
+          onSubmit: (formData) => this.handleAddItemSubmit(formData)
+        });
+      });
+  
+      clearBtn?.addEventListener('click', () => {
+        this.openModal('confirmation', {
+          title: 'Clear Menu',
+          message: 'Are you sure you want to clear all menu items?',
+          onConfirm: () => this.handleClearAll()
+        });
+      });
+  
+      reorderBtn?.addEventListener('click', () => {
+        this.openModal('dayPicker', {
+          title: 'Choose Start Day',
+          onDaySelect: (day) => this.handleDayReorder(day)
+        });
+      });
+  
+      clearCompletedBtn?.addEventListener('click', () => {
+        this.openModal('confirmation', {
+          title: 'Clear Completed Items',
+          message: 'Are you sure you want to clear completed items?',
+          onConfirm: () => this.handleClearCompleted()
+        });
+      });
+  
+      clearAllItemsBtn?.addEventListener('click', () => {
+        this.openModal('confirmation', {
+          title: 'Clear All Items',
+          message: 'Are you sure you want to clear all shopping list items?',
+          onConfirm: () => this.handleClearAllItems()
+        });
+      });
+  
+      editButtons.forEach(button => {
+        button.addEventListener('click', e => {
+          const dayId = e.target.dataset.jsEditMenu;
+          this.openModal('menuItem', {
+            title: `${this.state.days[parseInt(dayId.slice(-1)) - 1]} Menu Items`,
+            dayId,
+            onSubmit: (formData) => this.handleMenuEdit(dayId, formData)
+          });
+        });
+      });
+  
+      notesButtons.forEach(button => {
+        button.addEventListener('click', e => {
+          const dayId = e.target.dataset.jsEditNotes;
+          this.openModal('menuItem', {
+            title: `${this.state.days[parseInt(dayId.slice(-1)) - 1]} Notes`,
+            dayId,
+            mode: 'notes',
+            onSubmit: (notes) => this.handleNotesEdit(dayId, notes)
+          });
+        });
+      });
+    }
+  
+    createModal(type, options = {}) {
+      const modalClone = this.modalTemplate.content.cloneNode(true);
+      const modal = modalClone.querySelector('.modal');
+      const modalId = `modal-${Date.now()}`;
+      modal.id = modalId;
+      
+      // Set title
+      if (options.title) {
+        modalClone.querySelector('[data-js-modal-title]').textContent = options.title;
+      }
+      
+      // Clone and insert content
+      const contentTemplate = this.modalTypes[type];
+      if (contentTemplate) {
+        const contentClone = contentTemplate.content.cloneNode(true);
+        
+        // Set up form handlers if needed
+        if (options.onSubmit) {
+          const form = contentClone.querySelector('form');
+          if (form) {
+            form.addEventListener('submit', e => {
+              e.preventDefault();
+              const formData = new FormData(form);
+              options.onSubmit(Object.fromEntries(formData));
+              this.closeModal(modalId);
+            });
+          }
+        }
+        
+        // Set up confirmation handlers
+        if (options.onConfirm) {
+          const confirmBtn = contentClone.querySelector('[data-js-confirm-yes]');
+          confirmBtn?.addEventListener('click', () => {
+            options.onConfirm();
+            this.closeModal(modalId);
+          });
+        }
+        
+        // Set up day selection handlers
+        if (options.onDaySelect) {
+          const dayOptions = contentClone.querySelectorAll('.clickableDays');
+          dayOptions.forEach(option => {
+            option.addEventListener('click', () => {
+              options.onDaySelect(option.textContent);
+              this.closeModal(modalId);
+            });
+          });
+        }
+        
+        modalClone.querySelector('[data-js-modal-body]').appendChild(contentClone);
+      }
+      
+      // Set up close handlers
+      const closeButtons = modalClone.querySelectorAll('[data-js-modal-close]');
+      closeButtons.forEach(button => {
+        button.addEventListener('click', () => this.closeModal(modalId));
+      });
+      
+      this.modalContainer.appendChild(modalClone);
+      return modalId;
+    }
+  
+    openModal(type, options = {}) {
+      const modalId = this.createModal(type, options);
+      const modal = document.getElementById(modalId);
+      modal.style.display = 'block';
+      
+      // Focus first input if it exists
+      const firstInput = modal.querySelector('input, select, textarea');
+      firstInput?.focus();
+      
+      return modalId;
+    }
+  
+    closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'none';
+        modal.remove();
+      }
+    }
+  
+    // Handler Methods
+    handleClearAll() {
+      Object.keys(this.state.dinnerMenu).forEach(day => {
+        this.state.dinnerMenu[day] = {
+          main: '', side1: '', side2: '', other: '', notes: ''
+        };
+      });
+      localStorage.setItem(STORAGE_KEYS.DINNER_MENU, JSON.stringify(this.state.dinnerMenu));
+      document.dispatchEvent(new CustomEvent('menuUpdated'));
+    }
+  
+    handleClearCompleted() {
+      this.state.shoppingList = this.state.shoppingList.filter(item => !item.complete);
+      localStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(this.state.shoppingList));
+      document.dispatchEvent(new CustomEvent('listUpdated'));
+    }
+  
+    handleClearAllItems() {
+      this.state.shoppingList = [];
+      localStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(this.state.shoppingList));
+      document.dispatchEvent(new CustomEvent('listUpdated'));
+    }
+  
+    handleMenuEdit(dayId, formData) {
+      this.state.dinnerMenu[dayId] = {
+        main: formData.main || '',
+        side1: formData.side1 || '',
+        side2: formData.side2 || '',
+        other: formData.other || '',
+        notes: formData.notes || ''
+      };
+      localStorage.setItem(STORAGE_KEYS.DINNER_MENU, JSON.stringify(this.state.dinnerMenu));
+      document.dispatchEvent(new CustomEvent('menuUpdated'));
+    }
+  
+    handleNotesEdit(dayId, notes) {
+      this.state.dinnerMenu[dayId].notes = notes;
+      localStorage.setItem(STORAGE_KEYS.DINNER_MENU, JSON.stringify(this.state.dinnerMenu));
+      document.dispatchEvent(new CustomEvent('menuUpdated'));
+    }
+  
+    handleDayReorder(selectedDay) {
+      const currentIndex = this.state.days.indexOf(selectedDay);
+      this.state.days = [
+        ...this.state.days.slice(currentIndex),
+        ...this.state.days.slice(0, currentIndex)
+      ];
+      localStorage.setItem(STORAGE_KEYS.CURRENT_DOTW, JSON.stringify(this.state.days));
+      document.dispatchEvent(new CustomEvent('daysUpdated'));
+    }
+  
+    handleAddItemSubmit(formData) {
+      const newItem = {
+        id: Date.now().toString(),
+        name: formData.name,
+        type: formData.type,
+        quantity: parseInt(formData.quantity) || 1,
+        units: formData.units,
+        complete: false
+      };
+      
+      this.state.shoppingList.push(newItem);
+      localStorage.setItem(STORAGE_KEYS.SHOPPING_LIST, JSON.stringify(this.state.shoppingList));
+      document.dispatchEvent(new CustomEvent('listUpdated'));
+    }
   }
-
-  // Helper Methods
-  openModal(modal) {
-    modal.style.display = 'block';
-  }
-
-  closeModal(modal) {
-    modal.style.display = 'none';
-  }
-
-  handleModalClose(e, modal) {
-    e.preventDefault();
-    this.closeModal(modal);
-  }
-
-  openAddItemModal() {
-    const { addItem } = this.modals;
-    addItem.form.dataset.jsAddItemForm = 'new';
-    this.openModal(addItem.element);
-    addItem.inputs.name.focus();
-  }
-
-  resetAddItemForm() {
-    const { inputs, form } = this.modals.addItem;
-    inputs.name.value = '';
-    inputs.type.value = '';
-    inputs.quantity.value = '1';
-    inputs.units.value = '';
-    form.dataset.jsAddItemForm = 'new';
-  }
-
-  saveMenuAndClose(modalElement) {
-    localStorage.setItem(STORAGE_KEYS.DINNER_MENU, JSON.stringify(this.state.dinnerMenu));
-    document.dispatchEvent(new CustomEvent('menuUpdated'));
-    this.closeModal(modalElement);
-  }
-}
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
