@@ -487,6 +487,29 @@ class ModalController {
       this.openModal('confirmation', {
         title: 'Clear Menu',
         onConfirm: () => this.handleClearAll(),
+        onCancel: () => {}
+      });
+    });
+    reorderBtn?.addEventListener('click', () => this.openModal(this.modals.reorder.element));
+    clearCompletedBtn?.addEventListener('click', () => this.handleClearCompletedClick());
+    clearAllItemsBtn?.addEventListener('click', () => this.handleClearAllClick());
+  
+    // Comment out the old modal-specific events for now
+    // this.setupDinnerMenuModalEvents();
+    // this.setupNotesModalEvents();
+    // this.setupAddItemModalEvents();
+    // this.setupClearModalEvents();
+    // this.setupReorderModalEvents();
+    // this.setupClearCompletedModalEvents();
+    // this.setupNoItemsModalEvents();
+  }
+    
+    // Setup button click handlers
+    addItemBtn?.addEventListener('click', () => this.openAddItemModal());
+    clearBtn?.addEventListener('click', () => {
+      this.openModal('confirmation', {
+        title: 'Clear Menu',
+        onConfirm: () => this.handleClearAll(),
         onCancel: () => {} // empty function for now
       });
     });
