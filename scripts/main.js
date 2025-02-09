@@ -346,6 +346,8 @@ class ModalController {
   }
 
   createModal(type, options = {}) {
+    console.log('Modal template:', this.modalTemplate);
+    console.log('Content template:', this.modalTypes[type]);
     // Clone the base modal template
     const modalClone = this.modalTemplate.content.cloneNode(true);
     const modal = modalClone.querySelector('.modal');
