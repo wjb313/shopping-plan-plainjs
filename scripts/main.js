@@ -95,7 +95,7 @@ class UIController {
       daysContainer.appendChild(dayClone);
     }
   }
-  
+
   initializeElements() {
     this.elements = {
       dmpDisplay: document.querySelector('[data-js-dmp-display]'),
@@ -319,9 +319,102 @@ class MenuManager {
 
 class ModalController {
   constructor(state) {
-    this.state = state;
-    this.initializeModals();
-    this.setupModalEvents();
+  this.state = state;
+  this.initializeModalSystem();  // Add this line
+  this.initializeModals();
+  this.setupModalEvents();
+}
+
+// Add this as a new method in your ModalController class
+  initializeModalSystem() {
+    this.modalTemplate = document.getElementById('modalTemplate');
+    this.modalTypes = {
+      confirmation: document.getElementById('confirmationModalContent'),
+      dayPicker: document.getElementById('dayPickerModalContent'),
+      menuItem: document.getElementById('menuItemModalContent'),
+      addItem: document.getElementById('addItemModalContent')
+    };
+    
+    // Create modal container if it doesn't exist
+    let modalContainer = document.getElementById('modalContainer');
+    if (!modalContainer) {
+      modalContainer = document.createElement('div');
+      modalContainer.id = 'modalContainer';
+      document.body.appendChild(modalContainer);
+    }
+    this.modalContainer = modalContainer;
+  }
+
+  createModal(type, options = {}) {
+    // Clone the base modal template
+    const modalClone = this.modalTemplate.content.cloneNode(true);
+    const modal = modalClone.querySelector('.modal');
+    
+    // Set unique ID for the modal
+    const modalId = `modal-${Date.now()}`;
+    modal.id = modalId;
+    
+    // Set the title if provided
+    if (options.title) {
+      modalClone.querySelector('[data-js-modal-title]').textContent = options.title;
+    }
+    
+    // Clone and insert the specific content template
+    const contentTemplate = this.modalTypes[type];
+    if (contentTemplate) {
+      const contentClone = contentTemplate.content.cloneNode(true);
+      modalClone.querySelector('[data-js-modal-body]').appendChild(contentClone);
+    }
+    
+    // Add to the DOM
+    this.modalContainer.appendChild(modalClone);
+    
+    return modalId;
+  }
+
+  openModal(type, options = {}) {
+    const modalId = this.createModal(type, options);
+    const modal = document.getElementById(modalId);
+    
+    // Set up close handlers
+    const closeButtons = modal.querySelectorAll('[data-js-modal-close]');
+    closeButtons.forEach(button => {
+      button.addEventListener('click', () => this.closeModal(modalId));
+    });
+    
+    // Set up any custom handlers
+    if (options.onConfirm) {
+      const confirmButton = modal.querySelector('[data-js-confirm-yes]');
+      confirmButton?.addEventListener('click', () => {
+        options.onConfirm();
+        this.closeModal(modalId);
+      });
+    }
+    
+    if (options.onCancel) {
+      const cancelButton = modal.querySelector('[data-js-confirm-no]');
+      cancelButton?.addEventListener('click', () => {
+        options.onCancel();
+        this.closeModal(modalId);
+      });
+    }
+    
+    // Show the modal
+    modal.style.display = 'block';
+    
+    // Focus the first input if it exists
+    const firstInput = modal.querySelector('input, select, textarea');
+    firstInput?.focus();
+    
+    return modalId;
+  }
+
+  closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.style.display = 'none';
+      modal.remove(); // Remove from DOM since we create new ones each time
+    }
   }
 
   initializeModals() {
@@ -390,7 +483,13 @@ class ModalController {
     
     // Setup button click handlers
     addItemBtn?.addEventListener('click', () => this.openAddItemModal());
-    clearBtn?.addEventListener('click', () => this.openModal(this.modals.clearAll.element));
+    clearBtn?.addEventListener('click', () => {
+      this.openModal('confirmation', {
+        title: 'Clear Menu',
+        onConfirm: () => this.handleClearAll(),
+        onCancel: () => {} // empty function for now
+      });
+    });
     reorderBtn?.addEventListener('click', () => this.openModal(this.modals.reorder.element));
     clearCompletedBtn?.addEventListener('click', () => this.handleClearCompletedClick());
     clearAllItemsBtn?.addEventListener('click', () => this.handleClearAllClick());
