@@ -381,8 +381,6 @@ class ModalController {
     console.log('Created modal with ID:', modalId);
     const modal = document.getElementById(modalId);
     console.log('Found modal element:', modal);
-    const modalId = this.createModal(type, options);
-    const modal = document.getElementById(modalId);
     
     // Set up close handlers
     const closeButtons = modal.querySelectorAll('[data-js-modal-close]');
