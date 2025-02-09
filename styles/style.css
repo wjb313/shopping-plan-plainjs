@@ -563,6 +563,84 @@ nav {
   color: var(--interactive-hover-color);
 }
 
+/* New Modal System Styles */
+.modalBody {
+  padding: 20px 0;
+  font-size: 1.75rem;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 1.5rem;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 1.5rem;
+  border: none;
+  border-bottom: 1px var(--primary-container-shadow-color) solid;
+  color: var(--modal-input-font-color);
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-bottom-color: var(--interactive-hover-color);
+}
+
+.confirmationModal {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.dayPicker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.dayOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.clickableDays {
+  padding: 10px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* Fix modal container positioning */
+#modalContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+/* Ensure modal content is properly sized */
+[data-js-modal-body] {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 0 20px;
+}
+
 .editBtn {
   background: 0;
   border: 0;
