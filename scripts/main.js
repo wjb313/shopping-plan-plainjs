@@ -346,7 +346,8 @@ class ModalController {
   }
 
   createModal(type, options = {}) {
-    console.log('Modal template:', this.modalTemplate);
+    console.log('Creating modal of type:', type);
+    console.log('Template:', this.modalTemplate);
     console.log('Content template:', this.modalTypes[type]);
     // Clone the base modal template
     const modalClone = this.modalTemplate.content.cloneNode(true);
@@ -375,6 +376,11 @@ class ModalController {
   }
 
   openModal(type, options = {}) {
+    console.log('Opening modal with type:', type, 'and options:', options);
+    const modalId = this.createModal(type, options);
+    console.log('Created modal with ID:', modalId);
+    const modal = document.getElementById(modalId);
+    console.log('Found modal element:', modal);
     const modalId = this.createModal(type, options);
     const modal = document.getElementById(modalId);
     
