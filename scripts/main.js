@@ -56,10 +56,46 @@ class AppState {
 class UIController {
   constructor(state) {
     this.state = state;
+    this.initializeTemplates();  // Add this new line
     this.initializeElements();
     this.setupEventListeners();
   }
-
+  
+  initializeTemplates() {
+    // Insert navigation into both views
+    const navTemplate = document.getElementById('navigationTemplate');
+    const navContainers = document.querySelectorAll('[data-js-nav-container]');
+    navContainers.forEach(container => {
+      const navClone = navTemplate.content.cloneNode(true);
+      container.appendChild(navClone);
+    });
+  
+    // Generate day containers
+    this.generateDayContainers();
+  }
+  
+  generateDayContainers() {
+    const daysContainer = document.querySelector('[data-js-days-container]');
+    const dayTemplate = document.getElementById('dayTemplate');
+    
+    for (let i = 1; i <= 7; i++) {
+      const dayClone = dayTemplate.content.cloneNode(true);
+      
+      // Replace all instances of 'dayX' with the actual day number
+      dayClone.querySelectorAll('[data-js-dotw="dayX"], [data-js-menu-box-X], [data-js-droppable="dayX"], [data-js-main="dayX"], [data-js-side1="dayX"], [data-js-side2="dayX"], [data-js-other="dayX"], [data-js-edit-notes="dayX"], [data-js-notes-span="dayX"], [data-js-draggable="dayX"], [data-js-edit-menu="dayX"]')
+        .forEach(element => {
+          const attrs = element.getAttributeNames();
+          attrs.forEach(attr => {
+            if (element.getAttribute(attr).includes('dayX')) {
+              element.setAttribute(attr, element.getAttribute(attr).replace('dayX', `day${i}`));
+            }
+          });
+        });
+      
+      daysContainer.appendChild(dayClone);
+    }
+  }
+  
   initializeElements() {
     this.elements = {
       dmpDisplay: document.querySelector('[data-js-dmp-display]'),
