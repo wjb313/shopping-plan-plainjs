@@ -90,19 +90,25 @@ class UIController {
       
       // Set the day letter and full name
       const dayName = this.state.days[i - 1];
+      const tooltipSpan = document.createElement('span');
+      tooltipSpan.className = 'tooltiptext';
+      tooltipSpan.textContent = dayName;
+      
       dayBlock.textContent = dayName.charAt(0);
-      dayBlock.querySelector('.tooltiptext').textContent = dayName;
+      dayBlock.appendChild(tooltipSpan);
       
       // Update all data attributes with the correct day number
       [dayBlock, menuBlock].forEach(element => {
-        element.getAttributeNames().forEach(attr => {
-          if (element.getAttribute(attr).includes('dayX')) {
-            element.setAttribute(
-              attr, 
-              element.getAttribute(attr).replace('dayX', `day${i}`)
-            );
-          }
-        });
+        if (element) {  // Check if element exists
+          element.getAttributeNames().forEach(attr => {
+            if (element.getAttribute(attr).includes('dayX')) {
+              element.setAttribute(
+                attr, 
+                element.getAttribute(attr).replace('dayX', `day${i}`)
+              );
+            }
+          });
+        }
       });
       
       // Append both blocks to maintain grid structure
