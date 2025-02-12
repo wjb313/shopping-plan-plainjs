@@ -78,21 +78,36 @@ class UIController {
     const daysContainer = document.querySelector('[data-js-days-container]');
     const dayTemplate = document.getElementById('dayTemplate');
     
+    // Clear any existing content
+    daysContainer.innerHTML = '';
+    
     for (let i = 1; i <= 7; i++) {
       const dayClone = dayTemplate.content.cloneNode(true);
       
-      // Replace all instances of 'dayX' with the actual day number
-      dayClone.querySelectorAll('[data-js-dotw="dayX"], [data-js-menu-box-X], [data-js-droppable="dayX"], [data-js-main="dayX"], [data-js-side1="dayX"], [data-js-side2="dayX"], [data-js-other="dayX"], [data-js-edit-notes="dayX"], [data-js-notes-span="dayX"], [data-js-draggable="dayX"], [data-js-edit-menu="dayX"]')
-        .forEach(element => {
-          const attrs = element.getAttributeNames();
-          attrs.forEach(attr => {
-            if (element.getAttribute(attr).includes('dayX')) {
-              element.setAttribute(attr, element.getAttribute(attr).replace('dayX', `day${i}`));
-            }
-          });
-        });
+      // Create the day elements
+      const dayBlock = dayClone.querySelector('.daysOfTheWeek');
+      const menuBlock = dayClone.querySelector('.menuBox');
       
-      daysContainer.appendChild(dayClone);
+      // Set the day letter and full name
+      const dayName = this.state.days[i - 1];
+      dayBlock.textContent = dayName.charAt(0);
+      dayBlock.querySelector('.tooltiptext').textContent = dayName;
+      
+      // Update all data attributes with the correct day number
+      [dayBlock, menuBlock].forEach(element => {
+        element.getAttributeNames().forEach(attr => {
+          if (element.getAttribute(attr).includes('dayX')) {
+            element.setAttribute(
+              attr, 
+              element.getAttribute(attr).replace('dayX', `day${i}`)
+            );
+          }
+        });
+      });
+      
+      // Append both blocks to maintain grid structure
+      daysContainer.appendChild(dayBlock);
+      daysContainer.appendChild(menuBlock);
     }
   }
 
