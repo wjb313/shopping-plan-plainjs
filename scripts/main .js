@@ -1,41 +1,7 @@
 // ***FULLY MODERNIZED MAIN.JS*** 
 console.log("🔥 main.js is running!");
 
-// Import Firebase modules
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-
-// Initialize Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyD1Ex4V2kW9NVtUr7kg4zid4x4rZRhGqJ4",
-    authDomain: "shopplan-56d92.firebaseapp.com",
-    projectId: "shopplan-56d92",
-    messagingSenderId: "872127731325",
-    appId: "1:872127731325:web:d3216b68097ce8890c4314"
-};
-
-// ✅ Correct Firebase initialization
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// ✅ Firestore Debugging Function
-async function testFirestore() {
-    console.log("🔥 Attempting to write to Firestore...");
-
-    try {
-        const docRef = await addDoc(collection(db, "testCollection"), {
-            message: "Hello, Firestore!",
-            timestamp: new Date()
-        });
-
-        console.log("✅ Document written with ID: ", docRef.id);
-    } catch (e) {
-        console.error("❌ Firestore error: ", e);
-    }
-}
-
-// Run Firestore test
-testFirestore();
+// Removed Firebase initialization and Firestore test function
 
 document.addEventListener("DOMContentLoaded", () => {
     // Section Mapping
